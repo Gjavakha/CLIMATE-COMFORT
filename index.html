@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="doc-title">Climate Comfort | Premium Air Conditioners & Installation</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo-area">
+                <a href="#" class="logo">
+                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img">
+                    <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
+                </a>
+            </div>
+            
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-bar" placeholder="ძებნა (მაგ. Samsung)..." data-i18n-placeholder="search-placeholder">
+                    <button id="search-clear-btn" class="search-clear-btn hidden"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item-dropdown">
+                    <a href="#catalog" class="nav-link active" id="nav-shop-main" data-i18n="nav-shop">პროდუქცია</a>
+                    <div class="dropdown-menu">
+                        <a href="#catalog" class="dropdown-item" data-category="ac" data-i18n="nav-ac">კონდიციონერები</a>
+                        <a href="#catalog" class="dropdown-item" data-category="boiler" data-i18n="nav-boiler">ცენტრალური გათბობის ქვაბები</a>
+                    </div>
+                </div>
+                <a href="#financing-info" class="nav-link" data-i18n="nav-financing">განვადება</a>
+                <a href="#booking-section" class="nav-link" data-i18n="nav-booking">სერვისები</a>
+                <a href="#about-us" class="nav-link" data-i18n="nav-why-us">რატომ ჩვენ</a>
+            </nav>
+
+            <div class="header-actions">
+                <!-- Language Selector -->
+                <div class="lang-selector">
+                    <button class="lang-btn active" data-lang="ka">KA</button>
+                    <span class="lang-separator">|</span>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+                
+                <a href="tel:+995599000000" class="phone-link">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>+995 599 00 00 00</span>
+                </a>
+                <button class="cart-trigger" id="cart-btn" aria-label="Open shopping cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cart-badge-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Showcase Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="hero-tagline" data-i18n="hero-tagline">პრემიუმ კლიმატური ტექნიკა საქართველოში</span>
+                <h1 class="hero-title" data-i18n="hero-title">შეინარჩუნეთ სიგრილე ზაფხულში, სითბო ზამთარში</h1>
+                <p class="hero-description" data-i18n="hero-description">აღმოაჩინეთ ინტელექტუალური ინვერტორული კონდიციონერების ფართო არჩევანი, ისარგებლეთ მყისიერი 0%-იანი განვადებით და პროფესიონალური მონტაჟით.</p>
+                <div class="hero-ctas">
+                    <a href="#catalog" class="btn btn-primary btn-lg"><span data-i18n="hero-cta-explore">კატალოგის ნახვა</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#booking-section" class="btn btn-outline-white btn-lg"><span data-i18n="hero-cta-service">დაჯავშნე სერვისი</span> <i class="fa-solid fa-screwdriver-wrench"></i></a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3 data-i18n="hero-stat1-title">სწრაფი მიწოდება</h3>
+                    <p data-i18n="hero-stat1-desc">უფასო თბილისის მასშტაბით</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h3 data-i18n="hero-stat2-title">0%-იანი განვადება</h3>
+                    <p data-i18n="hero-stat2-desc">6 თვემდე უპროცენტო</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-award"></i></div>
+                    <h3 data-i18n="hero-stat3-title">3-წლიანი გარანტია</h3>
+                    <p data-i18n="hero-stat3-desc">ყველა მოდელზე</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features / Why Us Section -->
+    <section class="why-us" id="about-us">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="whyus-header">რატომ Climate Comfort?</h2>
+                <p data-i18n="whyus-subheader">ჩვენ გთავაზობთ სრულ სერვისს: ყიდვიდან დაწყებული, პროფესიონალურ მონტაჟსა და ყოველწლიურ მოვლამდე.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h4 data-i18n="whyus-f1-title">ინვერტორული ეფექტურობა</h4>
+                    <p data-i18n="whyus-f1-desc">ჩვენ ორიენტირებული ვართ მაღალი ენერგოკლასის (A++ და A+++) მოდელებზე, რომლებიც 40%-მდე ზოგავს ელექტროენერგიას.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h4 data-i18n="whyus-f2-title">ოფიციალური გარანტია</h4>
+                    <p data-i18n="whyus-f2-desc">ყველა შესყიდვაზე ვრცელდება მწარმოებლის ოფიციალური გარანტია და ჩვენი სამონტაჟო სამუშაოების ხარისხის გარანტია.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa-solid fa-calculator"></i></div>
+                    <h4 data-i18n="whyus-f3-title">მოქნილი განვადება</h4>
+                    <p data-i18n="whyus-f3-desc">მიიღეთ მყისიერი დასტური საქართველოს ბანკისგან, თიბისისგან ან ლიბერტისგან თქვენთვის მოსახერხებელი პირობებით.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa-solid fa-user-gear"></i></div>
+                    <h4 data-i18n="whyus-f4-title">სერტიფიცირებული ტექნიკოსები</h4>
+                    <p data-i18n="whyus-f4-desc">ჩვენი პროფესიონალი გუნდი სრულად ლიცენზირებულია ნებისმიერი ტიპის კონდიციონერის დასამონტაჟებლად.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Store Catalog & Filtering -->
+    <main class="store-catalog container" id="catalog">
+        
+        <!-- Filter Toggle (Mobile Only) -->
+        <div class="mobile-filter-bar">
+            <span id="results-count-mobile">8 პროდუქტი</span>
+            <button class="btn btn-outline" id="mobile-filter-trigger">
+                <i class="fa-solid fa-sliders"></i> <span data-i18n="mobile-filter-btn">ფილტრები</span>
+            </button>
+        </div>
+
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar" id="filter-sidebar">
+            <div class="filter-header">
+                <h3 data-i18n="filters-title">ფილტრები</h3>
+                <button class="clear-all-filters-btn" id="clear-all-filters" data-i18n="filters-reset">ყველას გასუფთავება</button>
+                <button class="mobile-filter-close" id="mobile-filter-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-price">ფასი (₾)</h4>
+                <div class="price-slider-container">
+                    <div class="price-inputs">
+                        <div class="price-input-field">
+                            <span>Min</span>
+                            <input type="number" id="price-min-input" value="500">
+                        </div>
+                        <div class="price-input-field">
+                            <span>Max</span>
+                            <input type="number" id="price-max-input" value="4000">
+                        </div>
+                    </div>
+                    <input type="range" id="price-range-slider" min="500" max="4000" step="50" value="4000" class="slider">
+                    <div class="price-range-labels">
+                        <span>500 ₾</span>
+                        <span>4,000 ₾</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-brand">ბრენდი</h4>
+                <div class="filter-options-list" id="filter-brands">
+                    <!-- Dynamic brands -->
+                </div>
+            </div>
+
+            <!-- Recommended Area Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-area">რეკომენდებული ფართი</h4>
+                <div class="filter-options-list" id="filter-areas">
+                    <!-- Dynamic areas -->
+                </div>
+            </div>
+
+            <!-- BTU Capacity Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-btu">სიმძლავრე (BTU)</h4>
+                <div class="filter-options-list" id="filter-btus">
+                    <!-- Dynamic BTUs -->
+                </div>
+            </div>
+
+            <!-- Inverter Technology Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-inverter">ინვერტორი</h4>
+                <div class="filter-options-list" id="filter-inverter">
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" name="inverter" value="yes">
+                        <span class="custom-checkbox"></span>
+                        <span class="label-text" data-i18n="filter-inverter-yes">ინვერტორული (ენერგოეფექტური)</span>
+                    </label>
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" name="inverter" value="no">
+                        <span class="custom-checkbox"></span>
+                        <span class="label-text" data-i18n="filter-inverter-no">ჩვეულებრივი (On/Off)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Energy Class Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-energy">ენერგოკლასი</h4>
+                <div class="filter-options-list" id="filter-energy">
+                    <!-- Dynamic Energy Classes -->
+                </div>
+            </div>
+
+            <!-- Color Filter -->
+            <div class="filter-group">
+                <h4 class="filter-title" data-i18n="filter-color">ფერი</h4>
+                <div class="filter-options-list" id="filter-colors">
+                    <!-- Dynamic Colors -->
+                </div>
+            </div>
+            
+            <button class="btn btn-primary w-full mobile-only-apply" id="mobile-apply-filters" data-i18n="filters-apply-btn">ფილტრების გამოყენება</button>
+        </aside>
+
+        <!-- Product Grid and Sorting -->
+        <section class="products-display">
+            <!-- Category Tabs Selector -->
+            <div class="category-tabs-container">
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="all" data-i18n="category-all">ყველა პროდუქტი</button>
+                    <button class="category-tab" data-category="ac" data-i18n="category-ac">კონდიციონერები</button>
+                    <button class="category-tab" data-category="boiler" data-i18n="category-boiler">ცენტრალური გათბობის ქვაბები</button>
+                </div>
+            </div>
+
+            <div class="catalog-control-bar">
+                <div class="products-count-label">
+                    <span data-i18n="catalog-showing">ნაჩვენებია</span> <span id="results-count-text">0</span> <span data-i18n="catalog-unit">პროდუქტი</span>
+                </div>
+                <div class="catalog-sorting">
+                    <label for="sort-select" data-i18n="catalog-sort-label">სორტირება:</label>
+                    <select id="sort-select" class="sort-dropdown">
+                        <option value="popular" data-i18n="sort-popular">პოპულარობით</option>
+                        <option value="price-asc" data-i18n="sort-price-asc">ფასი: ზრდადობით</option>
+                        <option value="price-desc" data-i18n="sort-price-desc">ფასი: კლებადობით</option>
+                        <option value="btu-desc" data-i18n="sort-btu-desc">სიმძლავრე: კლებადობით</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Active Filters Badges -->
+            <div class="active-filters-container hidden" id="active-filters-badges">
+                <span class="active-filters-label" data-i18n="active-filters-title">აქტიური ფილტრები:</span>
+                <div class="badges-wrapper" id="badges-wrapper">
+                    <!-- Badges injected by JS -->
+                </div>
+                <button class="clear-badges-btn" id="clear-badges-link" data-i18n="filters-reset-short">გასუფთავება</button>
+            </div>
+
+            <!-- Grid -->
+            <div class="products-grid" id="products-grid">
+                <!-- Products injected by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-catalog hidden" id="empty-catalog-message">
+                <i class="fa-solid fa-wind empty-icon"></i>
+                <h3 data-i18n="empty-title">კონდიციონერები ვერ მოიძებნა</h3>
+                <p data-i18n="empty-desc">შეცვალეთ ფილტრის პარამეტრები ან საძიებო სიტყვა.</p>
+                <button class="btn btn-primary" id="reset-all-filters-btn" data-i18n="empty-reset-btn">ფილტრების გასუფთავება</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Financing Banner / Info Section -->
+    <section class="financing-section" id="financing-info">
+        <div class="container">
+            <div class="financing-banner">
+                <div class="financing-banner-content">
+                    <span class="badge badge-accent" data-i18n="finance-badge">განვადება</span>
+                    <h2 data-i18n="finance-title">ხელმისაწვდომი განვადების პირობები</h2>
+                    <p data-i18n="finance-description">ნუ გადადებთ კომფორტს. შეიძინეთ ნებისმიერი კონდიციონერი დღესვე და გადაიხადეთ ეტაპობრივად. ჩვენ ვთანამშრომლობთ წამყვან ქართულ ბანკებთან, რათა შემოგთავაზოთ საუკეთესო პირობები, მათ შორის 0%-იანი უპროცენტო განვადება.</p>
+                    
+                    <div class="banks-logos">
+                        <div class="bank-logo">
+                            <span class="bog-logo-text"><i class="fa-solid fa-square-share-nodes"></i> Bank of Georgia</span>
+                            <span class="bank-promo" data-i18n="bank-promo-bog">6 თვემდე 0%</span>
+                        </div>
+                        <div class="bank-logo">
+                            <span class="tbc-logo-text"><i class="fa-solid fa-t"></i> TBC Bank</span>
+                            <span class="bank-promo" data-i18n="bank-promo-tbc">3 თვემდე 0%</span>
+                        </div>
+                        <div class="bank-logo">
+                            <span class="liberty-logo-text"><i class="fa-solid fa-l"></i> Liberty Bank</span>
+                            <span class="bank-promo" data-i18n="bank-promo-liberty">მარტივი დამტკიცება</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="financing-banner-graphic">
+                    <div class="calculator-preview-card">
+                        <div class="preview-header">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span data-i18n="calc-preview-header">განვადების კალკულატორი</span>
+                        </div>
+                        <div class="preview-body">
+                            <p class="preview-help" data-i18n="calc-preview-help">კალკულატორის გამოსაყენებლად და სასურველი განვადების პირობების მოსარგებად, დააჭირეთ „განვადებით ყიდვა“ ღილაკს ნებისმიერი პროდუქტის ბარათზე.</p>
+                            <div class="calculator-visual-row">
+                                <div class="visual-col">
+                                    <span class="visual-label" data-i18n="calc-preview-label-cost">ღირებულება</span>
+                                    <span class="visual-val">1,349 ₾</span>
+                                </div>
+                                <div class="visual-col">
+                                    <span class="visual-label" data-i18n="calc-preview-label-monthly">ყოველთვიური</span>
+                                    <span class="visual-val accent">112.42 ₾ / თვე</span>
+                                </div>
+                            </div>
+                            <a href="#catalog" class="btn btn-primary btn-sm w-full text-center" data-i18n="calc-preview-cta">შეარჩიეთ პროდუქტი განვადებისთვის</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Installation Booking Section -->
+    <section class="booking-section" id="booking-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="booking-header-title">დაჯავშნეთ მონტაჟი და სერვისი</h2>
+                <p data-i18n="booking-header-desc">გჭირდებათ პროფესიონალური დამონტაჟება? გამოთვალეთ ღირებულება რეალურ დროში და დაჯავშნეთ ხელოსანი სასურველ დღეს.</p>
+            </div>
+            
+            <div class="booking-wrapper">
+                <!-- Service Form -->
+                <div class="booking-card form-card">
+                    <h3 data-i18n="booking-form-title">სერვისის დეტალები</h3>
+                    <form id="service-booking-form">
+                        
+                        <!-- Service Type -->
+                        <div class="form-group-grid">
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-service">აირჩიეთ სერვისი</span> <span class="required">*</span></label>
+                                <select id="service-type" class="form-select" required>
+                                    <option value="installation" selected data-i18n="srv-standard-install">სტანდარტული მონტაჟი</option>
+                                    <option value="dismantling" data-i18n="srv-dismantle">AC დემონტაჟი</option>
+                                    <option value="refill" data-i18n="srv-refill">ფრეონის შევსება</option>
+                                    <option value="maintenance" data-i18n="srv-maintenance">სრული პროფილაქტიკა</option>
+                                </select>
+                            </div>
+                            
+                            <!-- AC BTU Capacity -->
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-capacity">სიმძლავრე (BTU)</span> <span class="required">*</span></label>
+                                <select id="booking-btu" class="form-select" required>
+                                    <option value="9000-12000" selected>9,000 - 12,000 BTU</option>
+                                    <option value="18000-24000">18,000 - 24,000 BTU</option>
+                                    <option value="30000">30,000+ BTU</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Extra Services -->
+                        <div class="form-control-group">
+                            <label class="input-label" data-i18n="booking-label-extra">დამატებითი სერვისები</label>
+                            <div class="booking-checkbox-list">
+                                <label class="filter-checkbox-label">
+                                    <input type="checkbox" id="extra-brackets" value="30">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="label-text" data-i18n="booking-extra-brackets">გარე ბლოკის კრონშტეინი (+30 ₾)</span>
+                                </label>
+                                <label class="filter-checkbox-label">
+                                    <input type="checkbox" id="extra-pipe" value="45">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="label-text" data-i18n="booking-extra-pipe">დამატებითი მილი (1 მეტრი) (+45 ₾)</span>
+                                </label>
+                                <label class="filter-checkbox-label">
+                                    <input type="checkbox" id="extra-dismantle" value="50">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="label-text" data-i18n="booking-extra-dismantle">ძველი აპარატის დემონტაჟი (+50 ₾)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Date & Time Slot -->
+                        <div class="form-group-grid">
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-date">სასურველი თარიღი</span> <span class="required">*</span></label>
+                                <input type="date" id="booking-date" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-time">სასურველი დრო</span> <span class="required">*</span></label>
+                                <select id="booking-time" class="form-select" required>
+                                    <option value="" disabled selected data-i18n="booking-time-default">აირჩიეთ დროის მონაკვეთი</option>
+                                    <option value="morning" data-i18n="booking-time-morning">დილა (09:00 - 13:00)</option>
+                                    <option value="afternoon" data-i18n="booking-time-afternoon">შუადღე (13:00 - 17:00)</option>
+                                    <option value="evening" data-i18n="booking-time-evening">საღამო (17:00 - 20:00)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Customer Details -->
+                        <h3 data-i18n="booking-customer-title">საკონტაქტო ინფორმაცია</h3>
+                        <div class="form-group-grid">
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-name">სახელი და გვარი</span> <span class="required">*</span></label>
+                                <input type="text" id="cust-name" class="form-input" placeholder="მაგ. გიორგი" required data-i18n-placeholder="booking-name-placeholder">
+                            </div>
+                            <div class="form-control-group">
+                                <label class="input-label"><span data-i18n="booking-label-phone">ტელეფონი</span> <span class="required">*</span></label>
+                                <input type="tel" id="cust-phone" class="form-input" placeholder="მაგ. +995 5xx xx xx xx" required data-i18n-placeholder="booking-phone-placeholder">
+                            </div>
+                        </div>
+
+                        <div class="form-control-group">
+                            <label class="input-label"><span data-i18n="booking-label-address">სამონტაჟო მისამართი</span> <span class="required">*</span></label>
+                            <input type="text" id="cust-address" class="form-input" placeholder="მაგ. რუსთაველის გამზ. 15, თბილისი" required data-i18n-placeholder="booking-address-placeholder">
+                        </div>
+                        
+                        <div class="form-control-group">
+                            <label class="input-label" data-i18n="booking-label-notes">დამატებითი შენიშვნა</label>
+                            <textarea id="cust-notes" class="form-textarea" rows="3" placeholder="მოგვიყევით სამონტაჟო კედლის, სიმაღლის ან სხვა დეტალების შესახებ..." data-i18n-placeholder="booking-notes-placeholder"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-full mt-2" id="submit-booking-btn" data-i18n="booking-submit-btn">
+                            დაჯავშნე პროფესიონალური მონტაჟი
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Price Estimator Summary -->
+                <div class="booking-card summary-card">
+                    <h3 data-i18n="calc-summary-title">ფასის კალკულატორი</h3>
+                    <div class="price-breakdown">
+                        <div class="breakdown-row">
+                            <span id="calc-service-name">სტანდარტული მონტაჟი</span>
+                            <span id="calc-service-base-cost">150 ₾</span>
+                        </div>
+                        <div class="breakdown-row indent-row">
+                            <span><span data-i18n="calc-summary-btu-adjust">სიმძლავრის კორექტირება</span> (<span id="calc-btu-range">9,000-12,000</span>)</span>
+                            <span id="calc-btu-adjustment">+0 ₾</span>
+                        </div>
+                        <div class="breakdown-row hidden" id="breakdown-bracket-row">
+                            <span data-i18n="calc-summary-brackets">გარე ბლოკის კრონშტეინი</span>
+                            <span>+30 ₾</span>
+                        </div>
+                        <div class="breakdown-row hidden" id="breakdown-pipe-row">
+                            <span data-i18n="calc-summary-pipe">დამატებითი მილი (1მ)</span>
+                            <span>+45 ₾</span>
+                        </div>
+                        <div class="breakdown-row hidden" id="breakdown-dismantle-row">
+                            <span data-i18n="calc-summary-dismantle">ძველი აპარატის დემონტაჟი</span>
+                            <span>+50 ₾</span>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="breakdown-row total-row">
+                            <span data-i18n="calc-summary-total">ჯამური ღირებულება</span>
+                            <span id="calc-total-cost">150 ₾</span>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-info-note">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <p data-i18n="booking-disclaimer">სტანდარტული მონტაჟი მოიცავს 3 მეტრამდე სპილენძის მილსა და კაბელს. ჩვენი ხელოსანი ადგილზე შეამოწმებს სიტუაციას სამუშაოს დაწყებამდე. ნებისმიერი დამატებითი ხარჯი გამოითვლება ზუსტი გაზომვის საფუძველზე.</p>
+                    </div>
+                    
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span data-i18n="trust-certified">სერტიფიცირებული გუნდი</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span data-i18n="trust-warranty">გარანტია სამუშაოზე</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide-out Shopping Cart Drawer -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3 data-i18n="cart-title">თქვენი კალათა</h3>
+            <button class="cart-drawer-close" id="cart-drawer-close" aria-label="Close cart">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="cart-drawer-body">
+            <!-- Empty Cart -->
+            <div class="cart-empty-state" id="cart-empty-element">
+                <i class="fa-solid fa-basket-shopping empty-icon"></i>
+                <p data-i18n="cart-empty">კალათა ცარიელია.</p>
+                <button class="btn btn-primary" id="cart-shop-now-btn" data-i18n="cart-shop-now">კატალოგში დაბრუნება</button>
+            </div>
+            
+            <!-- Cart Items List -->
+            <div class="cart-items-list hidden" id="cart-items-container">
+                <!-- Items injected by JS -->
+            </div>
+        </div>
+        
+        <div class="cart-drawer-footer hidden" id="cart-footer-element">
+            <div class="cart-total-summary">
+                <span data-i18n="cart-subtotal">ჯამი:</span>
+                <span class="cart-total-price" id="cart-total-price-text">0 ₾</span>
+            </div>
+            <p class="cart-checkout-help" data-i18n="cart-help">მიწოდება თბილისში უფასოა. გადაიხადეთ ბარათით ან ისარგებლეთ განვადებით.</p>
+            <div class="cart-checkout-buttons">
+                <button class="btn btn-primary w-full" id="cart-standard-checkout" data-i18n="cart-standard-checkout">
+                    სტანდარტული შეკვეთა
+                </button>
+                <button class="btn btn-accent w-full" id="cart-finance-checkout">
+                    <i class="fa-solid fa-percent"></i> <span data-i18n="cart-finance-checkout">განვადებით ყიდვა</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Installment Payment Calculator Modal -->
+    <div class="modal-backdrop" id="calculator-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 data-i18n="calc-modal-title">განვადების კალკულატორი</h3>
+                <button class="modal-close" id="close-calc-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body modal-calculator-grid">
+                
+                <!-- Calculator Settings -->
+                <div class="calculator-settings">
+                    <div class="product-mini-preview">
+                        <div class="mini-preview-info">
+                            <span class="mini-brand" id="modal-product-brand">Samsung</span>
+                            <h4 id="modal-product-title">WindFree Avant Air Conditioner</h4>
+                            <div class="mini-price-row">
+                                <span class="mini-price-label" data-i18n="calc-modal-cost-label">პროდუქტის ფასი:</span>
+                                <span class="mini-price-value" id="modal-product-price">2,499 ₾</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bank Selection -->
+                    <div class="form-control-group">
+                        <label class="input-label" data-i18n="calc-modal-select-bank">აირჩიეთ ბანკი</label>
+                        <div class="bank-selector-radio-grid">
+                            <label class="bank-radio-card selected" id="bank-card-bog">
+                                <input type="radio" name="bank-select" value="bog" checked>
+                                <span class="bank-radio-title">Bank of Georgia</span>
+                                <span class="bank-radio-badge" data-i18n="bank-promo-bog">6 თვემდე 0%</span>
+                            </label>
+                            <label class="bank-radio-card" id="bank-card-tbc">
+                                <input type="radio" name="bank-select" value="tbc">
+                                <span class="bank-radio-title">TBC Bank</span>
+                                <span class="bank-radio-badge" data-i18n="bank-promo-tbc">3 თვემდე 0%</span>
+                            </label>
+                            <label class="bank-radio-card" id="bank-card-liberty">
+                                <input type="radio" name="bank-select" value="liberty">
+                                <span class="bank-radio-title">Liberty Bank</span>
+                                <span class="bank-radio-badge" data-i18n="bank-promo-liberty">მარტივი დასტური</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Down Payment -->
+                    <div class="form-control-group">
+                        <label class="input-label" for="down-payment-input" data-i18n="calc-modal-down-payment">თანამონაწილეობა (₾) - არასავალდებულო</label>
+                        <div class="down-payment-wrapper">
+                            <input type="number" id="down-payment-input" class="form-input" min="0" value="0">
+                            <span class="input-suffix">₾</span>
+                        </div>
+                        <div class="down-payment-suggestions">
+                            <button class="dp-suggest-btn" data-pct="0">0%</button>
+                            <button class="dp-suggest-btn" data-pct="10">10%</button>
+                            <button class="dp-suggest-btn" data-pct="20">20%</button>
+                            <button class="dp-suggest-btn" data-pct="30">30%</button>
+                        </div>
+                    </div>
+
+                    <!-- Terms Months -->
+                    <div class="form-control-group">
+                        <label class="input-label" id="term-label-text">განვადების ვადა: 12 თვე</label>
+                        <input type="range" id="term-months-slider" min="3" max="36" step="3" value="12" class="slider">
+                        <div class="term-range-labels" id="term-range-markers">
+                            <!-- Injected by JS based on bank selection -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculator Result -->
+                <div class="calculator-results-pane">
+                    <div class="result-box">
+                        <span class="result-label" data-i18n="calc-modal-res-monthly">ყოველთვიური გადასახადი</span>
+                        <div class="monthly-payment-display">
+                            <span id="monthly-payment-amount">208.25</span>
+                            <span class="currency">₾ / თვ</span>
+                        </div>
+                        
+                        <div class="results-breakdown-list">
+                            <div class="res-row">
+                                <span data-i18n="calc-modal-res-financed">განვადების თანხა:</span>
+                                <span id="financed-amount-text">2,499 ₾</span>
+                            </div>
+                            <div class="res-row">
+                                <span data-i18n="calc-modal-res-downpaid">თანამონაწილეობა:</span>
+                                <span id="down-payment-paid-text">0 ₾</span>
+                            </div>
+                            <div class="res-row">
+                                <span data-i18n="calc-modal-res-rate">საპროცენტო განაკვეთი:</span>
+                                <span id="interest-rate-text">0%</span>
+                            </div>
+                            <div class="res-row">
+                                <span data-i18n="calc-modal-res-interest">ჯამური პროცენტი:</span>
+                                <span id="total-interest-text">0 ₾</span>
+                            </div>
+                            <hr class="result-divider">
+                            <div class="res-row grand-total">
+                                <span data-i18n="calc-modal-res-total">სულ გადასახდელი:</span>
+                                <span id="total-paid-text">2,499 ₾</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-accent btn-lg w-full" id="apply-financing-btn" data-i18n="calc-modal-submit">
+                        განვადების მოთხოვნა
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Method Selection Modal -->
+    <div class="modal-backdrop" id="payment-method-modal">
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3 data-i18n="pay-method-title">აირჩიეთ გადახდის მეთოდი</h3>
+                <button class="modal-close" id="close-pay-method-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body payment-methods-selection">
+                <div class="payment-method-card" id="pay-card-option">
+                    <div class="pay-card-icon"><i class="fa-solid fa-credit-card"></i></div>
+                    <div class="pay-card-text">
+                        <h4 data-i18n="pay-method-card">ბარათით გადახდა</h4>
+                        <p data-i18n="pay-method-card-desc">სწრაფი და უსაფრთხო გადახდა ნებისმიერი ბანკის ბარათით</p>
+                    </div>
+                </div>
+                <div class="payment-method-card" id="pay-finance-option">
+                    <div class="pay-card-icon"><i class="fa-solid fa-calculator"></i></div>
+                    <div class="pay-card-text">
+                        <h4 data-i18n="pay-method-finance">განვადებით ყიდვა</h4>
+                        <p data-i18n="pay-method-finance-desc">ონლაინ განვადება 0%-დან საქართველოს ბანკის, თიბისის ან ლიბერტის მეშვეობით</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application / Checkout Multi-Step Modal -->
+    <div class="modal-backdrop" id="checkout-modal">
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3 id="checkout-modal-title">სტანდარტული შეკვეთა</h3>
+                <button class="modal-close" id="close-checkout-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="checkout-form">
+                    <div class="form-control-group">
+                        <label class="input-label"><span data-i18n="checkout-label-name">სახელი და გვარი</span> <span class="required">*</span></label>
+                        <input type="text" id="check-name" class="form-input" placeholder="გიორგი" required data-i18n-placeholder="checkout-name-placeholder">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label"><span data-i18n="checkout-label-phone">ტელეფონი</span> <span class="required">*</span></label>
+                        <input type="tel" id="check-phone" class="form-input" placeholder="+995 5xx xx xx xx" required data-i18n-placeholder="checkout-phone-placeholder">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label"><span data-i18n="checkout-label-address">მიწოდების მისამართი</span> <span class="required">*</span></label>
+                        <input type="text" id="check-address" class="form-input" placeholder="ქალაქი, ქუჩა..." required data-i18n-placeholder="checkout-address-placeholder">
+                    </div>
+                    <div class="form-control-group" id="financing-fields-group" style="display:none;">
+                        <label class="input-label"><span data-i18n="checkout-label-idnum">პირადი ნომერი (11 ნიშნა)</span> <span class="required">*</span></label>
+                        <input type="text" id="check-idnum" class="form-input" placeholder="ბანკის მოთხოვნისთვის..." maxlength="11" pattern="\d{11}" data-i18n-placeholder="checkout-idnum-placeholder">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full mt-2" id="confirm-checkout-btn" data-i18n="checkout-submit-btn">შეკვეთის დადასტურება</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Feedback Modal -->
+    <div class="modal-backdrop" id="success-modal">
+        <div class="modal-container modal-small text-center">
+            <div class="success-icon-wrapper">
+                <div class="success-checkmark">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                        <div class="icon-circle"></div>
+                        <div class="icon-fix"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 id="success-title">განაცხადი გაგზავნილია!</h2>
+            <p id="success-message" class="success-message-text">თქვენი მოთხოვნა წარმატებით მიღებულია. ოპერატორი მალე დაგიკავშირდებათ.</p>
+            
+            <div class="success-details-card" id="success-details">
+                <!-- Details injected dynamically -->
+            </div>
+            
+            <button class="btn btn-primary btn-md w-full" id="success-close-btn" data-i18n="success-close">დასრულება</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-info">
+                <a href="#" class="footer-logo">
+                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img" style="width: 38px; height: 38px; filter: drop-shadow(0 2px 4px rgba(14, 193, 245, 0.2));">
+                    <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
+                </a>
+                <p class="footer-text" data-i18n="footer-text">გთავაზობთ საიმედო გათბობისა და კონდიცირების სისტემებს საქართველოს მასშტაბით. უმაღლესი ხარისხი, სწრაფი სერვისი, მორგებული განვადება.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links-col">
+                <h4 data-i18n="footer-products-title">პროდუქცია</h4>
+                <ul class="footer-links">
+                    <li><a href="#catalog" class="footer-cat-link" data-category="ac" data-i18n="footer-prod-1">კონდიციონერები</a></li>
+                    <li><a href="#catalog" class="footer-cat-link" data-category="boiler" data-i18n="footer-prod-2">ცენტრალური გათბობის ქვაბები</a></li>
+                    <li><a href="#financing-info" data-i18n="nav-financing">განვადების კალკულატორი</a></li>
+                    <li><a href="#booking-section" data-i18n="nav-booking">სამონტაჟო სერვისები</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links-col">
+                <h4 data-i18n="footer-services-title">სერვისები</h4>
+                <ul class="footer-links">
+                    <li><a href="#booking-section" data-i18n="footer-serv-1">კონდიციონერის მონტაჟი</a></li>
+                    <li><a href="#booking-section" data-i18n="footer-serv-2">გათბობის ქვაბის მონტაჟი</a></li>
+                    <li><a href="#booking-section" data-i18n="footer-serv-3">ფრეონით შევსება / მოვლა</a></li>
+                    <li><a href="#booking-section" data-i18n="footer-serv-4">სრული პროფილაქტიკა</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-col">
+                <h4 data-i18n="footer-contact-title">კონტაქტი</h4>
+                <ul class="footer-contacts">
+                    <li>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>ალ. ყაზბეგის გამზ. 12, თბილისი, საქართველო</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        <a href="tel:+995599000000">+995 599 00 00 00</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:info@climate-comfort.ge">info@climate-comfort.ge</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-clock"></i>
+                        <span data-i18n="footer-workhours">ორშ - შაბ: 09:00 - 20:00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-container">
+                <p>&copy; 2026 Climate Comfort. <span data-i18n="footer-copyright">ყველა უფლება დაცულია. დამზადებულია საქართველოში.</span></p>
+                <p>Website name: <span class="highlight-domain">cilmate-comfort.ge</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS script -->
+    <script src="app.js"></script>
+</body>
+</html>
