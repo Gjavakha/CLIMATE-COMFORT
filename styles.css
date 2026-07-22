@@ -1933,7 +1933,12 @@ img {
     max-height: calc(100vh - 48px);
     overflow-y: auto;
     box-shadow: var(--shadow-xl);
-    animation: modalSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animate on every open (the backdrop toggles opacity, not display — an
+   animation on the base class would only ever play once at page load) */
+.modal-backdrop.open .modal-container {
+    animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .modal-container.modal-small {
@@ -2206,148 +2211,164 @@ img {
 }
 
 /* ==========================================================================
-   CSS Animated Checkmark (Success Modal)
+   Success Modal
    ========================================================================== */
-.success-icon-wrapper {
-    margin: 0 auto 24px auto;
-    width: 80px;
-    height: 80px;
+#success-modal .modal-container {
+    max-width: 430px;
+    padding: 36px 30px 30px;
+    border-radius: 20px;
 }
 
-.success-checkmark {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
-}
-
-.success-checkmark .check-icon {
-    width: 80px;
-    height: 80px;
+.success-badge {
     position: relative;
+    width: 84px;
+    height: 84px;
+    margin: 6px auto 26px;
+    display: grid;
+    place-items: center;
     border-radius: 50%;
-    box-sizing: content-box;
-    border: 4px solid #4caf50;
+    background: linear-gradient(135deg, var(--secondary), #0a8fc9);
+    color: #ffffff;
+    font-size: 2.1rem;
+    box-shadow: 0 14px 34px rgba(14, 193, 245, 0.35);
 }
 
-.success-checkmark .check-icon::before {
-    top: 3px;
-    left: -2px;
-    width: 30px;
-    transform-origin: 100% 50%;
-    border-radius: 100px 0 0 100px;
-}
-
-.success-checkmark .check-icon::after {
-    top: 0;
-    left: 30px;
-    width: 60px;
-    transform-origin: 0 50%;
-    border-radius: 0 100px 100px 0;
-}
-
-.success-checkmark .check-icon::before, .success-checkmark .check-icon::after {
+.success-badge::before,
+.success-badge::after {
     content: '';
-    height: 80px;
     position: absolute;
-    background: #ffffff;
-    transform: rotate(-45deg);
-}
-
-.success-checkmark .check-icon .icon-line {
-    height: 5px;
-    background-color: #4caf50;
-    display: block;
-    border-radius: 2px;
-    position: absolute;
-    z-index: 10;
-}
-
-.success-checkmark .check-icon .icon-line.line-tip {
-    top: 46px;
-    left: 14px;
-    width: 25px;
-    transform: rotate(45deg);
-    animation: icon-line-tip 0.75s;
-}
-
-.success-checkmark .check-icon .icon-line.line-long {
-    top: 38px;
-    right: 8px;
-    width: 47px;
-    transform: rotate(-45deg);
-    animation: icon-line-long 0.75s;
-}
-
-.success-checkmark .check-icon .icon-circle {
-    top: -4px;
-    left: -4px;
-    z-index: 10;
-    width: 80px;
-    height: 80px;
+    inset: -12px;
     border-radius: 50%;
-    border: 4px solid rgba(76, 175, 80, 0.5);
-    box-sizing: content-box;
+    border: 2px solid rgba(14, 193, 245, 0.35);
+    opacity: 0;
+}
+
+.success-badge::after {
+    inset: -24px;
+    border-color: rgba(14, 193, 245, 0.16);
+}
+
+/* All motion is scoped to .open so it replays on every appearance */
+#success-modal.open .success-badge {
+    animation: successPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+#success-modal.open .success-badge::before {
+    animation: successRing 1.8s ease-out 0.4s infinite;
+}
+
+#success-modal.open .success-badge::after {
+    animation: successRing 1.8s ease-out 0.65s infinite;
+}
+
+@keyframes successPop {
+    from { transform: scale(0.2); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes successRing {
+    0%   { transform: scale(0.85); opacity: 1; }
+    100% { transform: scale(1.18); opacity: 0; }
+}
+
+/* Celebration burst: six brand-colored particles flying out of the badge */
+.success-badge .burst {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.success-checkmark .check-icon .icon-fix {
-    top: 8px;
-    left: 28px;
-    z-index: 1;
-    width: 5px;
-    height: 70px;
-    position: absolute;
-    transform: rotate(-45deg);
-    background-color: #ffffff;
+#success-modal.open .success-badge .burst {
+    animation: burstFly 0.9s ease-out 0.25s both;
 }
 
-@keyframes icon-line-tip {
-    0% { width: 0; left: 1px; top: 19px; }
-    54% { width: 0; left: 1px; top: 19px; }
-    70% { width: 50px; left: -8px; top: 37px; }
-    84% { width: 17px; left: 21px; top: 48px; }
-    100% { width: 25px; left: 14px; top: 46px; }
+.success-badge .burst:nth-child(1) { background: var(--accent);          --bx: -74px; --by: -44px; --br: 140deg; }
+.success-badge .burst:nth-child(2) { background: #ffffff;                --bx: 78px;  --by: -36px; --br: -160deg; border-radius: 50%; }
+.success-badge .burst:nth-child(3) { background: #22c55e;                --bx: -90px; --by: 14px;  --br: 200deg; }
+.success-badge .burst:nth-child(4) { background: #f59e0b;                --bx: 92px;  --by: 22px;  --br: -120deg; }
+.success-badge .burst:nth-child(5) { background: var(--primary);         --bx: -48px; --by: 58px;  --br: 90deg; width: 6px; height: 6px; }
+.success-badge .burst:nth-child(6) { background: var(--secondary-hover); --bx: 56px;  --by: 54px;  --br: -90deg; border-radius: 50%; }
+
+@keyframes burstFly {
+    0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) rotate(var(--br)) scale(0.6); opacity: 0; }
 }
 
-@keyframes icon-line-long {
-    0% { width: 0; right: 46px; top: 54px; }
-    65% { width: 0; right: 46px; top: 54px; }
-    84% { width: 55px; right: 0px; top: 35px; }
-    100% { width: 47px; right: 8px; top: 38px; }
+#success-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--primary);
+    margin-bottom: 8px;
 }
 
 .success-message-text {
     color: var(--text-muted);
     font-size: 0.95rem;
-    margin-bottom: 24px;
+    line-height: 1.6;
+    max-width: 340px;
+    margin: 0 auto 24px;
 }
 
+/* Receipt-style summary */
 .success-details-card {
-    background-color: #f8fafc;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 16px;
+    padding: 16px 18px;
     margin-bottom: 24px;
     text-align: left;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
 }
 
 .detail-line {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    font-size: 0.85rem;
+    gap: 12px;
+    font-size: 0.86rem;
+    padding-bottom: 9px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.detail-line:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .detail-line span:first-child {
     color: var(--text-muted);
     font-weight: 500;
+    flex-shrink: 0;
 }
 
 .detail-line span:last-child {
     font-weight: 700;
     color: var(--primary);
+    text-align: right;
+    word-break: break-word;
+}
+
+/* First row is always the order/booking reference — make it the keepsake */
+.success-details-card .detail-line:first-child {
+    background: rgba(14, 193, 245, 0.09);
+    border: 1px dashed rgba(14, 193, 245, 0.45);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    margin-bottom: 3px;
+}
+
+.success-details-card .detail-line:first-child span:last-child {
+    color: var(--secondary-hover);
+    font-size: 0.95rem;
+    letter-spacing: 0.6px;
 }
 
 /* ==========================================================================
