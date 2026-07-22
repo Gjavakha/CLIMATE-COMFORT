@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Identity Services (real Google sign-in; used only when a client ID is configured in app.js) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- CSS stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -58,6 +60,12 @@
                     <i class="fa-solid fa-phone"></i>
                     <span>+995 599 00 00 00</span>
                 </a>
+
+                <!-- Logged-in account chip (hidden until authenticated; click = log out) -->
+                <button class="account-btn hidden" id="account-btn">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span id="account-name-short"></span>
+                </button>
                 <button class="cart-trigger" id="cart-btn" aria-label="Open shopping cart">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-badge" id="cart-badge-count">0</span>
@@ -70,6 +78,7 @@
     <section class="hero">
         <div class="hero-overlay"></div>
         <div class="container hero-container">
+            <div class="hero-main">
             <div class="hero-content">
                 <span class="hero-tagline" data-i18n="hero-tagline">პრემიუმ კლიმატური ტექნიკა საქართველოში</span>
                 <h1 class="hero-title" data-i18n="hero-title">შეინარჩუნეთ სიგრილე ზაფხულში, სითბო ზამთარში</h1>
@@ -78,6 +87,17 @@
                     <a href="#catalog" class="btn btn-primary btn-lg"><span data-i18n="hero-cta-explore">კატალოგის ნახვა</span> <i class="fa-solid fa-arrow-right"></i></a>
                     <a href="#booking-section" class="btn btn-outline-white btn-lg"><span data-i18n="hero-cta-service">დაჯავშნე სერვისი</span> <i class="fa-solid fa-screwdriver-wrench"></i></a>
                 </div>
+            </div>
+
+            <!-- ============================================================
+                 VENDOR PROMO BANNER — PLACEHOLDER
+                 Replace the img src below with the real vendor banner/logo
+                 when it arrives. The image is cropped to a near-square
+                 (4:3) frame, so any size they send will fit.
+                 ============================================================ -->
+            <div class="hero-banner">
+                <img src="https://picsum.photos/seed/climatecomfort/900/675" alt="პარტნიორის სარეკლამო ბანერი">
+            </div>
             </div>
             <div class="hero-stats">
                 <div class="stat-card">
@@ -281,6 +301,21 @@
             </div>
         </section>
     </main>
+
+    <!-- Product Detail Page (SPA view — rendered by app.js on #product/<id>, hidden on home) -->
+    <section class="product-detail-page" id="product-detail-page">
+        <div class="container" id="product-detail-content"></div>
+    </section>
+
+    <!-- Checkout Page (SPA view — rendered by app.js on #checkout/<id>, requires login) -->
+    <section class="checkout-page" id="checkout-page">
+        <div class="container" id="checkout-content"></div>
+    </section>
+
+    <!-- Account Page (SPA view — rendered by app.js on #account, requires login) -->
+    <section class="account-page" id="account-page">
+        <div class="container" id="account-content"></div>
+    </section>
 
     <!-- Financing Banner / Info Section -->
     <section class="financing-section" id="financing-info">
@@ -698,6 +733,62 @@
         </div>
     </div>
 
+    <!-- Auth Modal (register / login — required before checkout) -->
+    <div class="modal-backdrop" id="auth-modal">
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3 id="auth-modal-title">რეგისტრაცია</h3>
+                <button class="modal-close" id="close-auth-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="auth-subtitle" data-i18n="auth-subtitle">შესყიდვის გასაგრძელებლად საჭიროა ავტორიზაცია</p>
+                <div class="auth-error hidden" id="auth-error"></div>
+
+                <!-- Email / password view -->
+                <div id="auth-main-view">
+                    <form id="auth-form" novalidate>
+                        <div class="form-control-group">
+                            <label class="input-label" for="auth-email-input" data-i18n="auth-email">ელ. ფოსტა</label>
+                            <input type="email" id="auth-email-input" class="form-input" placeholder="you@example.com" autocomplete="email">
+                        </div>
+                        <div class="form-control-group">
+                            <label class="input-label" for="auth-password-input" data-i18n="auth-password">პაროლი</label>
+                            <input type="password" id="auth-password-input" class="form-input" placeholder="••••••" autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn btn-accent w-full mt-2" id="auth-submit-btn">რეგისტრაცია</button>
+                    </form>
+
+                    <div class="auth-divider"><span data-i18n="auth-or">ან</span></div>
+
+                    <!-- Official Google button renders here when GOOGLE_CLIENT_ID is set in app.js -->
+                    <div class="google-btn-container hidden" id="google-btn-container"></div>
+
+                    <button type="button" class="google-btn" id="google-signin-btn">
+                        <span class="google-g">G</span>
+                        <span data-i18n="auth-google-btn">Google-ით გაგრძელება</span>
+                    </button>
+
+                    <p class="auth-switch">
+                        <span id="auth-switch-text">უკვე გაქვთ ანგარიში?</span>
+                        <a href="#" id="auth-switch-link">შესვლა</a>
+                    </p>
+
+                    <button type="button" class="guest-continue" id="guest-continue-btn">
+                        <span data-i18n="auth-guest-btn">რეგისტრაციის გარეშე გაგრძელება</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Mock Google account view (no real OAuth on a static site) -->
+                <div class="google-mock hidden" id="google-mock-view">
+                    <p class="google-mock-title" data-i18n="auth-google-title">Google ანგარიშით გაგრძელება</p>
+                    <p class="google-mock-hint" data-i18n="auth-google-hint">შეიყვანეთ თქვენი Google ელ. ფოსტა</p>
+                    <input type="email" id="google-email-input" class="form-input" placeholder="you@gmail.com" autocomplete="email">
+                    <button type="button" class="btn btn-primary w-full mt-2" id="google-continue-btn" data-i18n="auth-google-continue">გაგრძელება</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Success Feedback Modal -->
     <div class="modal-backdrop" id="success-modal">
         <div class="modal-container modal-small text-center">
@@ -790,6 +881,9 @@
     </footer>
 
     <!-- JS script -->
+    <!-- Supabase client (database: products, orders) — must load before app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

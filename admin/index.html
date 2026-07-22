@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Orders — Climate Comfort Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- ======================= LOGIN ======================= -->
+    <section class="auth-screen" id="auth-screen">
+        <div class="auth-glow auth-glow-blue"></div>
+        <div class="auth-glow auth-glow-orange"></div>
+
+        <div class="auth-card" id="auth-card">
+            <div class="auth-brand">
+                <span class="auth-logo"><i class="fa-solid fa-snowflake"></i></span>
+                <div>
+                    <p class="auth-name">Climate Comfort</p>
+                    <p class="auth-sub">Back office</p>
+                </div>
+            </div>
+
+            <h1 class="auth-title" id="auth-title">Sign in</h1>
+            <p class="auth-hint" id="auth-hint">Admin access only. Use the email that is on the admin list.</p>
+
+            <form id="auth-form" novalidate>
+                <label class="field-label" for="auth-email">Email</label>
+                <input type="email" id="auth-email" class="field-input" placeholder="you@company.com" autocomplete="username" required>
+
+                <label class="field-label" for="auth-password">Password</label>
+                <input type="password" id="auth-password" class="field-input" placeholder="••••••••" autocomplete="current-password" required minlength="6">
+
+                <p class="auth-error hidden" id="auth-error"></p>
+                <p class="auth-notice hidden" id="auth-notice"></p>
+
+                <button type="submit" class="btn-solid" id="auth-submit">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign in
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                <span id="auth-switch-label">First time here?</span>
+                <a href="#" id="auth-switch-link">Create an account</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- ======================= ACCESS DENIED ======================= -->
+    <section class="denied-screen hidden" id="denied-screen">
+        <div class="auth-card denied-card">
+            <span class="denied-icon"><i class="fa-solid fa-hand"></i></span>
+            <h1 class="auth-title">Not on the admin list</h1>
+            <p class="auth-hint">
+                You are signed in as <strong id="denied-email"></strong>, but this email is not in the
+                <code>admin_emails</code> table. Ask an administrator to add it, then sign in again.
+            </p>
+            <button class="btn-solid btn-ghost" id="denied-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button>
+        </div>
+    </section>
+
+    <!-- ======================= DASHBOARD ======================= -->
+    <div class="shell hidden" id="dashboard">
+        <header class="topbar">
+            <div class="topbar-brand">
+                <span class="topbar-logo"><i class="fa-solid fa-snowflake"></i></span>
+                <span class="topbar-title">Climate Comfort <em>Admin</em></span>
+            </div>
+            <div class="topbar-actions">
+                <a class="topbar-link" href="../index.html" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-store"></i> View shop
+                </a>
+                <span class="admin-chip" id="admin-chip"><i class="fa-solid fa-circle-user"></i> <span id="admin-email"></span></span>
+                <button class="icon-btn" id="logout-btn" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </header>
+
+        <main class="content">
+            <nav class="tab-bar">
+                <button class="tab active" data-view="orders"><i class="fa-solid fa-box-open"></i> Orders</button>
+                <button class="tab" data-view="import"><i class="fa-solid fa-file-arrow-up"></i> Price import</button>
+            </nav>
+
+            <!-- ================= ORDERS VIEW ================= -->
+            <div class="view" id="view-orders">
+            <div class="page-head">
+                <h2 class="page-title">Incoming orders</h2>
+                <button class="icon-btn refresh-btn" id="refresh-btn" title="Refresh">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stat-row">
+                <div class="stat-box stat-today">
+                    <p class="stat-label">Orders today</p>
+                    <p class="stat-value" id="stat-today">—</p>
+                </div>
+                <div class="stat-box stat-pending">
+                    <p class="stat-label">Awaiting payment</p>
+                    <p class="stat-value" id="stat-pending">—</p>
+                </div>
+                <div class="stat-box stat-revenue">
+                    <p class="stat-label">Paid revenue</p>
+                    <p class="stat-value"><span id="stat-revenue">—</span> <span class="stat-unit">₾</span></p>
+                </div>
+                <div class="stat-box stat-financing">
+                    <p class="stat-label">Financing requests</p>
+                    <p class="stat-value" id="stat-financing">—</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-bar">
+                <div class="chip-row" id="status-chips">
+                    <button class="chip active" data-status="all">All</button>
+                    <button class="chip" data-status="new">New</button>
+                    <button class="chip" data-status="confirmed">Confirmed</button>
+                    <button class="chip" data-status="delivering">Delivering</button>
+                    <button class="chip" data-status="completed">Completed</button>
+                    <button class="chip" data-status="cancelled">Cancelled</button>
+                </div>
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="order-search" placeholder="Search name, phone, product…">
+                </div>
+            </div>
+
+            <!-- Orders table -->
+            <div class="panel">
+                <div class="table-scroll">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th class="num">Amount</th>
+                                <th>Type</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body"></tbody>
+                    </table>
+                </div>
+                <div class="empty-state hidden" id="empty-state">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p id="empty-text">No orders yet. They will appear here the moment a customer checks out.</p>
+                </div>
+            </div>
+
+            <p class="foot-note">
+                Payments are marked <strong>pending</strong> automatically — confirm them here once the money
+                actually arrives (card gateway integration comes later). Click a row to see the delivery address
+                and contact details.
+            </p>
+            </div><!-- /view-orders -->
+
+            <!-- ================= IMPORT VIEW ================= -->
+            <div class="view hidden" id="view-import">
+                <div class="page-head">
+                    <h2 class="page-title">Price list import</h2>
+                </div>
+
+                <div class="dropzone" id="dropzone" tabindex="0">
+                    <i class="fa-solid fa-file-excel dz-icon"></i>
+                    <p class="dz-main">Drop a supplier price list here <span>— or click to choose a file</span></p>
+                    <p class="dz-hint">.xlsx from Elit Electronics or Kontakt — the supplier is recognized automatically.
+                        Nothing is published until you approve the preview.</p>
+                    <input type="file" id="file-input" accept=".xlsx,.xls">
+                </div>
+                <p class="auth-error hidden" id="import-error"></p>
+
+                <div class="import-preview hidden" id="import-preview">
+                    <div class="preview-head">
+                        <div>
+                            <p class="preview-file" id="preview-file"></p>
+                            <p class="preview-supplier">Supplier: <strong id="preview-supplier"></strong></p>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="chip" id="import-cancel">Cancel</button>
+                            <button class="btn-solid btn-apply" id="import-apply"><i class="fa-solid fa-check"></i> Approve &amp; publish</button>
+                        </div>
+                    </div>
+                    <div class="count-row" id="count-row"></div>
+                    <div class="panel">
+                        <div class="table-scroll">
+                            <table class="orders-table diff-table">
+                                <thead>
+                                    <tr>
+                                        <th>Change</th>
+                                        <th>Product</th>
+                                        <th>BTU</th>
+                                        <th class="num">Sell at</th>
+                                        <th class="num">Crossed out</th>
+                                        <th class="num">Our cost</th>
+                                        <th>Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="diff-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p class="foot-note">
+                        <strong>Sell at</strong> = supplier's action price (retail when no action price) —
+                        the price shoppers pay. <strong>Crossed out</strong> = supplier retail shown with a line
+                        through it. Rows marked <strong>review</strong> are NOT published (missing price or data).
+                        Products of this supplier that are absent from today's file get hidden from the shop.
+                    </p>
+                </div>
+
+                <div class="import-progress hidden" id="import-progress">
+                    <i class="fa-solid fa-rotate fa-spin"></i>
+                    <p id="progress-text">Working…</p>
+                </div>
+
+                <div class="import-done hidden" id="import-done">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <h3>Import published</h3>
+                    <p id="done-text"></p>
+                    <button class="btn-solid btn-apply" id="import-again"><i class="fa-solid fa-file-arrow-up"></i> Import another file</button>
+                </div>
+            </div><!-- /view-import -->
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="../supabase-config.js"></script>
+    <script src="importer-profiles.js"></script>
+    <script src="admin.js"></script>
+    <script src="importer.js"></script>
+</body>
+</html>

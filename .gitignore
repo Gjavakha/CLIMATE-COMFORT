@@ -1,0 +1,6 @@
+# Supplier price lists contain dealer (cost) prices — never publish these
+*.xlsx
+*.xls
+
+# Excel lock/temp files
+~$*

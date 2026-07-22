@@ -168,7 +168,99 @@ const translations = {
         "card-buy-credit": "განვადებით ყიდვა",
         "card-monthly-est": "განვადება თვეში",
         "card-add-cart": "კალათაში დამატება",
-        
+
+        // Product detail page
+        "detail-back": "კატალოგში დაბრუნება",
+        "detail-desc": "აღწერა",
+        "detail-specs": "მახასიათებლები",
+        "detail-features": "ძირითადი ფუნქციები",
+        "detail-install-title": "პროფესიონალური მონტაჟი",
+        "detail-install-desc": "დაამატეთ მონტაჟის სერვისი — ჩვენი სერტიფიცირებული ტექნიკოსი დაგიმონტაჟებთ თქვენთვის სასურველ დღეს.",
+        "detail-install-note": "ღირებულება დამოკიდებულია სამუშაოს სირთულეზე. გადახდა ხდება მხოლოდ მონტაჟის დასრულების შემდეგ, ადგილზე — ონლაინ გადახდა საჭირო არ არის.",
+        "detail-install-btn": "მონტაჟის დაჯავშნა",
+        "spec-brand": "ბრენდი",
+        "spec-capacity": "სიმძლავრე",
+        "spec-area": "რეკომენდებული ფართობი",
+        "spec-type": "ტიპი",
+        "spec-color": "ფერი",
+        "spec-energy": "ენერგოკლასი",
+        "spec-tech": "ტექნოლოგია",
+
+        // Auth (register / login) modal
+        "auth-title-login": "შესვლა",
+        "auth-title-register": "რეგისტრაცია",
+        "auth-subtitle": "შესყიდვის გასაგრძელებლად საჭიროა ავტორიზაცია",
+        "auth-email": "ელ. ფოსტა",
+        "auth-password": "პაროლი",
+        "auth-login-btn": "შესვლა",
+        "auth-register-btn": "რეგისტრაცია",
+        "auth-google-btn": "Google-ით გაგრძელება",
+        "auth-or": "ან",
+        "auth-google-title": "Google ანგარიშით გაგრძელება",
+        "auth-google-hint": "შეიყვანეთ თქვენი Google ელ. ფოსტა",
+        "auth-google-continue": "გაგრძელება",
+        "auth-switch-to-register": "არ გაქვთ ანგარიში?",
+        "auth-switch-to-login": "უკვე გაქვთ ანგარიში?",
+        "auth-err-exists": "ამ ელ. ფოსტით ანგარიში უკვე არსებობს",
+        "auth-err-invalid": "ელ. ფოსტა ან პაროლი არასწორია",
+        "auth-err-email": "შეიყვანეთ სწორი ელ. ფოსტა",
+        "auth-err-password": "პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო",
+        "auth-logout-confirm": "გსურთ ანგარიშიდან გასვლა?",
+        "auth-guest-btn": "რეგისტრაციის გარეშე გაგრძელება",
+        "co-guest-label": "სტუმრის რეჟიმი",
+
+        // Full-page checkout
+        "co-title": "შეკვეთის გაფორმება",
+        "co-signed-as": "ავტორიზებული:",
+        "co-logout": "გასვლა",
+        "co-details-header": "მიმღების მონაცემები",
+        "co-firstname": "სახელი",
+        "co-lastname": "გვარი",
+        "co-phone": "ტელეფონის ნომერი",
+        "co-address": "მისამართი",
+        "co-idnum": "პირადი ნომერი",
+        "co-install-toggle": "მჭირდება მონტაჟის სერვისი",
+        "co-payment-header": "გადახდის მეთოდი",
+        "co-pay-card-desc": "ბარათით გადახდა",
+        "co-summary-header": "თქვენი შეკვეთა",
+        "co-total": "ჯამი:",
+        "co-install-line": "მონტაჟი:",
+        "co-install-onsite": "ადგილზე გადახდა",
+        "co-delivery-note": "მიწოდებას სჭირდება 2-5 სამუშაო დღე",
+        "co-pay-btn": "გადახდა",
+        "co-processing": "მუშავდება...",
+        "co-err-id": "პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან",
+        "co-err-phone": "შეიყვანეთ სწორი ტელეფონის ნომერი",
+        "co-success-title": "გადახდა წარმატებულია!",
+        "co-success-msg": "თქვენი შეკვეთა მიღებულია. დეტალებს მიიღებთ ელ. ფოსტაზე.",
+        "co-success-install": "მონტაჟის მოთხოვნა მიღებულია — ღირებულებას გადაიხდით ადგილზე, მონტაჟის დასრულების შემდეგ.",
+
+        // Account page
+        "acc-title": "ჩემი ანგარიში",
+        "acc-nav-orders": "ჩემი შეკვეთები",
+        "acc-nav-details": "პირადი მონაცემები",
+        "acc-nav-cards": "გადახდის მეთოდები",
+        "acc-nav-security": "ანგარიშის უსაფრთხოება",
+        "acc-orders-empty": "შეკვეთები ჯერ არ გაქვთ",
+        "acc-status-received": "მიღებულია",
+        "acc-save": "შენახვა",
+        "acc-saved": "შენახულია",
+        "acc-current-password": "მიმდინარე პაროლი",
+        "acc-new-password": "ახალი პაროლი",
+        "acc-change-password": "პაროლის შეცვლა",
+        "acc-change-email": "ელ. ფოსტის შეცვლა",
+        "acc-pass-changed": "პაროლი შეიცვალა",
+        "acc-err-current": "მიმდინარე პაროლი არასწორია",
+        "acc-google-note": "თქვენ Google ანგარიშით ხართ ავტორიზებული — ელ. ფოსტა და პაროლი Google-იდან იმართება.",
+        "acc-card-number": "ბარათის ნომერი",
+        "acc-card-expiry": "მოქმედების ვადა (MM/YY)",
+        "acc-card-holder": "მფლობელის სახელი",
+        "acc-add-card": "ბარათის დამატება",
+        "acc-no-cards": "შენახული ბარათები არ გაქვთ",
+        "acc-card-note": "ინახება მხოლოდ ბარათის ბოლო 4 ციფრი — სრული მონაცემები და CVV არასდროს ინახება.",
+        "acc-err-card": "შეიყვანეთ სწორი ბარათის მონაცემები",
+        "acc-remove": "წაშლა",
+
         "calc-modal-title": "განვადების კალკულატორი",
         "calc-modal-cost-label": "პროდუქტის ფასი:",
         "calc-modal-select-bank": "აირჩიეთ ბანკი",
@@ -359,6 +451,98 @@ const translations = {
         "card-buy-credit": "Buy on Credit",
         "card-monthly-est": "from",
         "card-add-cart": "Add to Cart",
+
+        // Product detail page
+        "detail-back": "Back to Catalog",
+        "detail-desc": "Description",
+        "detail-specs": "Specifications",
+        "detail-features": "Key Features",
+        "detail-install-title": "Professional Installation",
+        "detail-install-desc": "Add our installation service — a certified technician will install the unit on the day you choose.",
+        "detail-install-note": "The fee depends on the complexity of the job. You pay only after the installation is completed, on site — no online payment needed.",
+        "detail-install-btn": "Book Installation",
+        "spec-brand": "Brand",
+        "spec-capacity": "Capacity",
+        "spec-area": "Recommended Area",
+        "spec-type": "Type",
+        "spec-color": "Color",
+        "spec-energy": "Energy Class",
+        "spec-tech": "Technology",
+
+        // Auth (register / login) modal
+        "auth-title-login": "Log In",
+        "auth-title-register": "Create Account",
+        "auth-subtitle": "Sign in to continue with your purchase",
+        "auth-email": "Email",
+        "auth-password": "Password",
+        "auth-login-btn": "Log In",
+        "auth-register-btn": "Register",
+        "auth-google-btn": "Continue with Google",
+        "auth-or": "or",
+        "auth-google-title": "Continue with Google",
+        "auth-google-hint": "Enter your Google email address",
+        "auth-google-continue": "Continue",
+        "auth-switch-to-register": "No account yet?",
+        "auth-switch-to-login": "Already have an account?",
+        "auth-err-exists": "An account with this email already exists",
+        "auth-err-invalid": "Incorrect email or password",
+        "auth-err-email": "Please enter a valid email address",
+        "auth-err-password": "Password must be at least 6 characters",
+        "auth-logout-confirm": "Log out of your account?",
+        "auth-guest-btn": "Continue without registering",
+        "co-guest-label": "Guest checkout",
+
+        // Full-page checkout
+        "co-title": "Checkout",
+        "co-signed-as": "Signed in as:",
+        "co-logout": "Log out",
+        "co-details-header": "Your Details",
+        "co-firstname": "First Name",
+        "co-lastname": "Last Name",
+        "co-phone": "Phone Number",
+        "co-address": "Address",
+        "co-idnum": "Personal ID Number",
+        "co-install-toggle": "I need installation service",
+        "co-payment-header": "Payment Method",
+        "co-pay-card-desc": "Card payment",
+        "co-summary-header": "Order Summary",
+        "co-total": "Total:",
+        "co-install-line": "Installation:",
+        "co-install-onsite": "paid on site",
+        "co-delivery-note": "Delivery takes 2–5 business days",
+        "co-pay-btn": "Pay Now",
+        "co-processing": "Processing...",
+        "co-err-id": "The personal ID number must be exactly 11 digits",
+        "co-err-phone": "Please enter a valid phone number",
+        "co-success-title": "Payment Successful!",
+        "co-success-msg": "Your order has been received. Details have been sent to your email.",
+        "co-success-install": "Installation request received — you pay for it on site, after the work is completed.",
+
+        // Account page
+        "acc-title": "My Account",
+        "acc-nav-orders": "My Orders",
+        "acc-nav-details": "Personal Details",
+        "acc-nav-cards": "Payment Methods",
+        "acc-nav-security": "Account Security",
+        "acc-orders-empty": "You have no orders yet",
+        "acc-status-received": "Received",
+        "acc-save": "Save",
+        "acc-saved": "Saved",
+        "acc-current-password": "Current Password",
+        "acc-new-password": "New Password",
+        "acc-change-password": "Change Password",
+        "acc-change-email": "Change Email",
+        "acc-pass-changed": "Password changed",
+        "acc-err-current": "Current password is incorrect",
+        "acc-google-note": "You signed in with Google — your email and password are managed by Google.",
+        "acc-card-number": "Card Number",
+        "acc-card-expiry": "Expiry (MM/YY)",
+        "acc-card-holder": "Cardholder Name",
+        "acc-add-card": "Add Card",
+        "acc-no-cards": "No saved cards yet",
+        "acc-card-note": "Only the last 4 digits are stored — full card details and CVV are never saved.",
+        "acc-err-card": "Please enter valid card details",
+        "acc-remove": "Remove",
         
         "calc-modal-title": "Financing Calculator",
         "calc-modal-cost-label": "Product Price:",
@@ -395,6 +579,9 @@ function t(key) {
 }
 
 // 2. Localized Product Database
+// NOTE: this built-in array is DEMO data. On startup loadDbProducts() replaces
+// it with the live catalog from Supabase whenever published products exist
+// there; until the first import is done, the demo products keep the site alive.
 const products = [
     {
         id: 1,
@@ -791,13 +978,90 @@ let state = {
     },
     sortBy: "popular",
     activeFinancedProduct: null,
-    checkoutMode: "standard"
+    checkoutMode: "standard",
+    user: null,               // logged-in account ({email, provider}) or null
+    afterAuthHash: null,      // hash to navigate to once the user authenticates (checkout/N, account)
+    guestCheckout: false      // set when the buyer skips registration ("continue without registering")
 };
+
+// ==========================================================================
+// Live catalog from Supabase
+// ==========================================================================
+// Product ids: demo products use numbers (1, 2...), database products use
+// UUIDs — always compare through findProduct()/String(), never parseInt.
+function findProduct(id) {
+    return products.find(p => String(p.id) === String(id));
+}
+
+function dbRowToProduct(r) {
+    const fallbackTitle = `${r.brand} ${r.model}`;
+    return {
+        id: r.id,
+        category: r.category,
+        brand: r.brand,
+        title: {
+            ka: r.title_ka || fallbackTitle,
+            en: r.title_en || fallbackTitle
+        },
+        price: Number(r.display_price) || 0,
+        oldPrice: r.display_old_price ? Number(r.display_old_price) : null,
+        btu: r.btu ? `${r.btu} BTU` : "",
+        area: r.area_sqm ? `${r.area_sqm} m²` : "",
+        type: "Split System",
+        inverter: r.subtype === "inverter",
+        energyClass: "",
+        color: "",
+        popularity: 50,
+        image: r.image_url || null,
+        description: {
+            ka: r.description_ka || "",
+            en: r.description_en || ""
+        },
+        features: { ka: [], en: [] }
+    };
+}
+
+async function loadDbProducts() {
+    if (!sbClient) return;
+    try {
+        const { data, error } = await sbClient
+            .from("products")
+            .select("id, brand, model, category, subtype, btu, area_sqm, title_ka, title_en, description_ka, description_en, image_url, display_price, display_old_price")
+            .eq("is_published", true)
+            .order("created_at", { ascending: false });
+
+        if (error) { console.warn("Supabase catalog error — using demo products:", error.message); return; }
+        if (!data || data.length === 0) return; // nothing imported yet — keep demo catalog
+
+        products.length = 0;
+        data.forEach(r => products.push(dbRowToProduct(r)));
+
+        // Rebuild everything derived from the catalog
+        generateFiltersUI();
+        renderCatalog();
+        handleRouting();
+    } catch (err) {
+        console.warn("Supabase unreachable — using demo products:", err);
+    }
+}
+
+// Fire-and-forget order persistence: the shopper's flow never blocks on it,
+// but every order lands in the database for the admin page.
+function saveOrderToDb(order) {
+    if (!sbClient) return;
+    sbClient.from("orders").insert(order).then(({ error }) => {
+        if (error) console.warn("Order was not saved to the database:", error.message);
+    });
+}
 
 // ==========================================================================
 // Initialization & Localization Apply
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
+    // 0. Restore auth session
+    try { state.user = JSON.parse(localStorage.getItem("cc_session")); } catch (err) { state.user = null; }
+    updateAuthUI();
+
     // 1. Setup Language Button States
     updateLangBtnStates();
 
@@ -812,7 +1076,14 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // 5. Bind Event Listeners
     bindUIEventListeners();
-    
+
+    // 6. Hash routing (product detail pages) — handle deep links like #product/3
+    window.addEventListener("hashchange", handleRouting);
+    handleRouting();
+
+    // 7. Swap in the live catalog from Supabase (async; demo data until it lands)
+    loadDbProducts();
+
     // Initialize date selector minimum date
     const dateInput = document.getElementById("booking-date");
     if (dateInput) {
@@ -978,6 +1249,919 @@ function generateFiltersUI() {
 }
 
 // ==========================================================================
+// Shared Product Render Helpers
+// ==========================================================================
+
+// Product visual, used by cards, detail page and checkout summary:
+// real photo when the product has one, neutral placeholder otherwise
+// (the old CSS-drawn mockups are retired — real photos are coming)
+function buildProductMockup(p) {
+    if (p.image) {
+        return `<img class="product-photo" src="${p.image}" alt="${p.brand}" loading="lazy">`;
+    }
+    const soon = state.currentLang === 'ka' ? 'ფოტო მალე დაემატება' : 'Photo coming soon';
+    return `
+        <div class="photo-placeholder">
+            <i class="fa-regular fa-image"></i>
+            <span>${soon}</span>
+        </div>
+    `;
+}
+
+// Inverter / Condensing tech label
+function getTechLabel(p) {
+    if (p.category === 'boiler') {
+        return p.inverter ? (state.currentLang === 'ka' ? 'კონდენსაციური' : 'Condensing') : (state.currentLang === 'ka' ? 'სტანდარტული' : 'Standard');
+    }
+    return p.inverter ? t("filter-inverter-yes").split(" ")[0] : t("filter-inverter-no").split(" ")[0];
+}
+
+// ==========================================================================
+// Product Detail Page (hash route: #product/<id>)
+// ==========================================================================
+const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view"];
+
+function handleRouting() {
+    const productMatch = location.hash.match(/^#product\/([\w-]+)$/);
+    const checkoutMatch = location.hash.match(/^#checkout\/([\w-]+)$/);
+    const detailProduct = productMatch ? findProduct(productMatch[1]) : null;
+    const checkoutProduct = checkoutMatch ? findProduct(checkoutMatch[1]) : null;
+    const isAccount = location.hash === "#account";
+    const wasOnSubPage = SUBPAGE_CLASSES.some(c => document.body.classList.contains(c));
+
+    // Checkout requires an account (or explicit guest mode) — bounce to the product page and ask to sign in
+    if (checkoutProduct && !state.user && !state.guestCheckout) {
+        state.afterAuthHash = `checkout/${checkoutProduct.id}`;
+        location.hash = `product/${checkoutProduct.id}`;
+        openAuthModal();
+        return;
+    }
+
+    // Account page requires login — show home behind the auth modal, then return here
+    if (isAccount && !state.user) {
+        state.afterAuthHash = "account";
+        document.body.classList.remove(...SUBPAGE_CLASSES);
+        openAuthModal();
+        setAuthMode("login");
+        return;
+    }
+
+    function showSubPage(className, renderFn) {
+        const entering = !document.body.classList.contains(className);
+        renderFn();
+        document.body.classList.remove(...SUBPAGE_CLASSES.filter(c => c !== className));
+        document.body.classList.add(className);
+        if (entering) window.scrollTo(0, 0);
+    }
+
+    if (isAccount) {
+        showSubPage("account-view", () => renderAccountPage());
+    } else if (checkoutProduct) {
+        showSubPage("checkout-view", () => renderCheckoutPage(checkoutProduct));
+    } else if (detailProduct) {
+        showSubPage("product-view", () => renderProductDetailPage(detailProduct));
+    } else {
+        document.body.classList.remove(...SUBPAGE_CLASSES);
+        document.title = t("doc-title");
+        // Re-scroll to the section anchor once the home sections are visible again
+        if (wasOnSubPage && location.hash) {
+            const target = document.getElementById(location.hash.slice(1));
+            if (target) target.scrollIntoView();
+        }
+    }
+}
+
+function renderProductDetailPage(p) {
+    const container = document.getElementById("product-detail-content");
+    if (!container) return;
+
+    const lang = state.currentLang;
+    const localizedTitle = p.title[lang];
+    const techLabel = getTechLabel(p);
+    const areaLabel = p.area.replace("m²", t("sqm"));
+    const capacityLabel = p.category === 'boiler' ? (lang === 'ka' ? 'სიმძლავრე' : 'Power') : 'BTU';
+    const typeLabel = p.type === 'Split System' ? t("ac-type-split") : p.type;
+
+    // Minimum monthly estimate (same formula and term as the catalog cards)
+    const bank = banksConfig.bog;
+    const term = 12;
+    const r = bank.standardRate / 100;
+    const monthlyEst = (p.price * (r * Math.pow(1 + r, term)) / (Math.pow(1 + r, term) - 1)).toFixed(2);
+
+    const inCart = state.cart.find(item => item.id === p.id);
+
+    container.innerHTML = `
+        <a href="#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
+
+        <div class="detail-layout">
+            <div class="detail-visual">
+                <div class="card-badges">
+                    <span class="badge badge-accent">${p.energyClass}</span>
+                    <span class="badge ${p.inverter ? 'badge-inverter' : 'badge-onoff'}">${techLabel}</span>
+                </div>
+                ${buildProductMockup(p)}
+            </div>
+
+            <div class="detail-info">
+                <span class="product-brand">${p.brand}</span>
+                <h1 class="detail-title">${localizedTitle}</h1>
+                <p class="detail-description">${p.description[lang]}</p>
+
+                <div class="detail-price-row">
+                    <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
+                    <div class="financing-mini-indicator">
+                        ${t("card-monthly-est")}<br>
+                        <strong>${monthlyEst} ₾ / ${t("month-unit")}</strong>
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    <button class="btn btn-accent btn-lg" id="detail-buy-btn">
+                        ${t("card-buy")} <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-outline ${inCart ? 'added-to-cart' : ''}" id="detail-cart-btn">
+                        <i class="fa-solid ${inCart ? 'fa-check' : 'fa-cart-shopping'}"></i> ${t("card-add-cart")}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-sections">
+            <div class="detail-panel">
+                <h3>${t("detail-specs")}</h3>
+                <table class="spec-table">
+                    <tr><td>${t("spec-brand")}</td><td>${p.brand}</td></tr>
+                    <tr><td>${capacityLabel}</td><td>${p.btu}</td></tr>
+                    <tr><td>${t("spec-area")}</td><td>${areaLabel}</td></tr>
+                    <tr><td>${t("spec-type")}</td><td>${typeLabel}</td></tr>
+                    <tr><td>${t("spec-energy")}</td><td>${p.energyClass}</td></tr>
+                    <tr><td>${t("spec-tech")}</td><td>${techLabel}</td></tr>
+                    <tr><td>${t("spec-color")}</td><td>${t(p.color)}</td></tr>
+                </table>
+            </div>
+            <div class="detail-panel">
+                <h3>${t("detail-features")}</h3>
+                <ul class="detail-features-list">
+                    ${p.features[lang].map(f => `<li><i class="fa-solid fa-circle-check"></i> ${f}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+    `;
+
+    document.title = `${localizedTitle} | Climate Comfort`;
+
+    // Wire up action buttons (content is re-rendered on each visit / language switch)
+    document.getElementById("detail-buy-btn").addEventListener("click", () => startPurchase(p.id));
+    document.getElementById("detail-cart-btn").addEventListener("click", (e) => {
+        addToCart(p.id);
+        const btn = e.currentTarget;
+        btn.classList.add("added-to-cart");
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> ${t("card-add-cart")}`;
+    });
+}
+
+// ==========================================================================
+// Accounts & Auth (mock — stored in localStorage, no backend on a static site)
+// ==========================================================================
+function loadAccounts() {
+    try { return JSON.parse(localStorage.getItem("cc_accounts")) || {}; } catch (err) { return {}; }
+}
+
+function saveAccounts(accounts) {
+    localStorage.setItem("cc_accounts", JSON.stringify(accounts));
+}
+
+function setSession(user) {
+    state.user = user;
+    state.guestCheckout = false;
+    localStorage.setItem("cc_session", JSON.stringify(user));
+    updateAuthUI();
+}
+
+function logout() {
+    state.user = null;
+    localStorage.removeItem("cc_session");
+    updateAuthUI();
+    // Leaving an authenticated-only page? Return to the catalog
+    if (document.body.classList.contains("checkout-view") || document.body.classList.contains("account-view")) {
+        location.hash = "catalog";
+    }
+}
+
+function updateAuthUI() {
+    const btn = document.getElementById("account-btn");
+    if (!btn) return;
+    if (state.user) {
+        btn.classList.remove("hidden");
+        document.getElementById("account-name-short").innerText = state.user.email.split("@")[0];
+        btn.title = state.user.email;
+    } else {
+        btn.classList.add("hidden");
+    }
+}
+
+// Buy flow entry point: authenticated users go straight to checkout,
+// everyone else registers / logs in first.
+function startPurchase(productId) {
+    if (state.user) {
+        location.hash = `checkout/${productId}`;
+    } else {
+        state.afterAuthHash = `checkout/${productId}`;
+        openAuthModal();
+    }
+}
+
+let authMode = "register";
+
+function openAuthModal() {
+    setAuthMode("register");
+    showAuthError(null);
+    document.getElementById("auth-email-input").value = "";
+    document.getElementById("auth-password-input").value = "";
+    document.getElementById("google-email-input").value = "";
+    document.getElementById("google-mock-view").classList.add("hidden");
+    document.getElementById("auth-main-view").classList.remove("hidden");
+    document.getElementById("auth-modal").classList.add("open");
+    setupGoogleButton(); // swaps in the official Google button when a client ID is configured
+}
+
+function setAuthMode(mode) {
+    authMode = mode;
+    const isLogin = mode === "login";
+    document.getElementById("auth-modal-title").innerText = t(isLogin ? "auth-title-login" : "auth-title-register");
+    document.getElementById("auth-submit-btn").innerText = t(isLogin ? "auth-login-btn" : "auth-register-btn");
+    document.getElementById("auth-switch-text").innerText = t(isLogin ? "auth-switch-to-register" : "auth-switch-to-login");
+    document.getElementById("auth-switch-link").innerText = t(isLogin ? "auth-register-btn" : "auth-login-btn");
+    showAuthError(null);
+}
+
+function showAuthError(key) {
+    const box = document.getElementById("auth-error");
+    if (key) {
+        box.innerText = t(key);
+        box.classList.remove("hidden");
+    } else {
+        box.classList.add("hidden");
+    }
+}
+
+function handleAuthSubmit() {
+    const email = document.getElementById("auth-email-input").value.trim().toLowerCase();
+    const password = document.getElementById("auth-password-input").value;
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError("auth-err-email"); return; }
+    if (password.length < 6) { showAuthError("auth-err-password"); return; }
+
+    const accounts = loadAccounts();
+
+    if (authMode === "register") {
+        if (accounts[email]) { showAuthError("auth-err-exists"); return; }
+        accounts[email] = { email: email, password: password, provider: "email", profile: null, orders: [], cards: [] };
+        saveAccounts(accounts);
+    } else {
+        const acc = accounts[email];
+        if (!acc || acc.provider !== "email" || acc.password !== password) { showAuthError("auth-err-invalid"); return; }
+    }
+
+    setSession({ email: email, provider: "email" });
+    finishAuth();
+}
+
+function handleGoogleContinue() {
+    const email = document.getElementById("google-email-input").value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError("auth-err-email"); return; }
+
+    // Google accounts are auto-registered on first sign-in
+    const accounts = loadAccounts();
+    if (!accounts[email]) {
+        accounts[email] = { email: email, password: null, provider: "google", profile: null, orders: [], cards: [] };
+        saveAccounts(accounts);
+    }
+
+    setSession({ email: email, provider: "google" });
+    finishAuth();
+}
+
+function finishAuth() {
+    document.getElementById("auth-modal").classList.remove("open");
+    if (state.afterAuthHash) {
+        const target = `#${state.afterAuthHash}`;
+        state.afterAuthHash = null;
+        if (location.hash === target) {
+            // Already on the target page (e.g. guest logged in from checkout) — re-render in place
+            handleRouting();
+        } else {
+            location.hash = target;
+        }
+    }
+}
+
+// ==========================================================================
+// Checkout Page (hash route: #checkout/<id>, login required)
+// ==========================================================================
+function renderCheckoutPage(p) {
+    const container = document.getElementById("checkout-content");
+    if (!container) return;
+
+    const lang = state.currentLang;
+    const localizedTitle = p.title[lang];
+    const isGuest = !state.user;
+    const accounts = loadAccounts();
+    const profile = (!isGuest && accounts[state.user.email] && accounts[state.user.email].profile) || {};
+
+    const identityLine = isGuest
+        ? `${t("co-guest-label")} <a href="#" id="co-login-link">${t("auth-login-btn")}</a>`
+        : `${t("co-signed-as")} <strong>${state.user.email}</strong> <a href="#" id="co-logout-link">${t("co-logout")}</a>`;
+
+    // Guests have no account email — ask for it in the form
+    const guestEmailField = isGuest ? `
+                        <div class="form-control-group">
+                            <label class="input-label" for="co-email">${t("auth-email")} <span class="required">*</span></label>
+                            <input type="email" id="co-email" class="form-input" placeholder="you@example.com" required>
+                        </div>` : '';
+
+    container.innerHTML = `
+        <a href="#product/${p.id}" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${localizedTitle}</a>
+
+        <h1 class="checkout-title">${t("co-title")}</h1>
+        <p class="signed-in-line">${identityLine}</p>
+
+        <div class="checkout-layout">
+            <form class="checkout-main" id="co-form" novalidate>
+                <!-- Recipient details -->
+                <div class="detail-panel">
+                    <h3><i class="fa-solid fa-user"></i> ${t("co-details-header")}</h3>
+                    <div class="co-field-grid">
+                        <div class="form-control-group">
+                            <label class="input-label" for="co-firstname">${t("co-firstname")} <span class="required">*</span></label>
+                            <input type="text" id="co-firstname" class="form-input" required value="${profile.firstName || ''}">
+                        </div>
+                        <div class="form-control-group">
+                            <label class="input-label" for="co-lastname">${t("co-lastname")} <span class="required">*</span></label>
+                            <input type="text" id="co-lastname" class="form-input" required value="${profile.lastName || ''}">
+                        </div>
+                        ${guestEmailField}
+                        <div class="form-control-group">
+                            <label class="input-label" for="co-phone">${t("co-phone")} <span class="required">*</span></label>
+                            <input type="tel" id="co-phone" class="form-input" placeholder="+995 5xx xx xx xx" required value="${profile.phone || ''}">
+                        </div>
+                        <div class="form-control-group">
+                            <label class="input-label" for="co-idnum">${t("co-idnum")} <span class="required">*</span></label>
+                            <input type="text" id="co-idnum" class="form-input" placeholder="01001234567" maxlength="11" inputmode="numeric" required value="${profile.idNumber || ''}">
+                        </div>
+                        <div class="form-control-group co-field-full">
+                            <label class="input-label" for="co-address">${t("co-address")} <span class="required">*</span></label>
+                            <input type="text" id="co-address" class="form-input" placeholder="${lang === 'ka' ? 'ქალაქი, ქუჩა, ბინა...' : 'City, street, apartment...'}" required value="${profile.address || ''}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Installation service toggle (paid on site AFTER installation — never online) -->
+                <div class="detail-panel">
+                    <h3><i class="fa-solid fa-screwdriver-wrench"></i> ${t("detail-install-title")}</h3>
+                    <label class="install-toggle">
+                        <input type="checkbox" id="co-install-toggle">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                        <span class="toggle-label">${t("co-install-toggle")}</span>
+                    </label>
+                    <p class="install-note"><i class="fa-solid fa-circle-info"></i> ${t("detail-install-note")}</p>
+                </div>
+
+                <!-- Payment method: TBC / BOG card payment -->
+                <div class="detail-panel">
+                    <h3><i class="fa-solid fa-credit-card"></i> ${t("co-payment-header")}</h3>
+                    <div class="pay-bank-options">
+                        <label class="pay-bank-card">
+                            <input type="radio" name="co-bank" value="tbc" checked>
+                            <span class="bank-logo bank-tbc">TBC</span>
+                            <span class="pay-bank-text">
+                                <strong>TBC Bank</strong>
+                                <small>${t("co-pay-card-desc")}</small>
+                            </span>
+                            <i class="fa-solid fa-circle-check pay-check"></i>
+                        </label>
+                        <label class="pay-bank-card">
+                            <input type="radio" name="co-bank" value="bog">
+                            <span class="bank-logo bank-bog">BOG</span>
+                            <span class="pay-bank-text">
+                                <strong>Bank of Georgia</strong>
+                                <small>${t("co-pay-card-desc")}</small>
+                            </span>
+                            <i class="fa-solid fa-circle-check pay-check"></i>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Order summary -->
+            <aside class="checkout-summary detail-panel">
+                <h3>${t("co-summary-header")}</h3>
+                <div class="co-product-row">
+                    <div class="co-product-thumb">${buildProductMockup(p)}</div>
+                    <div>
+                        <span class="product-brand">${p.brand}</span>
+                        <p class="co-product-title">${localizedTitle}</p>
+                    </div>
+                </div>
+                <div class="co-summary-rows">
+                    <div class="co-summary-row">
+                        <span>${localizedTitle}</span>
+                        <strong>${p.price.toLocaleString()} ₾</strong>
+                    </div>
+                    <div class="co-summary-row co-install-row hidden" id="co-install-row">
+                        <span>${t("co-install-line")}</span>
+                        <strong class="co-onsite">${t("co-install-onsite")}</strong>
+                    </div>
+                    <div class="co-summary-row co-total-row">
+                        <span>${t("co-total")}</span>
+                        <strong>${p.price.toLocaleString()} ₾</strong>
+                    </div>
+                </div>
+                <p class="co-delivery-note"><i class="fa-solid fa-truck-fast"></i> ${t("co-delivery-note")}</p>
+                <button type="submit" form="co-form" class="btn btn-accent btn-lg w-full" id="co-pay-btn">
+                    <i class="fa-solid fa-lock"></i> ${t("co-pay-btn")} — ${p.price.toLocaleString()} ₾
+                </button>
+                <p class="co-secure-note"><i class="fa-solid fa-shield-halved"></i> ${lang === 'ka' ? 'დაცული გადახდა' : 'Secure payment'}</p>
+            </aside>
+        </div>
+    `;
+
+    document.title = `${t("co-title")} | Climate Comfort`;
+
+    if (isGuest) {
+        // Guest → offer login; after auth the page re-renders with the account attached
+        document.getElementById("co-login-link").addEventListener("click", (e) => {
+            e.preventDefault();
+            state.afterAuthHash = `checkout/${p.id}`;
+            openAuthModal();
+            setAuthMode("login");
+        });
+    } else {
+        document.getElementById("co-logout-link").addEventListener("click", (e) => {
+            e.preventDefault();
+            if (confirm(t("auth-logout-confirm"))) logout();
+        });
+    }
+
+    // Installation toggle reflects into the summary
+    document.getElementById("co-install-toggle").addEventListener("change", (e) => {
+        document.getElementById("co-install-row").classList.toggle("hidden", !e.target.checked);
+    });
+
+    // Submit → validate → mock payment → success modal
+    document.getElementById("co-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const firstName = document.getElementById("co-firstname").value.trim();
+        const lastName = document.getElementById("co-lastname").value.trim();
+        const phone = document.getElementById("co-phone").value.trim();
+        const address = document.getElementById("co-address").value.trim();
+        const idNumber = document.getElementById("co-idnum").value.trim();
+
+        if (!firstName || !lastName || !phone || !address || !idNumber) return;
+        let guestEmail = "";
+        if (isGuest) {
+            guestEmail = document.getElementById("co-email").value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) { alert(t("auth-err-email")); return; }
+        }
+        if (!/^\d{11}$/.test(idNumber)) { alert(t("co-err-id")); return; }
+        if (phone.replace(/\D/g, "").length < 9) { alert(t("co-err-phone")); return; }
+
+        // Remember the profile for the next purchase (accounts only — guests aren't stored)
+        if (!isGuest) {
+            const accounts = loadAccounts();
+            if (accounts[state.user.email]) {
+                accounts[state.user.email].profile = { firstName, lastName, phone, address, idNumber };
+                saveAccounts(accounts);
+            }
+        }
+
+        const withInstall = document.getElementById("co-install-toggle").checked;
+        const bankVal = document.querySelector('input[name="co-bank"]:checked').value;
+        const bankName = bankVal === "tbc" ? "TBC Bank" : "Bank of Georgia";
+
+        // Mock card processing (no real gateway on a static site)
+        const payBtn = document.getElementById("co-pay-btn");
+        payBtn.disabled = true;
+        payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-processing")}`;
+
+        setTimeout(() => {
+            const refNum = "ORD-" + Math.floor(100000 + Math.random() * 900000);
+
+            // Persist to the database for the admin page (works for guests too)
+            saveOrderToDb({
+                user_email: isGuest ? guestEmail : state.user.email,
+                customer_name: `${firstName} ${lastName}`,
+                phone: phone,
+                address: address,
+                personal_id: idNumber,
+                product_id: typeof p.id === "string" ? p.id : null, // demo products have no DB id
+                product_title: p.title.ka,
+                amount: p.price,
+                needs_install: withInstall,
+                order_type: "standard",
+                payment_method: bankVal,
+                payment_status: "pending",
+                status: "new"
+            });
+
+            // Record the order on the account (guests aren't stored)
+            if (!isGuest) {
+                const accs = loadAccounts();
+                const acc = accs[state.user.email];
+                if (acc) {
+                    acc.orders = acc.orders || [];
+                    acc.orders.unshift({
+                        ref: refNum,
+                        date: new Date().toISOString(),
+                        productId: p.id,
+                        title: p.title,
+                        price: p.price,
+                        bank: bankName,
+                        install: withInstall
+                    });
+                    saveAccounts(accs);
+                }
+            }
+
+            document.getElementById("success-title").innerText = t("co-success-title");
+            document.getElementById("success-message").innerText =
+                t("co-success-msg") + (withInstall ? " " + t("co-success-install") : "");
+            document.getElementById("success-details").innerHTML = `
+                <div class="detail-line"><span>№</span><span>${refNum}</span></div>
+                <div class="detail-line"><span>${p.title[state.currentLang]}</span><span>${p.price.toLocaleString()} ₾</span></div>
+                <div class="detail-line"><span>${t("co-payment-header")}</span><span>${bankName}</span></div>
+                ${withInstall ? `<div class="detail-line"><span>${t("co-install-line")}</span><span>${t("co-install-onsite")}</span></div>` : ''}
+            `;
+            document.getElementById("success-modal").classList.add("open");
+
+            state.afterAuthHash = null;
+            state.guestCheckout = false;
+            location.hash = "catalog"; // home behind the success modal
+        }, 1200);
+    });
+}
+
+// ==========================================================================
+// Google Sign-In (real GIS when a client ID is configured; mock fallback otherwise)
+// ==========================================================================
+// To enable REAL Google sign-in:
+//   1. console.cloud.google.com → APIs & Services → Credentials → Create OAuth client ID (Web application)
+//   2. Add your origins (e.g. http://localhost:8000 and the production domain) under "Authorized JavaScript origins"
+//   3. Paste the client ID below. Until then the demo "Google" flow is used.
+const GOOGLE_CLIENT_ID = "727149305420-4e6s8klpuu61np7c3hrgqk0hp8jl4u6c.apps.googleusercontent.com"; // e.g. "1234567890-abc123.apps.googleusercontent.com"
+
+let googleInitDone = false;
+
+function realGoogleAvailable() {
+    return !!GOOGLE_CLIENT_ID && !!(window.google && google.accounts && google.accounts.id);
+}
+
+// Decode a JWT payload (unicode-safe) — client-side only; the future .NET backend must verify the signature
+function decodeJwtPayload(token) {
+    const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(atob(base64).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+    return JSON.parse(json);
+}
+
+function handleGoogleCredential(response) {
+    let payload = null;
+    try { payload = decodeJwtPayload(response.credential); } catch (err) { /* fall through */ }
+    if (!payload || !payload.email) { showAuthError("auth-err-invalid"); return; }
+
+    const email = payload.email.toLowerCase();
+    const accounts = loadAccounts();
+    if (!accounts[email]) {
+        accounts[email] = { email: email, password: null, provider: "google", profile: null, orders: [], cards: [] };
+        saveAccounts(accounts);
+    }
+    setSession({ email: email, provider: "google" });
+    finishAuth();
+}
+
+// Swap the mock button for the official Google button when real sign-in is configured
+function setupGoogleButton() {
+    if (!realGoogleAvailable()) return;
+    const container = document.getElementById("google-btn-container");
+    if (!googleInitDone) {
+        google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+        googleInitDone = true;
+    }
+    container.innerHTML = "";
+    google.accounts.id.renderButton(container, { theme: "outline", size: "large", width: 320, text: "continue_with" });
+    container.classList.remove("hidden");
+    document.getElementById("google-signin-btn").classList.add("hidden");
+}
+
+// ==========================================================================
+// Account Page (hash route: #account, login required)
+// ==========================================================================
+let accountActiveTab = "orders";
+
+function getCurrentAccount() {
+    const accounts = loadAccounts();
+    let acc = accounts[state.user.email];
+    if (!acc) {
+        // Session exists but the account record is missing (e.g. cleared storage) — recreate it
+        acc = { email: state.user.email, password: null, provider: state.user.provider, profile: null, orders: [], cards: [] };
+        accounts[state.user.email] = acc;
+        saveAccounts(accounts);
+    }
+    return acc;
+}
+
+function renderAccountPage(tab) {
+    if (tab) accountActiveTab = tab;
+    const container = document.getElementById("account-content");
+    if (!container) return;
+
+    const acc = getCurrentAccount();
+
+    const TABS = [
+        { key: "orders", icon: "fa-box", label: t("acc-nav-orders") },
+        { key: "details", icon: "fa-address-card", label: t("acc-nav-details") },
+        { key: "cards", icon: "fa-credit-card", label: t("acc-nav-cards") },
+        { key: "security", icon: "fa-shield-halved", label: t("acc-nav-security") }
+    ];
+
+    container.innerHTML = `
+        <h1 class="checkout-title">${t("acc-title")}</h1>
+        <p class="signed-in-line">${t("co-signed-as")} <strong>${acc.email}</strong></p>
+
+        <div class="account-layout">
+            <nav class="account-nav detail-panel">
+                ${TABS.map(tb => `
+                    <button class="account-nav-btn ${tb.key === accountActiveTab ? 'active' : ''}" data-tab="${tb.key}">
+                        <i class="fa-solid ${tb.icon}"></i> <span>${tb.label}</span>
+                    </button>`).join('')}
+                <button class="account-nav-btn acc-logout" id="acc-logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>${t("co-logout")}</span>
+                </button>
+            </nav>
+            <div class="account-panel detail-panel">
+                ${buildAccountTab(acc, accountActiveTab)}
+            </div>
+        </div>
+    `;
+
+    document.title = `${t("acc-title")} | Climate Comfort`;
+
+    container.querySelectorAll(".account-nav-btn[data-tab]").forEach(btn => {
+        btn.addEventListener("click", () => renderAccountPage(btn.getAttribute("data-tab")));
+    });
+
+    document.getElementById("acc-logout-btn").addEventListener("click", () => {
+        if (confirm(t("auth-logout-confirm"))) logout();
+    });
+
+    bindAccountTabEvents();
+}
+
+function buildAccountTab(acc, tab) {
+    const lang = state.currentLang;
+
+    if (tab === "orders") {
+        const orders = acc.orders || [];
+        if (!orders.length) {
+            return `
+                <h3>${t("acc-nav-orders")}</h3>
+                <div class="acc-empty">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>${t("acc-orders-empty")}</p>
+                    <a href="#catalog" class="btn btn-primary">${t("hero-cta-explore")}</a>
+                </div>`;
+        }
+        return `<h3>${t("acc-nav-orders")}</h3>` + orders.map(o => {
+            const dateStr = new Date(o.date).toLocaleDateString(lang === 'ka' ? 'ka-GE' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+            const installTag = o.install ? ` · ${t("co-install-line").replace(':', '')} (${t("co-install-onsite")})` : '';
+            return `
+                <div class="order-item">
+                    <div class="order-main">
+                        <span class="order-ref">${o.ref}</span>
+                        <p class="order-title-line">${o.title[lang]}</p>
+                        <span class="order-meta">${dateStr} · ${o.bank}${installTag}</span>
+                    </div>
+                    <div class="order-side">
+                        <strong>${o.price.toLocaleString()} ₾</strong>
+                        <span class="order-status">${t("acc-status-received")}</span>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    if (tab === "details") {
+        const pr = acc.profile || {};
+        return `
+            <h3>${t("acc-nav-details")}</h3>
+            <form id="acc-details-form" novalidate>
+                <div class="co-field-grid">
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-firstname">${t("co-firstname")}</label>
+                        <input type="text" id="acc-firstname" class="form-input" value="${pr.firstName || ''}">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-lastname">${t("co-lastname")}</label>
+                        <input type="text" id="acc-lastname" class="form-input" value="${pr.lastName || ''}">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-phone">${t("co-phone")}</label>
+                        <input type="tel" id="acc-phone" class="form-input" placeholder="+995 5xx xx xx xx" value="${pr.phone || ''}">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-idnum">${t("co-idnum")}</label>
+                        <input type="text" id="acc-idnum" class="form-input" maxlength="11" inputmode="numeric" value="${pr.idNumber || ''}">
+                    </div>
+                    <div class="form-control-group co-field-full">
+                        <label class="input-label" for="acc-address">${t("co-address")}</label>
+                        <input type="text" id="acc-address" class="form-input" placeholder="${lang === 'ka' ? 'ქალაქი, ქუჩა, ბინა...' : 'City, street, apartment...'}" value="${pr.address || ''}">
+                    </div>
+                </div>
+                <div class="acc-form-footer">
+                    <button type="submit" class="btn btn-accent">${t("acc-save")}</button>
+                    <span class="acc-saved-note hidden" id="acc-details-saved"><i class="fa-solid fa-check"></i> ${t("acc-saved")}</span>
+                </div>
+            </form>`;
+    }
+
+    if (tab === "cards") {
+        const cards = acc.cards || [];
+        const list = cards.length
+            ? cards.map((c, i) => `
+                <div class="card-item">
+                    <span class="bank-logo brand-${c.brand.toLowerCase()}">${c.brand}</span>
+                    <div class="card-item-text">
+                        <strong>•••• ${c.last4}</strong>
+                        <small>${c.holder} · ${c.expiry}</small>
+                    </div>
+                    <button type="button" class="card-remove-btn" data-idx="${i}" title="${t("acc-remove")}"><i class="fa-solid fa-trash-can"></i></button>
+                </div>`).join('')
+            : `<p class="acc-muted">${t("acc-no-cards")}</p>`;
+
+        return `
+            <h3>${t("acc-nav-cards")}</h3>
+            <div class="cards-list">${list}</div>
+            <form id="acc-card-form" novalidate>
+                <div class="co-field-grid">
+                    <div class="form-control-group co-field-full">
+                        <label class="input-label" for="acc-card-number">${t("acc-card-number")}</label>
+                        <input type="text" id="acc-card-number" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-card-expiry">${t("acc-card-expiry")}</label>
+                        <input type="text" id="acc-card-expiry" class="form-input" placeholder="12/28" maxlength="5">
+                    </div>
+                    <div class="form-control-group">
+                        <label class="input-label" for="acc-card-holder">${t("acc-card-holder")}</label>
+                        <input type="text" id="acc-card-holder" class="form-input" placeholder="GIORGI BERIDZE">
+                    </div>
+                </div>
+                <div class="acc-form-footer">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> ${t("acc-add-card")}</button>
+                </div>
+            </form>
+            <p class="install-note"><i class="fa-solid fa-circle-info"></i> ${t("acc-card-note")}</p>`;
+    }
+
+    // Security tab
+    if (acc.provider === "google") {
+        return `
+            <h3>${t("acc-nav-security")}</h3>
+            <div class="google-account-note">
+                <span class="google-g">G</span>
+                <p>${t("acc-google-note")}</p>
+            </div>`;
+    }
+    return `
+        <h3>${t("acc-nav-security")}</h3>
+        <form id="acc-email-form" class="acc-subform" novalidate>
+            <h4>${t("acc-change-email")}</h4>
+            <div class="form-control-group">
+                <label class="input-label" for="acc-email-input">${t("auth-email")}</label>
+                <input type="email" id="acc-email-input" class="form-input" value="${acc.email}">
+            </div>
+            <div class="acc-form-footer">
+                <button type="submit" class="btn btn-primary">${t("acc-save")}</button>
+                <span class="acc-saved-note hidden" id="acc-email-saved"><i class="fa-solid fa-check"></i> ${t("acc-saved")}</span>
+            </div>
+        </form>
+        <form id="acc-pass-form" class="acc-subform" novalidate>
+            <h4>${t("acc-change-password")}</h4>
+            <div class="co-field-grid">
+                <div class="form-control-group">
+                    <label class="input-label" for="acc-pass-current">${t("acc-current-password")}</label>
+                    <input type="password" id="acc-pass-current" class="form-input" autocomplete="current-password">
+                </div>
+                <div class="form-control-group">
+                    <label class="input-label" for="acc-pass-new">${t("acc-new-password")}</label>
+                    <input type="password" id="acc-pass-new" class="form-input" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="acc-form-footer">
+                <button type="submit" class="btn btn-primary">${t("acc-change-password")}</button>
+                <span class="acc-saved-note hidden" id="acc-pass-saved"><i class="fa-solid fa-check"></i> ${t("acc-pass-changed")}</span>
+            </div>
+        </form>`;
+}
+
+function flashSaved(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove("hidden");
+    setTimeout(() => el.classList.add("hidden"), 2500);
+}
+
+function bindAccountTabEvents() {
+    // Personal details
+    const detailsForm = document.getElementById("acc-details-form");
+    if (detailsForm) {
+        detailsForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const idNumber = document.getElementById("acc-idnum").value.trim();
+            if (idNumber && !/^\d{11}$/.test(idNumber)) { alert(t("co-err-id")); return; }
+            const accounts = loadAccounts();
+            accounts[state.user.email].profile = {
+                firstName: document.getElementById("acc-firstname").value.trim(),
+                lastName: document.getElementById("acc-lastname").value.trim(),
+                phone: document.getElementById("acc-phone").value.trim(),
+                address: document.getElementById("acc-address").value.trim(),
+                idNumber: idNumber
+            };
+            saveAccounts(accounts);
+            flashSaved("acc-details-saved");
+        });
+    }
+
+    // Saved cards
+    const cardForm = document.getElementById("acc-card-form");
+    if (cardForm) {
+        cardForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const num = document.getElementById("acc-card-number").value.replace(/\D/g, "");
+            const expiry = document.getElementById("acc-card-expiry").value.trim();
+            const holder = document.getElementById("acc-card-holder").value.trim();
+            if (num.length < 15 || num.length > 16 || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry) || !holder) {
+                alert(t("acc-err-card"));
+                return;
+            }
+            const brand = num[0] === '4' ? 'VISA' : (num[0] === '5' ? 'MC' : 'CARD');
+            const accounts = loadAccounts();
+            const acc = accounts[state.user.email];
+            acc.cards = acc.cards || [];
+            acc.cards.push({ last4: num.slice(-4), brand: brand, expiry: expiry, holder: holder }); // last4 only — never the full number
+            saveAccounts(accounts);
+            renderAccountPage("cards");
+        });
+
+        document.querySelectorAll(".card-remove-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const accounts = loadAccounts();
+                accounts[state.user.email].cards.splice(parseInt(btn.getAttribute("data-idx")), 1);
+                saveAccounts(accounts);
+                renderAccountPage("cards");
+            });
+        });
+    }
+
+    // Change email (re-keys the account record and refreshes the session)
+    const emailForm = document.getElementById("acc-email-form");
+    if (emailForm) {
+        emailForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const newEmail = document.getElementById("acc-email-input").value.trim().toLowerCase();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { alert(t("auth-err-email")); return; }
+            if (newEmail === state.user.email) { flashSaved("acc-email-saved"); return; }
+            const accounts = loadAccounts();
+            if (accounts[newEmail]) { alert(t("auth-err-exists")); return; }
+            const record = accounts[state.user.email];
+            delete accounts[state.user.email];
+            record.email = newEmail;
+            accounts[newEmail] = record;
+            saveAccounts(accounts);
+            setSession({ email: newEmail, provider: record.provider });
+            renderAccountPage("security");
+        });
+    }
+
+    // Change password
+    const passForm = document.getElementById("acc-pass-form");
+    if (passForm) {
+        passForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const current = document.getElementById("acc-pass-current").value;
+            const next = document.getElementById("acc-pass-new").value;
+            const accounts = loadAccounts();
+            const acc = accounts[state.user.email];
+            if (acc.password !== current) { alert(t("acc-err-current")); return; }
+            if (next.length < 6) { alert(t("auth-err-password")); return; }
+            acc.password = next;
+            saveAccounts(accounts);
+            passForm.reset();
+            flashSaved("acc-pass-saved");
+        });
+    }
+}
+
+// ==========================================================================
 // Catalog Rendering and Filtering Logic
 // ==========================================================================
 function renderCatalog() {
@@ -1061,38 +2245,10 @@ function renderCatalog() {
             const areaLabel = p.area.replace("m²", t("sqm"));
             
             // Inverter / Condensing Label
-            let techLabel = "";
-            if (p.category === 'boiler') {
-                techLabel = p.inverter ? (state.currentLang === 'ka' ? 'კონდენსაციური' : 'Condensing') : (state.currentLang === 'ka' ? 'სტანდარტული' : 'Standard');
-            } else {
-                techLabel = p.inverter ? t("filter-inverter-yes").split(" ")[0] : t("filter-inverter-no").split(" ")[0];
-            }
+            const techLabel = getTechLabel(p);
 
             // Boiler vs AC mockup graphic rendering
-            const mockupHTML = p.category === 'boiler' ? `
-                <div class="boiler-mockup-graphic">
-                    <div class="boiler-brand-print">${p.brand.toUpperCase()}</div>
-                    <div class="boiler-panel">
-                        <span class="boiler-temp">45°C</span>
-                        <span class="boiler-flame-icon"><i class="fa-solid fa-fire animate-pulse"></i></span>
-                    </div>
-                    <div class="boiler-pipes">
-                        <span class="pipe"></span>
-                        <span class="pipe"></span>
-                        <span class="pipe"></span>
-                    </div>
-                </div>
-            ` : `
-                <div class="ac-mockup-graphic">
-                    <div class="ac-brand-print">${p.brand.toUpperCase()}</div>
-                    <div class="ac-display-panel">21°C</div>
-                    <div class="ac-flow-indicator">
-                        <i class="fa-solid fa-angle-down"></i>
-                        <i class="fa-solid fa-angle-down"></i>
-                        <i class="fa-solid fa-angle-down"></i>
-                    </div>
-                </div>
-            `;
+            const mockupHTML = buildProductMockup(p);
 
             return `
                 <article class="product-card" data-id="${p.id}">
@@ -1126,7 +2282,7 @@ function renderCatalog() {
                         
                         <div class="card-footer">
                             <div class="price-container">
-                                <div class="price-tag">${p.price.toLocaleString()}</div>
+                                <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
                                 <div class="financing-mini-indicator">
                                     ${t("card-monthly-est")}<br>
                                     <strong>${monthlyEst} ₾ / ${t("month-unit")}</strong>
@@ -1293,6 +2449,11 @@ function switchCategory(category) {
 
     // Re-render catalog grid
     renderCatalog();
+
+    // If we're on a product detail page, jump back to the (now filtered) catalog
+    if (document.body.classList.contains("product-view")) {
+        location.hash = "catalog";
+    }
 }
 
 // Reset all filters
@@ -1355,7 +2516,7 @@ function updateFiltersFromDOM() {
 }
 
 function openPaymentMethodModal(productId) {
-    const product = products.find(p => p.id === productId);
+    const product = findProduct(productId);
     if (!product) return;
     
     state.activeFinancedProduct = product;
@@ -1368,7 +2529,7 @@ function openPaymentMethodModal(productId) {
 // Installment Payment / Financing Calculator Engine
 // ==========================================================================
 function openFinancingModal(productId) {
-    const product = products.find(p => p.id === productId);
+    const product = findProduct(productId);
     if (!product) return;
     
     state.activeFinancedProduct = product;
@@ -1469,10 +2630,10 @@ function applyDownPaymentPercentage(pct) {
 // Shopping Cart Logic
 // ==========================================================================
 function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
+    const product = findProduct(productId);
     if (!product) return;
 
-    const inCartItem = state.cart.find(item => item.id === productId);
+    const inCartItem = state.cart.find(item => String(item.id) === String(productId));
     if (inCartItem) {
         inCartItem.quantity++;
     } else {
@@ -1532,11 +2693,11 @@ function updateCartUI() {
             return `
                 <div class="cart-item">
                     <div class="cart-item-preview">
-                        <div class="mini-ac-bar"></div>
+                        ${p.image ? `<img class="product-photo" src="${p.image}" alt="">` : '<i class="fa-regular fa-image"></i>'}
                     </div>
                     <div class="cart-item-info">
                         <h4 class="cart-item-title">${p.title[state.currentLang]}</h4>
-                        <div class="cart-item-specs">${p.btu} | ${p.energyClass}</div>
+                        <div class="cart-item-specs">${[p.btu, p.energyClass].filter(Boolean).join(" | ")}</div>
                         <div class="cart-item-price">${(p.price * item.quantity).toLocaleString()}</div>
                     </div>
                     
@@ -1557,7 +2718,7 @@ function updateCartUI() {
 }
 
 function adjustCartQuantity(productId, delta) {
-    const item = state.cart.find(i => i.id === productId);
+    const item = state.cart.find(i => String(i.id) === String(productId));
     if (!item) return;
 
     item.quantity += delta;
@@ -1569,7 +2730,7 @@ function adjustCartQuantity(productId, delta) {
 }
 
 function removeCartItem(productId) {
-    state.cart = state.cart.filter(i => i.id !== productId);
+    state.cart = state.cart.filter(i => String(i.id) !== String(productId));
     updateCartUI();
     renderCatalog();
 }
@@ -1654,6 +2815,11 @@ function bindUIEventListeners() {
                 renderCatalog();
                 updateCartUI();
                 updateServiceEstimator();
+
+                // Re-render the current sub-page (product / checkout / account) in the new language
+                if (SUBPAGE_CLASSES.some(c => document.body.classList.contains(c))) {
+                    handleRouting();
+                }
             }
         });
     });
@@ -1803,31 +2969,74 @@ function bindUIEventListeners() {
     document.getElementById("products-grid").addEventListener("click", (e) => {
         const addBtn = e.target.closest(".add-cart-btn");
         if (addBtn) {
-            const id = parseInt(addBtn.getAttribute("data-id"));
+            const id = addBtn.getAttribute("data-id");
             addToCart(id);
+            return;
         }
 
         const buyBtn = e.target.closest(".buy-now-btn");
         if (buyBtn) {
-            const id = parseInt(buyBtn.getAttribute("data-id"));
-            openPaymentMethodModal(id);
+            const id = buyBtn.getAttribute("data-id");
+            startPurchase(id);
+            return;
+        }
+
+        // Anywhere else on the card → open the product detail page
+        const card = e.target.closest(".product-card");
+        if (card) {
+            location.hash = `product/${card.getAttribute("data-id")}`;
         }
     });
 
     // Cart controls
     document.getElementById("cart-items-container").addEventListener("click", (e) => {
         if (e.target.closest(".qty-plus-btn")) {
-            const id = parseInt(e.target.closest(".qty-plus-btn").getAttribute("data-id"));
+            const id = e.target.closest(".qty-plus-btn").getAttribute("data-id");
             adjustCartQuantity(id, 1);
         }
         if (e.target.closest(".qty-minus-btn")) {
-            const id = parseInt(e.target.closest(".qty-minus-btn").getAttribute("data-id"));
+            const id = e.target.closest(".qty-minus-btn").getAttribute("data-id");
             adjustCartQuantity(id, -1);
         }
         if (e.target.closest(".remove-item-btn")) {
-            const id = parseInt(e.target.closest(".remove-item-btn").getAttribute("data-id"));
+            const id = e.target.closest(".remove-item-btn").getAttribute("data-id");
             removeCartItem(id);
         }
+    });
+
+    // Auth Modal Listeners
+    document.getElementById("close-auth-modal").addEventListener("click", () => {
+        document.getElementById("auth-modal").classList.remove("open");
+        state.afterAuthHash = null;
+    });
+
+    document.getElementById("auth-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleAuthSubmit();
+    });
+
+    document.getElementById("auth-switch-link").addEventListener("click", (e) => {
+        e.preventDefault();
+        setAuthMode(authMode === "login" ? "register" : "login");
+    });
+
+    document.getElementById("google-signin-btn").addEventListener("click", () => {
+        document.getElementById("auth-main-view").classList.add("hidden");
+        document.getElementById("google-mock-view").classList.remove("hidden");
+        showAuthError(null);
+    });
+
+    document.getElementById("google-continue-btn").addEventListener("click", handleGoogleContinue);
+
+    // Continue without registering (guest checkout)
+    document.getElementById("guest-continue-btn").addEventListener("click", () => {
+        state.guestCheckout = true;
+        finishAuth();
+    });
+
+    // Header account chip → account page
+    document.getElementById("account-btn").addEventListener("click", () => {
+        location.hash = "account";
     });
 
     // Payment Method Selection Modal Listeners
@@ -1950,6 +3159,23 @@ function bindUIEventListeners() {
             const p = state.activeFinancedProduct || state.cart[0].productDetails;
             const monthlyPaymentText = document.getElementById("monthly-payment-amount").innerText;
 
+            // Persist the financing application for the admin page
+            saveOrderToDb({
+                user_email: state.user ? state.user.email : "",
+                customer_name: name,
+                phone: phone,
+                address: address,
+                personal_id: document.getElementById("check-idnum").value.trim() || null,
+                product_id: typeof p.id === "string" ? p.id : null,
+                product_title: p.title.ka,
+                amount: p.price,
+                needs_install: false,
+                order_type: "financing",
+                payment_method: bankRadio ? bankRadio.value : null,
+                payment_status: "pending",
+                status: "new"
+            });
+
             if (state.currentLang === 'ka') {
                 successTitle.innerText = "განვადება წინასწარ დამტკიცებულია!";
                 successMsg.innerText = "გილოცავთ! თქვენი ონლაინ განვადების განაცხადი წინასწარ დამტკიცებულია. ბანკის ოპერატორი მალე დაგიკავშირდებათ ხელშეკრულების გასაფორმებლად.";
@@ -1975,7 +3201,27 @@ function bindUIEventListeners() {
             // Standard order
             let orderSummary = "";
             let grandTotal = 0;
-            
+
+            // Persist one database order per cart line for the admin page
+            state.cart.forEach(item => {
+                const cp = item.productDetails;
+                saveOrderToDb({
+                    user_email: state.user ? state.user.email : "",
+                    customer_name: name,
+                    phone: phone,
+                    address: address,
+                    personal_id: document.getElementById("check-idnum").value.trim() || null,
+                    product_id: typeof cp.id === "string" ? cp.id : null,
+                    product_title: cp.title.ka + (item.quantity > 1 ? ` ×${item.quantity}` : ""),
+                    amount: cp.price * item.quantity,
+                    needs_install: false,
+                    order_type: "standard",
+                    payment_method: null,
+                    payment_status: "pending",
+                    status: "new"
+                });
+            });
+
             if (state.cart.length === 1) {
                 orderSummary = state.cart[0].productDetails.title[state.currentLang];
                 grandTotal = state.cart[0].productDetails.price * state.cart[0].quantity;

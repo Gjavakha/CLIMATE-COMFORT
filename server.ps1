@@ -18,8 +18,8 @@ try {
         
         # Get requested local path
         $urlPath = $request.Url.LocalPath
-        if ($urlPath -eq "/") { 
-            $urlPath = "/index.html" 
+        if ($urlPath.EndsWith("/")) {
+            $urlPath = $urlPath + "index.html"   # "/" and "/admin/" serve their index.html
         }
         
         # Clean up path to prevent directory traversal out of the workspace
