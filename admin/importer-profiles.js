@@ -42,6 +42,14 @@ function extractBtu(text) {
     return Number.isFinite(n) && n >= 5000 && n <= 100000 ? n : null;
 }
 
+// '28KW' / '28 კვ' → 28 (central boiler power; stored in the btu column)
+function extractKw(text) {
+    const m = /(\d{1,3})\s*(?:KW|კვ)/i.exec(String(text || ""));
+    if (!m) return null;
+    const n = parseInt(m[1], 10);
+    return Number.isFinite(n) && n >= 5 && n <= 200 ? n : null;
+}
+
 // '25-30 კვ/მ' or '35-40m²' → '25-30'
 function extractAreaSqm(text) {
     const m = /(\d+\s*-\s*\d+)\s*(?:კვ\/?მ|m²|m2)/i.exec(String(text || ""));
@@ -97,7 +105,11 @@ const SUPPLIER_PROFILES = {
                 model:  cleanText(row["Description"]).toUpperCase(),
                 category,
                 subtype,
-                btu: extractBtu(row["Product Group Code 2"]),
+                // ACs carry BTU in 'Product Group Code 2'; boilers carry kW in
+                // 'Product Group Code' (e.g. '28KW') or the Georgian description
+                btu: category === "boiler"
+                    ? (extractKw(row["Product Group Code"]) || extractKw(row["Full Description"]))
+                    : extractBtu(row["Product Group Code 2"]),
                 areaSqm: null,
                 retailPrice:      cleanPrice(row["Retail Unit Price"]),
                 actionPrice:      cleanPrice(row["Action Unit Price"], { zeroMeansNull: true }),

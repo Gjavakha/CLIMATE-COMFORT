@@ -204,7 +204,7 @@ function renderPreview() {
 
     document.getElementById("count-row").innerHTML = counts.map(c =>
         `<span class="count-chip ${c.cls}">${c.n} ${c.label}</span>`
-    ).join("") || '<span class="count-chip cc-same">Nothing to do — the database already matches this file.</span>';
+    ).join("") || '<span class="count-chip cc-same">No price changes — approving still refreshes stock levels.</span>';
 
     const rows = [];
     const pushRec = (badgeCls, badgeText, rec, oldOffer) => {
@@ -241,8 +241,9 @@ function renderPreview() {
     });
 
     document.getElementById("diff-body").innerHTML = rows.join("");
-    document.getElementById("import-apply").disabled =
-        plan.newProducts.length + plan.newOffers.length + plan.updates.length + plan.missing.length === 0;
+    // Approve stays enabled even with zero visible changes — approving still
+    // refreshes stock levels, display prices and last-seen timestamps.
+    document.getElementById("import-apply").disabled = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -334,6 +335,16 @@ async function applyImport() {
             (offersByProduct[o.product_id] = offersByProduct[o.product_id] || []).push(o);
         });
 
+        // Rough stock level from supplier hints: '>5'/'10+'/numbers above 5 →
+        // plenty ('in'), '<5'/small numbers → 'low'. Unknown but in stock → 'low'.
+        const offerStockLevel = (o) => {
+            const hint = String(o.stock_hint || "").trim();
+            if (hint === ">5" || hint === "10+") return "in";
+            const n = parseInt(hint, 10);
+            if (Number.isFinite(n)) return n > 5 ? "in" : "low";
+            return "low";
+        };
+
         const productUpserts = [];
         for (const prod of freshProducts) {
             const candidates = (offersByProduct[prod.id] || []).filter(o => o.in_stock);
@@ -350,6 +361,9 @@ async function applyImport() {
             next.display_price = best ? best.displayPrice : null;
             next.display_old_price = best && best.displayOldPrice ? best.displayOldPrice : null;
             next.is_published = !!best;
+            next.stock_status = best
+                ? (candidates.some(o => offerStockLevel(o) === "in") ? "in" : "low")
+                : null;
 
             // fill missing spec fields from today's parsed data
             const rec = recByKey[prod.brand + "|" + prod.model];
@@ -366,6 +380,7 @@ async function applyImport() {
                 Number(prod.display_price || 0) !== Number(next.display_price || 0) ||
                 Number(prod.display_old_price || 0) !== Number(next.display_old_price || 0) ||
                 prod.is_published !== next.is_published ||
+                prod.stock_status !== next.stock_status ||
                 prod.btu !== next.btu || prod.area_sqm !== next.area_sqm ||
                 prod.subtype !== next.subtype || prod.needs_review !== next.needs_review ||
                 prod.description_ka !== next.description_ka || prod.reference_url !== next.reference_url;

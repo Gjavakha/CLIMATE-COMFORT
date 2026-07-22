@@ -165,6 +165,8 @@ const translations = {
         "ac-type-split": "სპლიტ სისტემა",
         "ac-type-portable": "დასადგამი",
         "card-buy": "ყიდვა",
+        "stock-in": "მარაგშია",
+        "stock-low": "ბოლო ერთეულები",
         "card-buy-credit": "განვადებით ყიდვა",
         "card-monthly-est": "განვადება თვეში",
         "card-add-cart": "კალათაში დამატება",
@@ -448,6 +450,8 @@ const translations = {
         "ac-type-split": "Split System",
         "ac-type-portable": "Portable",
         "card-buy": "Buy",
+        "stock-in": "In stock",
+        "stock-low": "Last units",
         "card-buy-credit": "Buy on Credit",
         "card-monthly-est": "from",
         "card-add-cart": "Add to Cart",
@@ -977,6 +981,7 @@ let state = {
         colors: []
     },
     sortBy: "popular",
+    catalogPage: 1,           // current catalog page (resets when filters/sort change)
     activeFinancedProduct: null,
     checkoutMode: "standard",
     user: null,               // logged-in account ({email, provider}) or null
@@ -1005,13 +1010,14 @@ function dbRowToProduct(r) {
         },
         price: Number(r.display_price) || 0,
         oldPrice: r.display_old_price ? Number(r.display_old_price) : null,
-        btu: r.btu ? `${r.btu} BTU` : "",
+        btu: r.btu ? (r.category === "boiler" ? `${r.btu} kW` : `${r.btu} BTU`) : "",
         area: r.area_sqm ? `${r.area_sqm} m²` : "",
         type: "Split System",
         inverter: r.subtype === "inverter",
         energyClass: "",
         color: "",
         popularity: 50,
+        stock: r.stock_status || null, // 'in' | 'low' (out of stock is never published)
         image: r.image_url || null,
         description: {
             ka: r.description_ka || "",
@@ -1026,7 +1032,7 @@ async function loadDbProducts() {
     try {
         const { data, error } = await sbClient
             .from("products")
-            .select("id, brand, model, category, subtype, btu, area_sqm, title_ka, title_en, description_ka, description_en, image_url, display_price, display_old_price")
+            .select("*") // tolerant of columns added over time (e.g. stock_status)
             .eq("is_published", true)
             .order("created_at", { ascending: false });
 
@@ -1143,12 +1149,14 @@ function getFacetCounts() {
         return true;
     });
 
+    // Imported products can have missing fields (no area/color/energy data in
+    // the supplier files) — never build a facet checkbox out of an empty value
     filteredByCategory.forEach(p => {
-        brands[p.brand] = (brands[p.brand] || 0) + 1;
-        areas[p.area] = (areas[p.area] || 0) + 1;
-        btus[p.btu] = (btus[p.btu] || 0) + 1;
-        energy[p.energyClass] = (energy[p.energyClass] || 0) + 1;
-        colors[p.color] = (colors[p.color] || 0) + 1;
+        if (p.brand) brands[p.brand] = (brands[p.brand] || 0) + 1;
+        if (p.area) areas[p.area] = (areas[p.area] || 0) + 1;
+        if (p.btu) btus[p.btu] = (btus[p.btu] || 0) + 1;
+        if (p.energyClass) energy[p.energyClass] = (energy[p.energyClass] || 0) + 1;
+        if (p.color) colors[p.color] = (colors[p.color] || 0) + 1;
     });
 
     return { brands, areas, btus, energy, colors };
@@ -1246,11 +1254,27 @@ function generateFiltersUI() {
             <span class="count">(${facets.colors[color]})</span>
         </label>
     `).join('');
+
+    // Hide filter groups that have no options for the current catalog
+    // (e.g. energy class / color — the supplier files carry no such data yet)
+    [brandContainer, areaContainer, btuContainer, energyContainer, colorContainer].forEach(c => {
+        const group = c.closest(".filter-group");
+        if (group) group.classList.toggle("hidden", c.children.length === 0);
+    });
 }
 
 // ==========================================================================
 // Shared Product Render Helpers
 // ==========================================================================
+
+// Stock badge from supplier stock levels. Only 'in'/'low' exist here —
+// products with no in-stock offer are never published at all. Demo products
+// have no stock info and show no badge.
+function stockBadge(p) {
+    if (p.stock === "low") return `<span class="badge badge-stock-low">${t("stock-low")}</span>`;
+    if (p.stock === "in") return `<span class="badge badge-stock-in">${t("stock-in")}</span>`;
+    return "";
+}
 
 // Product visual, used by cards, detail page and checkout summary:
 // real photo when the product has one, neutral placeholder otherwise
@@ -1356,8 +1380,9 @@ function renderProductDetailPage(p) {
         <div class="detail-layout">
             <div class="detail-visual">
                 <div class="card-badges">
-                    <span class="badge badge-accent">${p.energyClass}</span>
-                    <span class="badge ${p.inverter ? 'badge-inverter' : 'badge-onoff'}">${techLabel}</span>
+                    ${p.energyClass ? `<span class="badge badge-accent">${p.energyClass}</span>` : ""}
+                    ${p.inverter ? `<span class="badge badge-inverter">${techLabel}</span>` : ""}
+                    ${stockBadge(p)}
                 </div>
                 ${buildProductMockup(p)}
             </div>
@@ -1391,20 +1416,20 @@ function renderProductDetailPage(p) {
                 <h3>${t("detail-specs")}</h3>
                 <table class="spec-table">
                     <tr><td>${t("spec-brand")}</td><td>${p.brand}</td></tr>
-                    <tr><td>${capacityLabel}</td><td>${p.btu}</td></tr>
-                    <tr><td>${t("spec-area")}</td><td>${areaLabel}</td></tr>
-                    <tr><td>${t("spec-type")}</td><td>${typeLabel}</td></tr>
-                    <tr><td>${t("spec-energy")}</td><td>${p.energyClass}</td></tr>
+                    ${p.btu ? `<tr><td>${capacityLabel}</td><td>${p.btu}</td></tr>` : ""}
+                    ${p.area ? `<tr><td>${t("spec-area")}</td><td>${areaLabel}</td></tr>` : ""}
+                    ${p.type ? `<tr><td>${t("spec-type")}</td><td>${typeLabel}</td></tr>` : ""}
+                    ${p.energyClass ? `<tr><td>${t("spec-energy")}</td><td>${p.energyClass}</td></tr>` : ""}
                     <tr><td>${t("spec-tech")}</td><td>${techLabel}</td></tr>
-                    <tr><td>${t("spec-color")}</td><td>${t(p.color)}</td></tr>
+                    ${p.color ? `<tr><td>${t("spec-color")}</td><td>${t(p.color)}</td></tr>` : ""}
                 </table>
             </div>
-            <div class="detail-panel">
+            ${p.features[lang].length ? `<div class="detail-panel">
                 <h3>${t("detail-features")}</h3>
                 <ul class="detail-features-list">
                     ${p.features[lang].map(f => `<li><i class="fa-solid fa-circle-check"></i> ${f}</li>`).join('')}
                 </ul>
-            </div>
+            </div>` : ""}
         </div>
     `;
 
@@ -2164,6 +2189,34 @@ function bindAccountTabEvents() {
 // ==========================================================================
 // Catalog Rendering and Filtering Logic
 // ==========================================================================
+const CATALOG_PAGE_SIZE = 12; // divides evenly into 2/3/4-column grids
+let lastCatalogContext = ""; // filters+sort signature; a change resets paging
+
+function renderCatalogPagination(totalPages) {
+    const nav = document.getElementById("catalog-pagination");
+    if (!nav) return;
+    if (totalPages <= 1) { nav.innerHTML = ""; return; }
+
+    const cur = state.catalogPage;
+    // Always show first, last and the current page's neighbours; collapse the rest
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - cur) <= 1) {
+            pages.push(i);
+        } else if (pages[pages.length - 1] !== "…") {
+            pages.push("…");
+        }
+    }
+
+    nav.innerHTML = `
+        <button class="page-btn page-arrow" data-page="${cur - 1}" ${cur === 1 ? "disabled" : ""} aria-label="Previous page"><i class="fa-solid fa-chevron-left"></i></button>
+        ${pages.map(pg => pg === "…"
+            ? `<span class="page-ellipsis">…</span>`
+            : `<button class="page-btn ${pg === cur ? "active" : ""}" data-page="${pg}">${pg}</button>`).join("")}
+        <button class="page-btn page-arrow" data-page="${cur + 1}" ${cur === totalPages ? "disabled" : ""} aria-label="Next page"><i class="fa-solid fa-chevron-right"></i></button>
+    `;
+}
+
 function renderCatalog() {
     const grid = document.getElementById("products-grid");
     const emptyState = document.getElementById("empty-catalog-message");
@@ -2219,26 +2272,33 @@ function renderCatalog() {
         return b.popularity - a.popularity;
     });
 
+    // Pagination: changing filters/sort resets to page 1; language switch keeps it
+    const catalogContext = JSON.stringify(state.filters) + "|" + state.sortBy;
+    if (catalogContext !== lastCatalogContext) {
+        lastCatalogContext = catalogContext;
+        state.catalogPage = 1;
+    }
+    const totalPages = Math.max(1, Math.ceil(filteredProducts.length / CATALOG_PAGE_SIZE));
+    if (state.catalogPage > totalPages) state.catalogPage = totalPages;
+    if (state.catalogPage < 1) state.catalogPage = 1;
+    const pageStart = (state.catalogPage - 1) * CATALOG_PAGE_SIZE;
+    const pageProducts = filteredProducts.slice(pageStart, pageStart + CATALOG_PAGE_SIZE);
+    renderCatalogPagination(totalPages);
+
     // Toggle Empty State
     if (filteredProducts.length === 0) {
         grid.innerHTML = "";
         emptyState.classList.remove("hidden");
     } else {
         emptyState.classList.add("hidden");
-        
+
         // Build cards
-        grid.innerHTML = filteredProducts.map(p => {
+        grid.innerHTML = pageProducts.map(p => {
             const inCart = state.cart.find(item => item.id === p.id);
             const cartBtnClass = inCart ? "btn-icon-only added-to-cart" : "btn-icon-only";
             const cartBtnIcon = inCart ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-cart-shopping"></i>';
             const cartBtnTitle = inCart ? t("Added to Cart") : t("card-add-cart");
-            
-            // Calculate minimum monthly financing for showcase
-            const term = 12;
-            const bank = banksConfig.bog;
-            const r = bank.standardRate / 100;
-            const monthlyEst = (p.price * (r * Math.pow(1 + r, term)) / (Math.pow(1 + r, term) - 1)).toFixed(2);
-            
+
             // Localized texts
             const localizedTitle = p.title[state.currentLang];
             const colorLabel = t(p.color);
@@ -2254,39 +2314,34 @@ function renderCatalog() {
                 <article class="product-card" data-id="${p.id}">
                     <div class="card-image-area">
                         <div class="card-badges">
-                            <span class="badge badge-accent">${p.energyClass}</span>
-                            <span class="badge ${p.inverter ? 'badge-inverter' : 'badge-onoff'}">
-                                ${techLabel}
-                            </span>
+                            ${p.energyClass ? `<span class="badge badge-accent">${p.energyClass}</span>` : ""}
+                            ${p.inverter ? `<span class="badge badge-inverter">${techLabel}</span>` : ""}
+                            ${stockBadge(p)}
                         </div>
-                        
+
                         ${mockupHTML}
                     </div>
-                    
+
                     <div class="card-body">
                         <span class="product-brand">${p.brand}</span>
                         <h3 class="product-title" title="${localizedTitle}">${localizedTitle}</h3>
-                        
+
                         <div class="product-specs-summary">
-                            <div class="spec-line">
-                                <i class="fa-solid fa-cube"></i> 
+                            ${p.btu ? `<div class="spec-line">
+                                <i class="fa-solid fa-cube"></i>
                                 <span>${p.category === 'boiler' ? (state.currentLang === 'ka' ? 'სიმძლავრე' : 'Power') : 'BTU'}: <strong>${p.btu}</strong></span>
-                            </div>
-                            <div class="spec-line"><i class="fa-solid fa-maximize"></i> <span>${t("filter-area").split(" ")[0]}: <strong>${areaLabel}</strong></span></div>
-                            <div class="spec-line"><i class="fa-solid fa-palette"></i> <span>${t("filter-color")}: <strong>${colorLabel}</strong></span></div>
-                            <div class="spec-line">
-                                <i class="fa-solid ${p.category === 'boiler' ? 'fa-fire-burner' : 'fa-snowflake'}"></i> 
-                                <span>${p.category === 'boiler' ? (state.currentLang === 'ka' ? 'კლასიფიკაცია' : 'Classification') : t("filter-inverter")}: <strong>${p.inverter ? (state.currentLang === 'ka' ? 'ეკო' : 'Eco') : (state.currentLang === 'ka' ? 'სტანდ.' : 'Std.')}</strong></span>
-                            </div>
+                            </div>` : ""}
+                            ${p.area ? `<div class="spec-line"><i class="fa-solid fa-maximize"></i> <span>${t("filter-area").split(" ")[0]}: <strong>${areaLabel}</strong></span></div>` : ""}
+                            ${p.color ? `<div class="spec-line"><i class="fa-solid fa-palette"></i> <span>${t("filter-color")}: <strong>${colorLabel}</strong></span></div>` : ""}
+                            ${p.category !== 'boiler' ? `<div class="spec-line spec-line-wide">
+                                <i class="fa-solid fa-snowflake"></i>
+                                <span>${t("filter-inverter")}: <strong>${p.inverter ? (state.currentLang === 'ka' ? 'ინვერტორი' : 'Inverter') : 'ON/OFF'}</strong></span>
+                            </div>` : ""}
                         </div>
                         
                         <div class="card-footer">
                             <div class="price-container">
                                 <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
-                                <div class="financing-mini-indicator">
-                                    ${t("card-monthly-est")}<br>
-                                    <strong>${monthlyEst} ₾ / ${t("month-unit")}</strong>
-                                </div>
                             </div>
                             
                             <div class="card-actions">
@@ -2304,8 +2359,11 @@ function renderCatalog() {
         }).join('');
     }
 
-    // Update product counts
-    document.getElementById("results-count-text").innerText = filteredProducts.length;
+    // Update product counts ("13–24 / 87" when paged, plain total otherwise)
+    const countLabel = filteredProducts.length > CATALOG_PAGE_SIZE
+        ? `${pageStart + 1}–${pageStart + pageProducts.length} / ${filteredProducts.length}`
+        : `${filteredProducts.length}`;
+    document.getElementById("results-count-text").innerText = countLabel;
     document.getElementById("results-count-mobile").innerText = `${filteredProducts.length} ${t("catalog-unit")}`;
     
     // Render Active Badge List
@@ -2902,6 +2960,21 @@ function bindUIEventListeners() {
             const type = e.target.getAttribute("data-type");
             const val = e.target.getAttribute("data-val");
             removeFilterBadge(type, val);
+        }
+    });
+
+    // Catalog pagination (delegated; buttons are re-rendered on every filter change)
+    document.getElementById("catalog-pagination").addEventListener("click", (e) => {
+        const btn = e.target.closest(".page-btn");
+        if (!btn || btn.disabled) return;
+        const page = parseInt(btn.getAttribute("data-page"));
+        if (!Number.isFinite(page) || page === state.catalogPage) return;
+        state.catalogPage = page;
+        renderCatalog();
+        // Back to the top of the product list (offset clears the sticky header)
+        const controlBar = document.querySelector(".catalog-control-bar");
+        if (controlBar) {
+            window.scrollTo({ top: controlBar.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
         }
     });
 

@@ -46,6 +46,8 @@ try {
             elseif ($ext -eq ".svg") { $response.ContentType = "image/svg+xml" }
             elseif ($ext -eq ".ico") { $response.ContentType = "image/x-icon" }
             
+            # Always serve fresh files — browsers must not cache stale app code
+            $response.Headers.Add("Cache-Control", "no-store")
             $response.ContentLength64 = $bytes.Length
             $response.OutputStream.Write($bytes, 0, $bytes.Length)
             Write-Host "[200] Served: $urlPath"
