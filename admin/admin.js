@@ -123,6 +123,7 @@ async function enterDashboard(user) {
     $("admin-email").innerText = user.email;
 
     await loadOrders();
+    loadBookings();
     startAutoRefresh();
 }
 
@@ -156,6 +157,36 @@ function bindDashboardUI() {
         }
     });
 
+    // Bookings tab interactions
+    $("refresh-bookings-btn").addEventListener("click", loadBookings);
+
+    $("bookings-body").addEventListener("click", (e) => {
+        if (e.target.closest(".pill-select")) return;
+        const row = e.target.closest("tr.order-row");
+        if (!row) return;
+        const detail = row.nextElementSibling;
+        if (detail && detail.classList.contains("detail-row")) detail.classList.toggle("hidden");
+    });
+
+    $("bookings-body").addEventListener("change", async (e) => {
+        const sel = e.target.closest(".pill-select");
+        if (!sel) return;
+        sel.classList.add("saving");
+        const { error } = await sbClient
+            .from("service_bookings")
+            .update({ status: sel.value })
+            .eq("id", sel.getAttribute("data-booking"));
+        sel.classList.remove("saving");
+        if (error) {
+            alert("Could not save the change: " + error.message);
+            await loadBookings();
+            return;
+        }
+        const booking = allBookings.find(b => b.id === sel.getAttribute("data-booking"));
+        if (booking) booking.status = sel.value;
+        sel.className = `pill-select st-${sel.value}`;
+    });
+
     $("orders-body").addEventListener("change", async (e) => {
         const sel = e.target.closest(".pill-select");
         if (!sel) return;
@@ -177,6 +208,80 @@ function bindDashboardUI() {
         sel.className = `pill-select ${pillClass(field, value)}`;
         renderStats();
     });
+}
+
+// ---------------------------------------------------------------------------
+// Service bookings
+// ---------------------------------------------------------------------------
+let allBookings = [];
+const BOOKING_STATUS_OPTIONS = ["new", "confirmed", "completed", "cancelled"];
+const SLOT_LABELS = { morning: "09:00–13:00", afternoon: "13:00–17:00", evening: "17:00–20:00" };
+
+async function loadBookings() {
+    const btn = $("refresh-bookings-btn");
+    if (btn) btn.classList.add("spinning");
+    try {
+        const { data, error } = await sbClient
+            .from("service_bookings")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(300);
+        if (error) {
+            console.warn("bookings load failed:", error.message);
+            return;
+        }
+        allBookings = data || [];
+        renderBookings();
+    } finally {
+        if (btn) btn.classList.remove("spinning");
+    }
+}
+
+function extrasLabel(extras) {
+    if (!extras) return "—";
+    const parts = [];
+    if (extras.brackets) parts.push("wall brackets");
+    if (extras.pipe) parts.push("extra pipe");
+    if (extras.dismantle) parts.push("dismantle old unit");
+    return parts.length ? parts.join(", ") : "—";
+}
+
+function renderBookings() {
+    const body = $("bookings-body");
+    if (!body) return;
+    $("bookings-empty").classList.toggle("hidden", allBookings.length > 0);
+
+    body.innerHTML = allBookings.map(b => `
+        <tr class="order-row">
+            <td class="order-no">#${b.booking_no}</td>
+            <td class="order-date">${fmtDate(b.created_at)}</td>
+            <td class="prod-cell">
+                <div class="prod-title">${esc(b.service_label || b.service_type)}</div>
+                <div class="cust-phone">${esc(b.btu_range || "")}</div>
+            </td>
+            <td>
+                <div class="cust-name">${b.preferred_date || "—"}</div>
+                <div class="cust-phone">${SLOT_LABELS[b.time_slot] || esc(b.time_slot || "")}</div>
+            </td>
+            <td>
+                <div class="cust-name">${esc(b.customer_name)}</div>
+                <div class="cust-phone">${esc(b.phone)}</div>
+            </td>
+            <td class="num amount-cell">${b.estimated_cost ? Number(b.estimated_cost).toLocaleString() + " ₾" : "—"}</td>
+            <td><select class="pill-select st-${b.status}" data-booking="${b.id}">
+                ${BOOKING_STATUS_OPTIONS.map(s => `<option value="${s}" ${s === b.status ? "selected" : ""}>${s}</option>`).join("")}
+            </select></td>
+        </tr>
+        <tr class="detail-row hidden">
+            <td colspan="7">
+                <div class="detail-grid">
+                    <div class="detail-item"><p>Address</p><p>${esc(b.address)}</p></div>
+                    <div class="detail-item"><p>Extras</p><p>${extrasLabel(b.extras)}</p></div>
+                    <div class="detail-item"><p>Customer notes</p><p>${esc(b.notes) || "—"}</p></div>
+                </div>
+            </td>
+        </tr>
+    `).join("");
 }
 
 function startAutoRefresh() {

@@ -11,13 +11,14 @@
 let pendingImport = null; // { profile, fileName, records, plan, supplier }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ---- tab switching ----
+    // ---- tab switching (generic: tab data-view="x" ↔ container id "view-x") ----
     document.querySelectorAll(".tab-bar .tab").forEach(tab => {
         tab.addEventListener("click", () => {
             document.querySelectorAll(".tab-bar .tab").forEach(t => t.classList.toggle("active", t === tab));
             const view = tab.getAttribute("data-view");
-            document.getElementById("view-orders").classList.toggle("hidden", view !== "orders");
-            document.getElementById("view-import").classList.toggle("hidden", view !== "import");
+            document.querySelectorAll(".content .view").forEach(v =>
+                v.classList.toggle("hidden", v.id !== "view-" + view));
+            if (view === "bookings" && typeof loadBookings === "function") loadBookings();
         });
     });
 

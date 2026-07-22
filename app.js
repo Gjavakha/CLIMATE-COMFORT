@@ -1060,6 +1060,14 @@ function saveOrderToDb(order) {
     });
 }
 
+// Same for service bookings (admin page → Bookings tab)
+function saveBookingToDb(booking) {
+    if (!sbClient) return;
+    sbClient.from("service_bookings").insert(booking).then(({ error }) => {
+        if (error) console.warn("Booking was not saved to the database:", error.message);
+    });
+}
+
 // ==========================================================================
 // Initialization & Localization Apply
 // ==========================================================================
@@ -3365,6 +3373,25 @@ function bindUIEventListeners() {
         const totalEstimatedCost = document.getElementById("calc-total-cost").innerText;
 
         const refNum = "SRV-" + Math.floor(100000 + Math.random() * 900000);
+
+        // Persist for the admin page (Bookings tab)
+        saveBookingToDb({
+            service_type: serviceTypeSelect.value,
+            service_label: serviceName,
+            btu_range: btuVal,
+            extras: {
+                brackets: document.getElementById("extra-brackets").checked,
+                pipe: document.getElementById("extra-pipe").checked,
+                dismantle: document.getElementById("extra-dismantle").checked
+            },
+            preferred_date: dateVal || null,
+            time_slot: timeSelect.value || null,
+            customer_name: nameVal,
+            phone: phoneVal,
+            address: addressVal,
+            notes: document.getElementById("cust-notes").value.trim() || null,
+            estimated_cost: parseFloat(totalEstimatedCost.replace(/[^\d.]/g, "")) || null
+        });
 
         const successTitle = document.getElementById("success-title");
         const successMsg = document.getElementById("success-message");

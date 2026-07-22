@@ -211,6 +211,43 @@ create policy orders_admin_update on orders
     for update using (is_admin()) with check (is_admin());
 
 -- ----------------------------------------------------------------------------
+-- Service bookings (installation / dismantling / refill / maintenance):
+-- written by the storefront booking form, managed in the admin Bookings tab.
+-- ----------------------------------------------------------------------------
+create table if not exists service_bookings (
+    id             uuid primary key default gen_random_uuid(),
+    booking_no     bigint generated always as identity,
+    service_type   text not null,          -- 'installation' | 'dismantling' | 'refill' | 'maintenance'
+    service_label  text,                   -- human label shown at booking time
+    btu_range      text,                   -- '9000-12000' ...
+    extras         jsonb,                  -- {"brackets":true,"pipe":false,"dismantle":false}
+    preferred_date date,
+    time_slot      text,                   -- 'morning' | 'afternoon' | 'evening'
+    customer_name  text not null,
+    phone          text not null,
+    address        text not null,
+    notes          text,
+    estimated_cost numeric(10,2),
+    status         text not null default 'new'
+                   check (status in ('new','confirmed','completed','cancelled')),
+    created_at     timestamptz not null default now()
+);
+
+alter table service_bookings enable row level security;
+
+drop policy if exists bookings_insert_any on service_bookings;
+create policy bookings_insert_any on service_bookings
+    for insert with check (true);
+
+drop policy if exists bookings_admin_select on service_bookings;
+create policy bookings_admin_select on service_bookings
+    for select using (is_admin());
+
+drop policy if exists bookings_admin_update on service_bookings;
+create policy bookings_admin_update on service_bookings
+    for update using (is_admin()) with check (is_admin());
+
+-- ----------------------------------------------------------------------------
 -- Seed the two suppliers we already have price lists for
 -- ----------------------------------------------------------------------------
 insert into suppliers (slug, name) values
