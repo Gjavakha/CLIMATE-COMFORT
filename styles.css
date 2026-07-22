@@ -1186,6 +1186,226 @@ img {
     color: var(--primary);
 }
 
+/* ==========================================================================
+   Homepage Rails (featured carousels) + Brand Strip
+   ========================================================================== */
+.home-rails {
+    padding-top: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+}
+
+.rail-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.rail-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rail-ico {
+    color: var(--secondary);
+    font-size: 1.1rem;
+}
+
+.rail-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.rail-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.rail-btn:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+    transform: translateY(-1px);
+}
+
+.rail-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+    scrollbar-width: none;          /* Firefox */
+}
+
+.rail-track::-webkit-scrollbar { display: none; }
+
+.rail-card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.rail-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(14, 193, 245, 0.4);
+}
+
+.rail-card-img {
+    position: relative;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafafa;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.rail-card-img .photo-placeholder { min-height: 0; gap: 4px; }
+.rail-card-img .photo-placeholder i { font-size: 1.6rem; }
+.rail-card-img .photo-placeholder span { display: none; }
+
+.rail-sale {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: var(--accent);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+}
+
+.rail-card .product-brand {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+}
+
+.rail-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 4px 0 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.7em;
+}
+
+.rail-card-price {
+    margin-top: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.rail-card-price strong {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.rail-old-price {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+/* Brand strip */
+.brand-strip-title {
+    justify-content: center;
+    margin-bottom: 22px;
+}
+
+.brand-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+.brand-tile {
+    position: relative;
+    height: 84px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--card-bg);
+    cursor: pointer;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.brand-tile-name {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+/* Sweeping shine on hover */
+.brand-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(14, 193, 245, 0.12), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+}
+
+.brand-tile:hover::before { left: 120%; }
+
+.brand-tile:hover {
+    transform: translateY(-4px);
+    border-color: rgba(14, 193, 245, 0.5);
+    box-shadow: 0 12px 24px -8px rgba(14, 193, 245, 0.25);
+}
+
+.brand-tile:hover .brand-tile-name {
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+    .home-rails { padding-top: 36px; gap: 32px; }
+    .rail-card { flex-basis: 180px; }
+    .rail-title { font-size: 1.2rem; }
+    .brand-strip { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+    .brand-tile { height: 68px; }
+    .brand-tile-name { font-size: 0.9rem; }
+}
+
 /* Catalog pagination */
 .pagination {
     display: flex;
@@ -2979,7 +3199,7 @@ body.product-view .product-detail-page {
 body.product-view .hero,
 body.product-view .why-us,
 body.product-view .store-catalog,
-body.product-view .financing-section,
+body.product-view .home-rails,
 body.product-view .booking-section {
     display: none;
 }
@@ -3359,7 +3579,7 @@ body.checkout-view .checkout-page {
 body.checkout-view .hero,
 body.checkout-view .why-us,
 body.checkout-view .store-catalog,
-body.checkout-view .financing-section,
+body.checkout-view .home-rails,
 body.checkout-view .booking-section {
     display: none;
 }
@@ -3699,7 +3919,7 @@ body.account-view .account-page {
 body.account-view .hero,
 body.account-view .why-us,
 body.account-view .store-catalog,
-body.account-view .financing-section,
+body.account-view .home-rails,
 body.account-view .booking-section {
     display: none;
 }

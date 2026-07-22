@@ -43,7 +43,6 @@
                         <a href="#catalog" class="dropdown-item" data-category="boiler" data-i18n="nav-boiler">ცენტრალური გათბობის ქვაბები</a>
                     </div>
                 </div>
-                <a href="#financing-info" class="nav-link" data-i18n="nav-financing">განვადება</a>
                 <a href="#booking-section" class="nav-link" data-i18n="nav-booking">სერვისები</a>
                 <a href="#about-us" class="nav-link" data-i18n="nav-why-us">რატომ ჩვენ</a>
             </nav>
@@ -148,6 +147,59 @@
                     <p data-i18n="whyus-f4-desc">ჩვენი პროფესიონალი გუნდი სრულად ლიცენზირებულია ნებისმიერი ტიპის კონდიციონერის დასამონტაჟებლად.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Featured Product Rails + Brand Tiles (rendered by JS) -->
+    <section class="home-rails container" id="home-rails">
+        <div class="rail hidden" id="rail-midea-wrap">
+            <div class="rail-head">
+                <h2 class="rail-title"><i class="fa-solid fa-star rail-ico"></i> <span data-i18n="rail-midea">Midea კოლექცია</span></h2>
+                <div class="rail-nav">
+                    <button class="rail-btn" data-dir="-1" data-target="rail-midea" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="rail-btn" data-dir="1" data-target="rail-midea" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="rail-track" id="rail-midea"></div>
+        </div>
+
+        <div class="rail hidden" id="rail-best-wrap">
+            <div class="rail-head">
+                <h2 class="rail-title"><i class="fa-solid fa-fire rail-ico"></i> <span data-i18n="rail-best">გაყიდვების ლიდერები</span></h2>
+                <div class="rail-nav">
+                    <button class="rail-btn" data-dir="-1" data-target="rail-best" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="rail-btn" data-dir="1" data-target="rail-best" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="rail-track" id="rail-best"></div>
+        </div>
+
+        <div class="rail hidden" id="rail-deals-wrap">
+            <div class="rail-head">
+                <h2 class="rail-title"><i class="fa-solid fa-tags rail-ico"></i> <span data-i18n="rail-deals">საუკეთესო შეთავაზებები</span></h2>
+                <div class="rail-nav">
+                    <button class="rail-btn" data-dir="-1" data-target="rail-deals" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="rail-btn" data-dir="1" data-target="rail-deals" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="rail-track" id="rail-deals"></div>
+        </div>
+
+        <div class="rail hidden" id="rail-budget-wrap">
+            <div class="rail-head">
+                <h2 class="rail-title"><i class="fa-solid fa-coins rail-ico"></i> <span data-i18n="rail-budget">საბიუჯეტო არჩევანი</span></h2>
+                <div class="rail-nav">
+                    <button class="rail-btn" data-dir="-1" data-target="rail-budget" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="rail-btn" data-dir="1" data-target="rail-budget" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="rail-track" id="rail-budget"></div>
+        </div>
+
+        <!-- Brand tiles: click filters the catalog below to that brand -->
+        <div class="brand-strip-wrap hidden" id="brand-strip-wrap">
+            <h2 class="rail-title brand-strip-title" data-i18n="brands-title">ბრენდები</h2>
+            <div class="brand-strip" id="brand-strip"></div>
         </div>
     </section>
 
@@ -321,55 +373,6 @@
     </section>
 
     <!-- Financing Banner / Info Section -->
-    <section class="financing-section" id="financing-info">
-        <div class="container">
-            <div class="financing-banner">
-                <div class="financing-banner-content">
-                    <span class="badge badge-accent" data-i18n="finance-badge">განვადება</span>
-                    <h2 data-i18n="finance-title">ხელმისაწვდომი განვადების პირობები</h2>
-                    <p data-i18n="finance-description">ნუ გადადებთ კომფორტს. შეიძინეთ ნებისმიერი კონდიციონერი დღესვე და გადაიხადეთ ეტაპობრივად. ჩვენ ვთანამშრომლობთ წამყვან ქართულ ბანკებთან, რათა შემოგთავაზოთ საუკეთესო პირობები, მათ შორის 0%-იანი უპროცენტო განვადება.</p>
-                    
-                    <div class="banks-logos">
-                        <div class="bank-logo">
-                            <span class="bog-logo-text"><i class="fa-solid fa-square-share-nodes"></i> Bank of Georgia</span>
-                            <span class="bank-promo" data-i18n="bank-promo-bog">6 თვემდე 0%</span>
-                        </div>
-                        <div class="bank-logo">
-                            <span class="tbc-logo-text"><i class="fa-solid fa-t"></i> TBC Bank</span>
-                            <span class="bank-promo" data-i18n="bank-promo-tbc">3 თვემდე 0%</span>
-                        </div>
-                        <div class="bank-logo">
-                            <span class="liberty-logo-text"><i class="fa-solid fa-l"></i> Liberty Bank</span>
-                            <span class="bank-promo" data-i18n="bank-promo-liberty">მარტივი დამტკიცება</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="financing-banner-graphic">
-                    <div class="calculator-preview-card">
-                        <div class="preview-header">
-                            <i class="fa-solid fa-calculator"></i>
-                            <span data-i18n="calc-preview-header">განვადების კალკულატორი</span>
-                        </div>
-                        <div class="preview-body">
-                            <p class="preview-help" data-i18n="calc-preview-help">კალკულატორის გამოსაყენებლად და სასურველი განვადების პირობების მოსარგებად, დააჭირეთ „განვადებით ყიდვა“ ღილაკს ნებისმიერი პროდუქტის ბარათზე.</p>
-                            <div class="calculator-visual-row">
-                                <div class="visual-col">
-                                    <span class="visual-label" data-i18n="calc-preview-label-cost">ღირებულება</span>
-                                    <span class="visual-val">1,349 ₾</span>
-                                </div>
-                                <div class="visual-col">
-                                    <span class="visual-label" data-i18n="calc-preview-label-monthly">ყოველთვიური</span>
-                                    <span class="visual-val accent">112.42 ₾ / თვე</span>
-                                </div>
-                            </div>
-                            <a href="#catalog" class="btn btn-primary btn-sm w-full text-center" data-i18n="calc-preview-cta">შეარჩიეთ პროდუქტი განვადებისთვის</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Professional Installation Booking Section -->
     <section class="booking-section" id="booking-section">
         <div class="container">
@@ -833,7 +836,6 @@
                 <ul class="footer-links">
                     <li><a href="#catalog" class="footer-cat-link" data-category="ac" data-i18n="footer-prod-1">კონდიციონერები</a></li>
                     <li><a href="#catalog" class="footer-cat-link" data-category="boiler" data-i18n="footer-prod-2">ცენტრალური გათბობის ქვაბები</a></li>
-                    <li><a href="#financing-info" data-i18n="nav-financing">განვადების კალკულატორი</a></li>
                     <li><a href="#booking-section" data-i18n="nav-booking">სამონტაჟო სერვისები</a></li>
                 </ul>
             </div>

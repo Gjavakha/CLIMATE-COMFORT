@@ -245,6 +245,13 @@ const translations = {
         "footer-workhours": "ორშ - შაბ: 09:00 - 20:00",
         "footer-copyright": "საავტორო უფლება © 2026 Climate Comfort. ყველა უფლება დაცულია",
         "footer-made-by": "Powered by",
+
+        // Homepage rails + brand strip
+        "rail-midea": "Midea კოლექცია",
+        "rail-best": "გაყიდვების ლიდერები",
+        "rail-deals": "საუკეთესო შეთავაზებები",
+        "rail-budget": "საბიუჯეტო არჩევანი",
+        "brands-title": "ბრენდები",
         "co-processing": "მუშავდება...",
         "co-err-id": "პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან",
         "co-err-phone": "შეიყვანეთ სწორი ტელეფონის ნომერი",
@@ -545,6 +552,13 @@ const translations = {
         "footer-workhours": "Mon - Sat: 09:00 - 20:00",
         "footer-copyright": "Copyright © 2026 Climate Comfort. All rights reserved.",
         "footer-made-by": "Powered by",
+
+        // Homepage rails + brand strip
+        "rail-midea": "Midea Collection",
+        "rail-best": "Best Sellers",
+        "rail-deals": "Top Deals",
+        "rail-budget": "Budget Picks",
+        "brands-title": "Shop by Brand",
         "co-processing": "Processing...",
         "co-err-id": "The personal ID number must be exactly 11 digits",
         "co-err-phone": "Please enter a valid phone number",
@@ -1075,6 +1089,7 @@ async function loadDbProducts() {
         // Rebuild everything derived from the catalog
         generateFiltersUI();
         renderCatalog();
+        renderHomeRails();
         handleRouting();
     } catch (err) {
         console.warn("Supabase unreachable — using demo products:", err);
@@ -1115,8 +1130,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Generate filters dynamically based on product database to get correct counts
     generateFiltersUI();
     
-    // 4. Initial Render of Catalog
+    // 4. Initial Render of Catalog + homepage rails
     renderCatalog();
+    renderHomeRails();
     
     // 5. Bind Event Listeners
     bindUIEventListeners();
@@ -1232,11 +1248,11 @@ function generateFiltersUI() {
         }
     }
 
-    // 1. Brands
+    // 1. Brands (restore checked state — brand tiles set the filter from outside)
     const brandContainer = document.getElementById("filter-brands");
     brandContainer.innerHTML = Object.keys(facets.brands).map(brand => `
         <label class="filter-checkbox-label">
-            <input type="checkbox" name="brand" value="${brand}">
+            <input type="checkbox" name="brand" value="${brand}" ${state.filters.brands.includes(brand) ? "checked" : ""}>
             <span class="custom-checkbox"></span>
             <span class="label-text">${brand}</span>
             <span class="count">(${facets.brands[brand]})</span>
@@ -2225,6 +2241,73 @@ function bindAccountTabEvents() {
 }
 
 // ==========================================================================
+// Homepage Rails (featured carousels) + Brand Strip
+// ==========================================================================
+let bestSellerOrder = null; // random once per visit; replace with real sales data later
+
+function railCard(p) {
+    const title = p.title[state.currentLang];
+    const onSale = p.oldPrice && p.oldPrice > p.price;
+    return `
+        <a class="rail-card" href="#product/${p.id}">
+            <div class="rail-card-img">
+                ${buildProductMockup(p)}
+                ${onSale ? `<span class="rail-sale">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</span>` : ""}
+            </div>
+            <span class="product-brand">${p.brand}</span>
+            <p class="rail-card-title">${title}</p>
+            <div class="rail-card-price">
+                ${onSale ? `<span class="rail-old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}
+                <strong>${p.price.toLocaleString()} ₾</strong>
+            </div>
+        </a>
+    `;
+}
+
+function renderHomeRails() {
+    if (!document.getElementById("home-rails")) return;
+
+    // Stable random order for "best sellers" until real sales data exists
+    if (!bestSellerOrder || bestSellerOrder.length !== products.length) {
+        bestSellerOrder = [...products].sort(() => Math.random() - 0.5).map(p => p.id);
+    }
+
+    const onSale = products.filter(p => p.oldPrice && p.oldPrice > p.price);
+    const rails = [
+        { key: "rail-midea", items: products.filter(p => p.brand.toUpperCase() === "MIDEA") },
+        { key: "rail-best", items: bestSellerOrder.map(id => findProduct(id)).filter(Boolean) },
+        { key: "rail-deals", items: [...onSale].sort((a, b) =>
+            (b.oldPrice - b.price) / b.oldPrice - (a.oldPrice - a.price) / a.oldPrice) },
+        { key: "rail-budget", items: [...products].filter(p => p.price > 0).sort((a, b) => a.price - b.price) },
+    ];
+
+    rails.forEach(rail => {
+        const wrap = document.getElementById(`${rail.key}-wrap`);
+        const track = document.getElementById(rail.key);
+        if (!wrap || !track) return;
+        const items = rail.items.slice(0, 12);
+        wrap.classList.toggle("hidden", items.length < 4); // a rail with 2 cards looks broken
+        track.innerHTML = items.map(railCard).join("");
+    });
+
+    renderBrandStrip();
+}
+
+function renderBrandStrip() {
+    const wrap = document.getElementById("brand-strip-wrap");
+    const strip = document.getElementById("brand-strip");
+    if (!wrap || !strip) return;
+
+    const brands = [...new Set(products.map(p => p.brand))].sort();
+    wrap.classList.toggle("hidden", brands.length < 2);
+    strip.innerHTML = brands.map(b => `
+        <button class="brand-tile" data-brand="${b}" aria-label="${b}">
+            <span class="brand-tile-name">${b}</span>
+        </button>
+    `).join("");
+}
+
+// ==========================================================================
 // Catalog Rendering and Filtering Logic
 // ==========================================================================
 const CATALOG_PAGE_SIZE = 12; // divides evenly into 2/3/4-column grids
@@ -2909,6 +2992,7 @@ function bindUIEventListeners() {
                 applyLanguage();
                 generateFiltersUI();
                 renderCatalog();
+                renderHomeRails();
                 updateCartUI();
                 updateServiceEstimator();
 
@@ -3000,6 +3084,32 @@ function bindUIEventListeners() {
             removeFilterBadge(type, val);
         }
     });
+
+    // Homepage rails: arrow buttons scroll the track; brand tiles filter the catalog
+    const homeRails = document.getElementById("home-rails");
+    if (homeRails) {
+        homeRails.addEventListener("click", (e) => {
+            const railBtn = e.target.closest(".rail-btn");
+            if (railBtn) {
+                const track = document.getElementById(railBtn.getAttribute("data-target"));
+                if (track) {
+                    track.scrollBy({ left: parseInt(railBtn.getAttribute("data-dir")) * track.clientWidth * 0.8, behavior: "smooth" });
+                }
+                return;
+            }
+
+            const tile = e.target.closest(".brand-tile");
+            if (tile) {
+                state.filters.brands = [tile.getAttribute("data-brand")];
+                generateFiltersUI();
+                renderCatalog();
+                const catalogTop = document.querySelector(".category-tabs-container");
+                if (catalogTop) {
+                    window.scrollTo({ top: catalogTop.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
+                }
+            }
+        });
+    }
 
     // Catalog pagination (delegated; buttons are re-rendered on every filter change)
     document.getElementById("catalog-pagination").addEventListener("click", (e) => {
