@@ -4,3 +4,18 @@
 
 # Excel lock/temp files
 ~$*
+
+# One-off data backfills generated from supplier/retailer sites
+*-backfill.sql
+backfill*.sql
+
+# Editor / OS noise
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.swp
+
+# Local tooling
+node_modules/
+.DS_Store
