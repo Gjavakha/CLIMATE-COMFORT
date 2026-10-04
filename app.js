@@ -205,6 +205,15 @@ const translations = {
         "auth-switch-to-login": "უკვე გაქვთ ანგარიში?",
         "auth-err-exists": "ამ ელ. ფოსტით ანგარიში უკვე არსებობს",
         "auth-err-invalid": "ელ. ფოსტა ან პაროლი არასწორია",
+        "auth-err-offline": "სერვერთან კავშირი ვერ დამყარდა. სცადეთ მოგვიანებით.",
+        "auth-forgot": "დაგავიწყდათ პაროლი?",
+        "auth-reset-sent": "პაროლის აღდგენის ბმული გამოგზავნილია ელ. ფოსტაზე.",
+        "auth-confirm-sent": "დადასტურების ბმული გამოგზავნილია ელ. ფოსტაზე. გთხოვთ, გახსნათ იგი რეგისტრაციის დასასრულებლად.",
+        "acc-email-confirm": "დადასტურების ბმული გამოგზავნილია ახალ ელ. ფოსტაზე. მისამართი შეიცვლება მას შემდეგ, რაც ბმულს გახსნით.",
+        "acc-status-confirmed": "დადასტურებულია",
+        "acc-status-delivering": "მიწოდებაში",
+        "acc-status-completed": "დასრულებულია",
+        "acc-status-cancelled": "გაუქმებულია",
         "auth-err-email": "შეიყვანეთ სწორი ელ. ფოსტა",
         "auth-err-password": "პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო",
         "auth-logout-confirm": "გსურთ ანგარიშიდან გასვლა?",
@@ -233,7 +242,7 @@ const translations = {
 
         // Footer
         "footer-text": "გთავაზობთ საიმედო გათბობისა და კონდიცირების სისტემებს საქართველოს მასშტაბით. უმაღლესი ხარისხი, სწრაფი სერვისი, მორგებული განვადება.",
-        "footer-products-title": "პროდუქცია",
+        "footer-products-title": "პროდუქცია და სერვისი",
         "footer-prod-1": "კონდიციონერები",
         "footer-prod-2": "ცენტრალური გათბობის ქვაბები",
         "footer-services-title": "სერვისები",
@@ -241,7 +250,14 @@ const translations = {
         "footer-serv-2": "გათბობის ქვაბის მონტაჟი",
         "footer-serv-3": "ფრეონით შევსება / მოვლა",
         "footer-serv-4": "სრული პროფილაქტიკა",
-        "footer-contact-title": "კონტაქტი",
+        "meta-description": "კონდიციონერები და ცენტრალური გათბობის ქვაბები საქართველოში — Samsung, LG, Midea, Bosch, Gree და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+        "footer-legal-title": "წესები და პირობები",
+        "footer-terms": "წესები და პირობები",
+        "footer-privacy": "კონფიდენციალურობის პოლიტიკა",
+        "footer-returns": "დაბრუნება და გარანტია",
+        "footer-cookies": "Cookie პარამეტრები",
+        "footer-follow-title": "გამოგვყევი",
+        "footer-contact-title": "დაგვიკავშირდი",
         "footer-workhours": "ორშ - შაბ: 09:00 - 20:00",
         "footer-copyright": "საავტორო უფლება © 2026 Climate Comfort. ყველა უფლება დაცულია",
         "footer-made-by": "Powered by",
@@ -512,6 +528,15 @@ const translations = {
         "auth-switch-to-login": "Already have an account?",
         "auth-err-exists": "An account with this email already exists",
         "auth-err-invalid": "Incorrect email or password",
+        "auth-err-offline": "Could not reach the server. Please try again later.",
+        "auth-forgot": "Forgot your password?",
+        "auth-reset-sent": "A password reset link has been sent to your email.",
+        "auth-confirm-sent": "A confirmation link has been sent to your email. Please open it to finish signing up.",
+        "acc-email-confirm": "A confirmation link has been sent to the new address. The email changes once you open it.",
+        "acc-status-confirmed": "Confirmed",
+        "acc-status-delivering": "Out for delivery",
+        "acc-status-completed": "Completed",
+        "acc-status-cancelled": "Cancelled",
         "auth-err-email": "Please enter a valid email address",
         "auth-err-password": "Password must be at least 6 characters",
         "auth-logout-confirm": "Log out of your account?",
@@ -540,7 +565,7 @@ const translations = {
 
         // Footer
         "footer-text": "Reliable heating and air conditioning systems across Georgia. Top quality, fast service, and flexible installment plans.",
-        "footer-products-title": "Products",
+        "footer-products-title": "Products & Service",
         "footer-prod-1": "Air Conditioners",
         "footer-prod-2": "Central Heating Boilers",
         "footer-services-title": "Services",
@@ -548,7 +573,14 @@ const translations = {
         "footer-serv-2": "Boiler Installation",
         "footer-serv-3": "Freon Refill / Maintenance",
         "footer-serv-4": "Full Servicing",
-        "footer-contact-title": "Contact",
+        "meta-description": "Air conditioners and central heating boilers in Georgia — Samsung, LG, Midea, Bosch, Gree and more. Official warranty, professional installation, 0% instalments and free delivery in Tbilisi.",
+        "footer-legal-title": "Terms & Policies",
+        "footer-terms": "Terms & Conditions",
+        "footer-privacy": "Privacy Policy",
+        "footer-returns": "Returns & Warranty",
+        "footer-cookies": "Cookie settings",
+        "footer-follow-title": "Follow us",
+        "footer-contact-title": "Get in touch",
         "footer-workhours": "Mon - Sat: 09:00 - 20:00",
         "footer-copyright": "Copyright © 2026 Climate Comfort. All rights reserved.",
         "footer-made-by": "Powered by",
@@ -1028,7 +1060,10 @@ let state = {
     catalogPage: 1,           // current catalog page (resets when filters/sort change)
     activeFinancedProduct: null,
     checkoutMode: "standard",
-    user: null,               // logged-in account ({email, provider}) or null
+    user: null,               // signed-in account ({id, email, provider}) or null — from Supabase Auth
+    profile: null,            // cached `profiles` row: delivery details + saved cards
+    orders: [],               // this user's orders, read from the database
+    ordersLoaded: false,      // so the account page fetches them once per visit
     afterAuthHash: null,      // hash to navigate to once the user authenticates (checkout/N, account)
     guestCheckout: false      // set when the buyer skips registration ("continue without registering")
 };
@@ -1063,6 +1098,10 @@ function dbRowToProduct(r) {
         popularity: 50,
         stock: r.stock_status || null, // 'in' | 'low' (out of stock is never published)
         image: r.image_url || null,
+        images: Array.isArray(r.images) && r.images.length ? r.images : (r.image_url ? [r.image_url] : []),
+        // Full spec table fetched from the supplier's own product page at
+        // import time: [{group, items:[{name,value}]}] — see fetch-product-details.
+        specs: Array.isArray(r.specs) ? r.specs : [],
         description: {
             ka: r.description_ka || "",
             en: r.description_en || ""
@@ -1107,6 +1146,7 @@ function saveOrderToDb(order) {
 
 // Same for service bookings (admin page → Bookings tab)
 function saveBookingToDb(booking) {
+    if (typeof trackLead === "function") trackLead("service_booking");
     if (!sbClient) return;
     sbClient.from("service_bookings").insert(booking).then(({ error }) => {
         if (error) console.warn("Booking was not saved to the database:", error.message);
@@ -1117,8 +1157,25 @@ function saveBookingToDb(booking) {
 // Initialization & Localization Apply
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
-    // 0. Restore auth session
-    try { state.user = JSON.parse(localStorage.getItem("cc_session")); } catch (err) { state.user = null; }
+    // 0. Restore the auth session. supabase-js persists and refreshes the JWT
+    //    itself, and also parses the tokens an OAuth / magic-link redirect puts
+    //    in the URL — so this covers "already signed in" and "just came back
+    //    from Google" alike. It is async, hence the re-render once it lands.
+    if (sbClient) {
+        sbClient.auth.getSession().then(({ data }) => {
+            if (!data.session) return;
+            applySession(data.session).then(() => handleRouting());
+        });
+
+        sbClient.auth.onAuthStateChange((event, session) => {
+            // INITIAL_SESSION is already handled by getSession above
+            if (event === "INITIAL_SESSION") return;
+            applySession(session).then(() => {
+                state.ordersLoaded = false;
+                if (SUBPAGE_CLASSES.some(c => document.body.classList.contains(c))) handleRouting();
+            });
+        });
+    }
     updateAuthUI();
 
     // 1. Setup Language Button States
@@ -1185,6 +1242,12 @@ function applyLanguage() {
         const key = el.getAttribute("data-i18n-placeholder");
         el.setAttribute("placeholder", t(key));
     });
+
+    // SEO meta tags carry their text in a content attribute, not a text node
+    document.querySelectorAll("[data-i18n-meta]").forEach(el => {
+        el.setAttribute("content", t(el.getAttribute("data-i18n-meta")));
+    });
+    document.documentElement.setAttribute("lang", state.currentLang);
 }
 
 // Faceted Counter Generator
@@ -1355,9 +1418,339 @@ function getTechLabel(p) {
 }
 
 // ==========================================================================
+// Legal pages (hash routes: #terms, #privacy, #returns)
+//
+// Required before launch: Georgian consumer-protection law obliges a distance
+// seller to publish its identity, the withdrawal right and the complaints
+// procedure, and the acquiring bank asks for all three documents before it
+// issues a merchant account.
+//
+// ⚠ FILL IN COMPANY below with the real registration data, then have a lawyer
+// review the text once — the wording follows the law but is not legal advice.
+// ==========================================================================
+const COMPANY = {
+    legalName: "შპს Climate Comfort",       // ← იურიდიული დასახელება ამონაწერის მიხედვით
+    legalNameEn: "Climate Comfort LLC",
+    taxId: "000000000",                      // ← საიდენტიფიკაციო კოდი (9 ციფრი)
+    address: "ალ. ყაზბეგის გამზ. 12, თბილისი 0160, საქართველო",
+    addressEn: "12 Al. Kazbegi Ave, Tbilisi 0160, Georgia",
+    phone: "+995 599 00 00 00",              // ← რეალური ნომერი
+    email: "info@climate-comfort.ge",        // ← რეალური, მოქმედი მისამართი
+    site: "https://climate-comfort.ge",
+    updated: "2026-09-30"                    // ← ბოლო რედაქტირების თარიღი
+};
+
+const LEGAL_SLUGS = ["terms", "privacy", "returns"];
+
+// Each page is authored as HTML (not data-i18n) because applyLanguage() sets
+// innerText and would strip the markup; the language switch re-renders instead.
+function legalContent() {
+    const c = COMPANY;
+    const ka = {
+        terms: {
+            title: "წესები და პირობები",
+            html: `
+<p class="legal-lead">წინამდებარე წესები და პირობები არეგულირებს ${c.site} ვებგვერდის (შემდგომში „ვებგვერდი") მეშვეობით პროდუქციის შეძენასა და სერვისის მიღებას. ვებგვერდზე შეკვეთის განთავსებით თქვენ ეთანხმებით ამ პირობებს.</p>
+
+<h3>1. გამყიდველის შესახებ</h3>
+<ul>
+    <li>იურიდიული დასახელება: <strong>${c.legalName}</strong></li>
+    <li>საიდენტიფიკაციო კოდი: <strong>${c.taxId}</strong></li>
+    <li>მისამართი: ${c.address}</li>
+    <li>ტელეფონი: <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a></li>
+    <li>ელ. ფოსტა: <a href="mailto:${c.email}">${c.email}</a></li>
+</ul>
+
+<h3>2. პროდუქცია და ფასები</h3>
+<p>ვებგვერდზე განთავსებული ფასები მითითებულია საქართველოს ლარში და მოიცავს დღგ-ს. ფასი, რომელიც მოქმედებს შეკვეთის განთავსების მომენტში, არის სავალდებულო ორივე მხარისთვის.</p>
+<p>ვებგვერდზე მითითებული ტექნიკური მახასიათებლები და ფოტოსურათები მოწოდებულია მწარმოებლისა და ოფიციალური დისტრიბუტორის მიერ. მწარმოებელი უფლებას იტოვებს შეიტანოს ცვლილება პროდუქციის კომპლექტაციაში; ფოტოსურათი შეიძლება ატარებდეს საილუსტრაციო ხასიათს. თუ მიღებული პროდუქტი არსებითად განსხვავდება აღწერილობისგან, გამოიყენება <a href="#returns">დაბრუნებისა და გარანტიის</a> პირობები.</p>
+<p>ვიტოვებთ უფლებას უარი განვაცხადოთ შეკვეთის დადასტურებაზე, თუ პროდუქტი ამოწურულია ან ფასი/მახასიათებელი აშკარა ტექნიკური შეცდომით იყო გამოქვეყნებული. ასეთ შემთხვევაში დაგიკავშირდებით და გადახდილი თანხა სრულად დაგიბრუნდებათ.</p>
+
+<h3>3. შეკვეთა და მისი დადასტურება</h3>
+<p>შეკვეთა მიღებულად ითვლება მას შემდეგ, რაც მიიღებთ დადასტურებას ელექტრონული ფოსტით ან ტელეფონით. შეკვეთის განთავსებისას ვალდებული ხართ მიუთითოთ ზუსტი და უტყუარი ინფორმაცია — არასწორი მონაცემების გამო წარმოშობილი დაგვიანებისთვის ან მიუწოდებლობისთვის პასუხისმგებლობა არ გვეკისრება.</p>
+
+<h3>4. გადახდა</h3>
+<p>გადახდა შესაძლებელია ბანკის ბარათით ან პარტნიორი ბანკის განვადებით. განვადების პირობებს, მათ შორის საპროცენტო განაკვეთსა და ვადას, განსაზღვრავს შესაბამისი ბანკი და მასთან ფორმდება ცალკე ხელშეკრულება — ${c.legalName} განვადების ხელშეკრულების მხარე არ არის.</p>
+<p>ბარათის სრულ მონაცემებს ვებგვერდი არ ინახავს: გადახდა მუშავდება ბანკის მხარეს, უსაფრთხო გვერდზე.</p>
+
+<h3>5. მიწოდება</h3>
+<p>მიწოდება ხორციელდება შეკვეთის დადასტურებიდან შეთანხმებულ ვადაში. მიწოდების მომენტში შეამოწმეთ შეფუთვის მთლიანობა და პროდუქტის გარეგნული მდგომარეობა. ტრანსპორტირებით გამოწვეული ხილული დაზიანება უნდა დაფიქსირდეს მიღებისთანავე — ამის შემდეგ წარმოდგენილი ასეთი პრეტენზიის დაკმაყოფილება შეუძლებელია.</p>
+
+<h3>6. მონტაჟი</h3>
+<p>მონტაჟი ცალკე მომსახურებაა და არ შედის პროდუქტის ფასში, თუ სხვა რამ პირდაპირ არ არის მითითებული. სამუშაოს ღირებულება დამოკიდებულია ობიექტის სპეციფიკაზე და დგინდება ადგილზე დათვალიერების შემდეგ; გადახდა ხდება სამუშაოს დასრულების შემდეგ.</p>
+<p>ყურადღება: მწარმოებლის გარანტია, როგორც წესი, ძალას კარგავს, თუ მონტაჟი შეასრულა არაავტორიზებულმა პირმა. გირჩევთ მონტაჟი შეგვიკვეთოთ ჩვენთან ან ავტორიზებულ სერვისცენტრში.</p>
+
+<h3>7. ინტელექტუალური საკუთრება</h3>
+<p>ვებგვერდის დიზაინი, ტექსტები და მასზე განთავსებული მასალა დაცულია საავტორო უფლებით. ბრენდების სასაქონლო ნიშნები მათ მფლობელებს ეკუთვნის და გამოყენებულია პროდუქციის იდენტიფიცირების მიზნით.</p>
+
+<h3>8. პასუხისმგებლობის შეზღუდვა</h3>
+<p>ვებგვერდი მოწოდებულია „როგორც არის". არ ვიღებთ პასუხისმგებლობას ტექნიკური შეფერხების ან ვებგვერდის დროებითი მიუწვდომლობის შედეგად წარმოშობილ ზიანზე. ეს პუნქტი არ ზღუდავს თქვენს უფლებებს, რომლებიც გარანტირებულია „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონით.</p>
+
+<h3>9. მოქმედი კანონმდებლობა და დავები</h3>
+<p>წესებს არეგულირებს საქართველოს კანონმდებლობა. დავის შემთხვევაში მხარეები შეეცდებიან მოლაპარაკებით მოგვარებას; შეთანხმების მიუღწევლობისას დავა განიხილება საქართველოს სასამართლოში. მომხმარებელს ასევე უფლება აქვს მიმართოს <a href="https://www.competition.ge" target="_blank" rel="noopener">კონკურენციისა და მომხმარებლის დაცვის სააგენტოს</a>.</p>
+
+<h3>10. პირობების ცვლილება</h3>
+<p>ვიტოვებთ უფლებას შევცვალოთ ეს პირობები. ცვლილება ძალაში შედის ვებგვერდზე გამოქვეყნებისთანავე და არ ვრცელდება უკან, უკვე დადასტურებულ შეკვეთებზე.</p>`
+        },
+        privacy: {
+            title: "კონფიდენციალურობის პოლიტიკა",
+            html: `
+<p class="legal-lead">ეს პოლიტიკა განმარტავს, რომელ პერსონალურ მონაცემებს ვამუშავებთ, რა მიზნით და რა უფლებები გაქვთ. მონაცემებს ვამუშავებთ „პერსონალურ მონაცემთა დაცვის შესახებ" საქართველოს კანონის შესაბამისად.</p>
+
+<h3>1. მონაცემთა დამმუშავებელი</h3>
+<p>${c.legalName} (ს/კ ${c.taxId}), ${c.address}. კონფიდენციალურობასთან დაკავშირებული ნებისმიერი საკითხზე მოგვწერეთ: <a href="mailto:${c.email}">${c.email}</a>.</p>
+
+<h3>2. რა მონაცემებს ვაგროვებთ</h3>
+<ul>
+    <li><strong>საკონტაქტო და საიდენტიფიკაციო:</strong> სახელი, გვარი, ტელეფონი, ელ. ფოსტა, მისამართი.</li>
+    <li><strong>პირადი ნომერი:</strong> მხოლოდ მაშინ, როცა ეს საჭიროა განვადების გასაფორმებლად ან ანგარიშ-ფაქტურის გამოსაწერად.</li>
+    <li><strong>შეკვეთის მონაცემები:</strong> შეძენილი პროდუქტი, თანხა, გადახდის მეთოდი და შეკვეთის სტატუსი.</li>
+    <li><strong>ტექნიკური მონაცემები:</strong> IP მისამართი, ბრაუზერის ტიპი, ვებგვერდზე მოქმედებების სტატისტიკა.</li>
+</ul>
+<p><strong>ბარათის სრულ მონაცემებს არ ვაგროვებთ და არ ვინახავთ.</strong> გადახდა მუშავდება ბანკის მხარეს; ჩვენთან შეიძლება შეინახოს მხოლოდ ბარათის ბოლო 4 ციფრი და ტიპი, თქვენივე მოხერხებულობისთვის.</p>
+
+<h3>3. დამუშავების საფუძველი და მიზანი</h3>
+<ul>
+    <li><strong>ხელშეკრულების შესრულება</strong> — შეკვეთის დამუშავება, მიწოდება, მონტაჟი, გარანტიის მომსახურება.</li>
+    <li><strong>კანონით დაკისრებული ვალდებულება</strong> — საბუღალტრო და საგადასახადო აღრიცხვა.</li>
+    <li><strong>თანხმობა</strong> — მარკეტინგული შეტყობინებები და არააუცილებელი cookie-ები. თანხმობის გამოთხოვა შესაძლებელია ნებისმიერ დროს.</li>
+    <li><strong>ლეგიტიმური ინტერესი</strong> — ვებგვერდის უსაფრთხოება და გაუმჯობესება.</li>
+</ul>
+
+<h3>4. ვის ვუზიარებთ</h3>
+<p>მონაცემებს არ ვყიდით. ვუზიარებთ მხოლოდ იმდენს, რამდენიც აუცილებელია: საკურიერო და სამონტაჟო პარტნიორს (მიწოდების მისამართი და ტელეფონი), ბანკს (გადახდისა და განვადების გასაფორმებლად), ავტორიზებულ სერვისცენტრს (გარანტიის შემთხვევაში), ბუღალტრულ და IT მომსახურე კომპანიას, ასევე უფლებამოსილ ორგანოს კანონით დადგენილი მოთხოვნისას.</p>
+<p>ვებგვერდი იყენებს გარე სერვისებს, რომლებსაც შესაძლოა მონაცემები საქართველოს ფარგლებს გარეთ დამუშავდეს: <strong>Supabase</strong> (მონაცემთა ბაზა და ავტორიზაცია), <strong>Google Analytics</strong> (სტატისტიკა), <strong>Meta Pixel</strong> (რეკლამის ეფექტურობა) და <strong>Google Sign-In</strong>. ეს სერვისები უზრუნველყოფენ დაცვის ადეკვატურ დონეს.</p>
+
+<h3>5. შენახვის ვადა</h3>
+<p>შეკვეთისა და საბუღალტრო დოკუმენტაციას ვინახავთ კანონით დადგენილი <strong>6 წლის</strong> განმავლობაში. მომხმარებლის ანგარიშის მონაცემები ინახება ანგარიშის აქტიურობის პერიოდში; წაშლის მოთხოვნისას ვშლით, გარდა იმ ნაწილისა, რომლის შენახვაც კანონით გვევალება.</p>
+
+<h3>6. თქვენი უფლებები</h3>
+<p>უფლება გაქვთ: მიიღოთ ინფორმაცია დამუშავების შესახებ; მოითხოვოთ ასლი, შესწორება, განახლება, დაბლოკვა, წაშლა ან განადგურება; გამოითხოვოთ თანხმობა; მოითხოვოთ მონაცემთა გადატანა. მოთხოვნაზე პასუხს გაიცემა კანონით დადგენილ ვადაში, უსასყიდლოდ.</p>
+<p>მოგვწერეთ <a href="mailto:${c.email}">${c.email}</a>. თუ პასუხი არ დაგაკმაყოფილებთ, უფლება გაქვთ მიმართოთ <a href="https://personaldata.ge" target="_blank" rel="noopener">პერსონალურ მონაცემთა დაცვის სამსახურს</a> ან სასამართლოს.</p>
+
+<h3>7. Cookie-ები</h3>
+<p>აუცილებელი cookie-ები უზრუნველყოფს კალათის, ავტორიზაციისა და ენის არჩევის მუშაობას — მათ გარეშე ვებგვერდი ვერ იმუშავებს. ანალიტიკური და მარკეტინგული cookie-ები გამოიყენება მხოლოდ თქვენი თანხმობით. თანხმობა შეგიძლიათ შეცვალოთ ბრაუზერის პარამეტრებიდან.</p>
+
+<h3>8. უსაფრთხოება</h3>
+<p>კავშირი დაშიფრულია (HTTPS), ბაზაზე წვდომა შეზღუდულია და ადმინისტრირების პანელი ხელმისაწვდომია მხოლოდ უფლებამოსილი პირებისთვის.</p>`
+        },
+        returns: {
+            title: "დაბრუნება და გარანტია",
+            html: `
+<p class="legal-lead">ამ გვერდზე აღწერილია პროდუქტის უკან დაბრუნებისა და გარანტიის პირობები. ისინი ეფუძნება „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონს და არ ზღუდავს კანონით მოცემულ თქვენს უფლებებს.</p>
+
+<h3>1. 14-დღიანი დაბრუნების უფლება</h3>
+<p>დისტანციურად შეძენილი პროდუქტის უკან დაბრუნება შეგიძლიათ <strong>14 კალენდარული დღის</strong> განმავლობაში, მიღების დღიდან, მიზეზის განმარტების გარეშე.</p>
+<p>ამისთვის საჭიროა, რომ პროდუქტი იყოს:</p>
+<ul>
+    <li>გამოუყენებელი და დაუზიანებელი;</li>
+    <li>სრული კომპლექტაციით, ორიგინალურ შეფუთვაში, ყველა აქსესუარითა და დოკუმენტით;</li>
+    <li>შენარჩუნებული სასაქონლო სახით.</li>
+</ul>
+<p>თანხა დაგიბრუნდებათ პროდუქტის მიღებიდან <strong>არაუგვიანეს 14 დღეში</strong>, იმავე მეთოდით, რომლითაც გადაიხადეთ.</p>
+
+<h3>2. როდის არ ვრცელდება 14-დღიანი უფლება</h3>
+<p>უფლება არ გამოიყენება, თუ პროდუქტი:</p>
+<ul>
+    <li>დამონტაჟებულია ან/და ექსპლუატაციაშია შესული (კონდიციონერი და ქვაბი, რომელიც უკვე ჩაერთო სისტემაში);</li>
+    <li>დამზადებულია ან შეკვეთილია ინდივიდუალური მახასიათებლებით;</li>
+    <li>დაზიანებულია მომხმარებლის ბრალით.</li>
+</ul>
+<p>ეს ბუნებრივი შეზღუდვაა კლიმატური ტექნიკისთვის: დამონტაჟებული და ფრეონით შევსებული აგრეგატი ახლად ითვლება.</p>
+
+<h3>3. ხარვეზიანი ან აღწერილობისგან განსხვავებული პროდუქტი</h3>
+<p>თუ პროდუქტი ხარვეზიანია ან არსებითად განსხვავდება ვებგვერდზე მითითებული აღწერილობისგან, უფლება გაქვთ მოითხოვოთ — თანმიმდევრობით — <strong>უსასყიდლო შეკეთება ან შეცვლა</strong>; ხოლო თუ ეს შეუძლებელია ან არაპროპორციულია — <strong>ფასის შემცირება ან ხელშეკრულების გაუქმება</strong> და თანხის სრული დაბრუნება.</p>
+<p>ამ შემთხვევაში დაბრუნების ტრანსპორტირების ხარჯს ვფარავთ ჩვენ. კანონის მიხედვით, ხარვეზი, რომელიც გამოვლინდა მიღებიდან <strong>6 თვის</strong> განმავლობაში, მიჩნეულია თავიდანვე არსებულად, თუ საწინააღმდეგო არ დამტკიცდება.</p>
+
+<h3>4. გარანტია</h3>
+<p>ყველა პროდუქტს აქვს მწარმოებლის გარანტია. კონკრეტული ვადა მითითებულია საგარანტიო ფურცელში და პროდუქტის გვერდზე (როგორც წესი, კონდიციონერზე 1–5 წელი, კომპრესორზე უფრო ხანგრძლივი). ამასთან, კანონით გათვალისწინებული <strong>2-წლიანი</strong> შესაბამისობის გარანტია მოქმედებს დამოუკიდებლად.</p>
+<p>საგარანტიო მომსახურებისთვის აუცილებელია საგარანტიო ფურცელი და შეძენის დოკუმენტი (ჩეკი ან ანგარიშ-ფაქტურა).</p>
+
+<h3>5. როდის ვერ მოქმედებს გარანტია</h3>
+<ul>
+    <li>მონტაჟი შეასრულა არაავტორიზებულმა პირმა ან დარღვეულია მწარმოებლის ინსტრუქცია;</li>
+    <li>არ ჩატარდა სავალდებულო პერიოდული მომსახურება (ფილტრების წმენდა, პროფილაქტიკა);</li>
+    <li>დაზიანება გამოწვეულია ელექტროქსელის გაუმართაობით, სტიქიით, დატბორვით ან მექანიკური ზემოქმედებით;</li>
+    <li>პროდუქტი შეკეთდა ან გაიხსნა მესამე პირის მიერ;</li>
+    <li>წაშლილია ან დაზიანებულია სერიული ნომერი.</li>
+</ul>
+
+<h3>6. როგორ დავიწყოთ პროცესი</h3>
+<ol>
+    <li>დაგვიკავშირდით: <a href="mailto:${c.email}">${c.email}</a> ან <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>.</li>
+    <li>მიუთითეთ შეკვეთის ნომერი, პროდუქტი და მოკლედ აღწერეთ პრობლემა; სასურველია ფოტო ან ვიდეო.</li>
+    <li>განცხადებაზე პასუხს მიიღებთ <strong>2 სამუშაო დღეში</strong> და შევათანხმებთ შემდეგ ნაბიჯს — დიაგნოსტიკას, შეკეთებას, შეცვლას ან თანხის დაბრუნებას.</li>
+</ol>`
+        }
+    };
+
+    const en = {
+        terms: {
+            title: "Terms & Conditions",
+            html: `
+<p class="legal-lead">These terms govern purchases of products and services made through ${c.site} (the "Website"). By placing an order you agree to them.</p>
+
+<h3>1. About the seller</h3>
+<ul>
+    <li>Legal name: <strong>${c.legalNameEn}</strong></li>
+    <li>Tax ID: <strong>${c.taxId}</strong></li>
+    <li>Address: ${c.addressEn}</li>
+    <li>Phone: <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a></li>
+    <li>Email: <a href="mailto:${c.email}">${c.email}</a></li>
+</ul>
+
+<h3>2. Products and prices</h3>
+<p>Prices are shown in Georgian Lari and include VAT. The price valid at the moment you place the order binds both parties.</p>
+<p>Specifications and photos are supplied by the manufacturer and the official distributor. Manufacturers may change a product's configuration, and a photo may be illustrative. If what you receive differs materially from the description, the <a href="#returns">returns and warranty</a> terms apply.</p>
+<p>We may decline to confirm an order if the product is out of stock or if its price or specification was published with an obvious technical error. We will contact you and refund any amount paid in full.</p>
+
+<h3>3. Orders and confirmation</h3>
+<p>An order is accepted once you receive confirmation by email or phone. You must provide accurate details; we are not liable for delays or failed delivery caused by incorrect information.</p>
+
+<h3>4. Payment</h3>
+<p>You may pay by bank card or through a partner bank's instalment plan. Instalment terms, including interest and duration, are set by that bank under a separate agreement — ${c.legalNameEn} is not a party to it.</p>
+<p>The Website never stores full card details: payment is processed on the bank's own secure page.</p>
+
+<h3>5. Delivery</h3>
+<p>Delivery takes place within the period agreed after the order is confirmed. On delivery, check that the packaging is intact and inspect the product. Visible transport damage must be recorded at the moment of receipt; claims of this kind raised later cannot be accepted.</p>
+
+<h3>6. Installation</h3>
+<p>Installation is a separate service and is not included in the product price unless expressly stated. Its cost depends on the site and is set after an on-site inspection; you pay once the work is complete.</p>
+<p>Please note: a manufacturer's warranty is generally void if installation was carried out by an unauthorised party. We recommend booking installation with us or with an authorised service centre.</p>
+
+<h3>7. Intellectual property</h3>
+<p>The Website's design, texts and materials are protected by copyright. Brand trademarks belong to their owners and are used to identify the products.</p>
+
+<h3>8. Limitation of liability</h3>
+<p>The Website is provided "as is". We are not liable for damage arising from technical faults or temporary unavailability. This clause does not limit the rights guaranteed to you by the Georgian Law on Consumer Rights Protection.</p>
+
+<h3>9. Governing law and disputes</h3>
+<p>These terms are governed by the law of Georgia. The parties will first attempt to settle any dispute by negotiation; failing that, it will be heard by a Georgian court. Consumers may also contact the <a href="https://www.competition.ge" target="_blank" rel="noopener">Competition and Consumer Protection Agency</a>.</p>
+
+<h3>10. Changes</h3>
+<p>We may amend these terms. Amendments take effect on publication and do not apply retroactively to orders already confirmed.</p>`
+        },
+        privacy: {
+            title: "Privacy Policy",
+            html: `
+<p class="legal-lead">This policy explains which personal data we process, why, and what rights you have. We process data in accordance with the Georgian Law on Personal Data Protection.</p>
+
+<h3>1. Data controller</h3>
+<p>${c.legalNameEn} (Tax ID ${c.taxId}), ${c.addressEn}. For any privacy matter write to <a href="mailto:${c.email}">${c.email}</a>.</p>
+
+<h3>2. What we collect</h3>
+<ul>
+    <li><strong>Contact and identity:</strong> first and last name, phone, email, address.</li>
+    <li><strong>Personal ID number:</strong> only where required to arrange an instalment plan or issue an invoice.</li>
+    <li><strong>Order data:</strong> the product purchased, amount, payment method and order status.</li>
+    <li><strong>Technical data:</strong> IP address, browser type, usage statistics.</li>
+</ul>
+<p><strong>We do not collect or store full card details.</strong> Payment is processed by the bank; we may retain only the last 4 digits and the card type, for your convenience.</p>
+
+<h3>3. Legal basis and purpose</h3>
+<ul>
+    <li><strong>Performance of a contract</strong> — processing your order, delivery, installation, warranty service.</li>
+    <li><strong>Legal obligation</strong> — accounting and tax records.</li>
+    <li><strong>Consent</strong> — marketing messages and non-essential cookies. Consent can be withdrawn at any time.</li>
+    <li><strong>Legitimate interest</strong> — securing and improving the Website.</li>
+</ul>
+
+<h3>4. Who we share with</h3>
+<p>We do not sell data. We share only what is necessary: with our courier and installation partners (delivery address and phone), the bank (to process payment or an instalment plan), authorised service centres (for warranty work), our accounting and IT providers, and with authorised public bodies where the law requires it.</p>
+<p>The Website uses third-party services that may process data outside Georgia: <strong>Supabase</strong> (database and authentication), <strong>Google Analytics</strong> (statistics), <strong>Meta Pixel</strong> (advertising performance) and <strong>Google Sign-In</strong>. These providers maintain an adequate level of protection.</p>
+
+<h3>5. Retention</h3>
+<p>Order and accounting records are kept for the <strong>6 years</strong> required by law. Account data is kept while the account is active; on a deletion request we erase it, except where retention is legally required.</p>
+
+<h3>6. Your rights</h3>
+<p>You have the right to be informed about the processing; to request a copy, correction, update, blocking, erasure or destruction of your data; to withdraw consent; and to data portability. We respond within the statutory period, free of charge.</p>
+<p>Write to <a href="mailto:${c.email}">${c.email}</a>. If our response does not satisfy you, you may contact the <a href="https://personaldata.ge" target="_blank" rel="noopener">Personal Data Protection Service</a> or the courts.</p>
+
+<h3>7. Cookies</h3>
+<p>Essential cookies make the cart, sign-in and language choice work — the Website cannot function without them. Analytics and marketing cookies are used only with your consent, which you can change in your browser settings.</p>
+
+<h3>8. Security</h3>
+<p>Connections are encrypted (HTTPS), database access is restricted, and the admin panel is available only to authorised staff.</p>`
+        },
+        returns: {
+            title: "Returns & Warranty",
+            html: `
+<p class="legal-lead">This page sets out how to return a product and how warranty claims work. It follows the Georgian Law on Consumer Rights Protection and does not limit the rights that law gives you.</p>
+
+<h3>1. 14-day right to return</h3>
+<p>You may return a product bought at a distance within <strong>14 calendar days</strong> of receiving it, without giving a reason.</p>
+<p>The product must be:</p>
+<ul>
+    <li>unused and undamaged;</li>
+    <li>complete, in its original packaging, with all accessories and documents;</li>
+    <li>in resalable condition.</li>
+</ul>
+<p>We refund you <strong>within 14 days</strong> of receiving the product back, using the same method you paid with.</p>
+
+<h3>2. When the 14-day right does not apply</h3>
+<p>It does not apply where the product:</p>
+<ul>
+    <li>has been installed and/or put into use (an air conditioner or boiler already connected to a system);</li>
+    <li>was made or ordered to your individual specification;</li>
+    <li>was damaged through your own fault.</li>
+</ul>
+<p>This is an inherent limitation for climate equipment: once a unit is mounted and charged with refrigerant it is no longer new.</p>
+
+<h3>3. Faulty products or products that differ from the description</h3>
+<p>If a product is faulty or differs materially from the description on the Website, you may require — in this order — <strong>free repair or replacement</strong>; and where that is impossible or disproportionate, <strong>a price reduction or cancellation of the contract</strong> with a full refund.</p>
+<p>In that case we cover the cost of return shipping. Under the law, a fault that appears within <strong>6 months</strong> of receipt is presumed to have existed from the outset unless the contrary is proven.</p>
+
+<h3>4. Warranty</h3>
+<p>Every product carries the manufacturer's warranty. The exact term is stated on the warranty card and on the product page (typically 1–5 years for an air conditioner, longer for the compressor). Separately, the <strong>2-year</strong> statutory conformity guarantee applies in its own right.</p>
+<p>Warranty service requires the warranty card and proof of purchase (receipt or invoice).</p>
+
+<h3>5. When the warranty does not apply</h3>
+<ul>
+    <li>installation was carried out by an unauthorised party, or the manufacturer's instructions were not followed;</li>
+    <li>required periodic servicing (filter cleaning, maintenance) was not performed;</li>
+    <li>the damage was caused by a power-supply fault, a natural event, flooding or mechanical impact;</li>
+    <li>the product was repaired or opened by a third party;</li>
+    <li>the serial number has been removed or damaged.</li>
+</ul>
+
+<h3>6. How to start a claim</h3>
+<ol>
+    <li>Contact us at <a href="mailto:${c.email}">${c.email}</a> or <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>.</li>
+    <li>Give your order number and the product, describe the problem briefly, and attach a photo or video if you can.</li>
+    <li>We reply within <strong>2 working days</strong> and agree the next step with you — diagnosis, repair, replacement or refund.</li>
+</ol>`
+        }
+    };
+
+    return state.currentLang === "ka" ? ka : en;
+}
+
+function renderLegalPage(slug) {
+    const page = legalContent()[slug];
+    const container = document.getElementById("legal-content");
+    if (!page || !container) return;
+
+    const isKa = state.currentLang === "ka";
+    const updatedLabel = isKa ? "ბოლო განახლება" : "Last updated";
+    const backLabel = isKa ? "მთავარზე დაბრუნება" : "Back to home";
+    const otherLinks = LEGAL_SLUGS.filter(s => s !== slug)
+        .map(s => `<a href="#${s}">${legalContent()[s].title}</a>`)
+        .join("");
+
+    document.title = `${page.title} | Climate Comfort`;
+    container.innerHTML = `
+        <a href="#" class="legal-back"><i class="fa-solid fa-arrow-left"></i> ${backLabel}</a>
+        <h1 class="legal-title">${page.title}</h1>
+        <p class="legal-updated">${updatedLabel}: ${COMPANY.updated}</p>
+        <div class="legal-body">${page.html}</div>
+        <nav class="legal-other">${otherLinks}</nav>
+    `;
+}
+
+// ==========================================================================
 // Product Detail Page (hash route: #product/<id>)
 // ==========================================================================
-const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view"];
+const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view", "legal-view"];
 
 function handleRouting() {
     const productMatch = location.hash.match(/^#product\/([\w-]+)$/);
@@ -1365,6 +1758,7 @@ function handleRouting() {
     const detailProduct = productMatch ? findProduct(productMatch[1]) : null;
     const checkoutProduct = checkoutMatch ? findProduct(checkoutMatch[1]) : null;
     const isAccount = location.hash === "#account";
+    const legalSlug = LEGAL_SLUGS.includes(location.hash.slice(1)) ? location.hash.slice(1) : null;
     const wasOnSubPage = SUBPAGE_CLASSES.some(c => document.body.classList.contains(c));
 
     // Checkout requires an account (or explicit guest mode) — bounce to the product page and ask to sign in
@@ -1392,7 +1786,9 @@ function handleRouting() {
         if (entering) window.scrollTo(0, 0);
     }
 
-    if (isAccount) {
+    if (legalSlug) {
+        showSubPage("legal-view", () => renderLegalPage(legalSlug));
+    } else if (isAccount) {
         showSubPage("account-view", () => renderAccountPage());
     } else if (checkoutProduct) {
         showSubPage("checkout-view", () => renderCheckoutPage(checkoutProduct));
@@ -1413,6 +1809,8 @@ function renderProductDetailPage(p) {
     const container = document.getElementById("product-detail-content");
     if (!container) return;
 
+    if (typeof trackViewItem === "function") trackViewItem(p);
+
     const lang = state.currentLang;
     const localizedTitle = p.title[lang];
     const techLabel = getTechLabel(p);
@@ -1432,13 +1830,24 @@ function renderProductDetailPage(p) {
         <a href="#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
 
         <div class="detail-layout">
-            <div class="detail-visual">
+            <div class="detail-visual ${p.images.length > 1 ? 'has-gallery' : ''}">
                 <div class="card-badges">
                     ${p.energyClass ? `<span class="badge badge-accent">${p.energyClass}</span>` : ""}
                     ${p.inverter ? `<span class="badge badge-inverter">${techLabel}</span>` : ""}
                     ${stockBadge(p)}
                 </div>
-                ${buildProductMockup(p)}
+                ${p.images.length > 1 ? `
+                <div class="detail-gallery">
+                    <div class="detail-gallery-thumbs">
+                        ${p.images.map((img, i) => `
+                        <button class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${img}">
+                            <img src="${img}" alt="${p.brand} ${i + 1}">
+                        </button>`).join('')}
+                    </div>
+                    <div class="detail-gallery-main">
+                        <img id="detail-main-image" src="${p.images[0]}" alt="${p.brand}">
+                    </div>
+                </div>` : buildProductMockup(p)}
             </div>
 
             <div class="detail-info">
@@ -1469,6 +1878,12 @@ function renderProductDetailPage(p) {
             <div class="detail-panel">
                 <h3>${t("detail-specs")}</h3>
                 <table class="spec-table">
+                    ${lang === "ka" && p.specs && p.specs.length
+                        ? p.specs.map(group => `
+                            ${p.specs.length > 1 ? `<tr class="spec-group-row"><td colspan="2">${group.group}</td></tr>` : ""}
+                            ${(group.items || []).map(item => `<tr><td>${item.name}</td><td>${item.value}</td></tr>`).join('')}
+                        `).join('')
+                        : `
                     <tr><td>${t("spec-brand")}</td><td>${p.brand}</td></tr>
                     ${p.btu ? `<tr><td>${capacityLabel}</td><td>${p.btu}</td></tr>` : ""}
                     ${p.area ? `<tr><td>${t("spec-area")}</td><td>${areaLabel}</td></tr>` : ""}
@@ -1476,6 +1891,7 @@ function renderProductDetailPage(p) {
                     ${p.energyClass ? `<tr><td>${t("spec-energy")}</td><td>${p.energyClass}</td></tr>` : ""}
                     <tr><td>${t("spec-tech")}</td><td>${techLabel}</td></tr>
                     ${p.color ? `<tr><td>${t("spec-color")}</td><td>${t(p.color)}</td></tr>` : ""}
+                    `}
                 </table>
             </div>
             ${p.features[lang].length ? `<div class="detail-panel">
@@ -1489,6 +1905,14 @@ function renderProductDetailPage(p) {
 
     document.title = `${localizedTitle} | Climate Comfort`;
 
+    // Gallery thumbnails swap the big image; no reload of the rest of the page
+    container.querySelectorAll(".gallery-thumb").forEach(btn => {
+        btn.addEventListener("click", () => {
+            container.querySelector("#detail-main-image").src = btn.getAttribute("data-img");
+            container.querySelectorAll(".gallery-thumb").forEach(b => b.classList.toggle("active", b === btn));
+        });
+    });
+
     // Wire up action buttons (content is re-rendered on each visit / language switch)
     document.getElementById("detail-buy-btn").addEventListener("click", () => startPurchase(p.id));
     document.getElementById("detail-cart-btn").addEventListener("click", (e) => {
@@ -1500,31 +1924,105 @@ function renderProductDetailPage(p) {
 }
 
 // ==========================================================================
-// Accounts & Auth (mock — stored in localStorage, no backend on a static site)
+// Accounts & Auth — Supabase Auth
+//
+// Passwords never reach this code: signUp/signInWithPassword send them
+// straight to Supabase, which stores only a hash. The session (a JWT) is
+// persisted and refreshed by supabase-js, so the same account works on every
+// device — unlike the old localStorage accounts, which lived in one browser
+// and kept the password in plain text.
+//
+// state.user is the shape the rest of the app already expects
+// ({ id, email, provider }); state.profile caches the `profiles` row so the
+// render functions can stay synchronous.
 // ==========================================================================
-function loadAccounts() {
-    try { return JSON.parse(localStorage.getItem("cc_accounts")) || {}; } catch (err) { return {}; }
+
+// Turns a Supabase session into the user object the UI works with
+function userFromSession(session) {
+    if (!session || !session.user) return null;
+    const u = session.user;
+    return {
+        id: u.id,
+        email: u.email,
+        provider: (u.app_metadata && u.app_metadata.provider) || "email"
+    };
 }
 
-function saveAccounts(accounts) {
-    localStorage.setItem("cc_accounts", JSON.stringify(accounts));
+// The profile row carries delivery details and saved cards. Missing row is not
+// an error — the DB trigger creates one, but a brand-new signup can race it.
+async function loadProfile() {
+    if (!sbClient || !state.user) { state.profile = null; return null; }
+    const { data, error } = await sbClient
+        .from("profiles")
+        .select("*")
+        .eq("id", state.user.id)
+        .maybeSingle();
+    if (error) console.warn("Profile could not be loaded:", error.message);
+    state.profile = data || { id: state.user.id, email: state.user.email, cards: [] };
+    return state.profile;
 }
 
-function setSession(user) {
-    state.user = user;
+async function saveProfile(patch) {
+    if (!sbClient || !state.user) return { error: new Error("not signed in") };
+    const row = { id: state.user.id, email: state.user.email, ...patch };
+    const { data, error } = await sbClient
+        .from("profiles")
+        .upsert(row, { onConflict: "id" })
+        .select()
+        .maybeSingle();
+    if (!error && data) state.profile = data;
+    return { data, error };
+}
+
+// The account page lists orders straight from the database, so they follow the
+// shopper to any device. RLS limits the rows to this user's own orders.
+async function loadMyOrders() {
+    if (!sbClient || !state.user) { state.orders = []; return []; }
+    const { data, error } = await sbClient
+        .from("orders")
+        .select("order_no, product_title, amount, needs_install, payment_method, status, created_at")
+        .eq("user_id", state.user.id)
+        .order("created_at", { ascending: false });
+    if (error) console.warn("Orders could not be loaded:", error.message);
+    state.orders = data || [];
+    return state.orders;
+}
+
+// Called on sign-in, sign-out and token refresh — the single place that keeps
+// state.user / state.profile in step with Supabase.
+async function applySession(session) {
+    state.user = userFromSession(session);
     state.guestCheckout = false;
-    localStorage.setItem("cc_session", JSON.stringify(user));
+    if (state.user) {
+        await loadProfile();
+    } else {
+        state.profile = null;
+        state.orders = [];
+    }
     updateAuthUI();
 }
 
-function logout() {
+async function logout() {
+    if (sbClient) await sbClient.auth.signOut();
     state.user = null;
-    localStorage.removeItem("cc_session");
+    state.profile = null;
+    state.orders = [];
     updateAuthUI();
     // Leaving an authenticated-only page? Return to the catalog
     if (document.body.classList.contains("checkout-view") || document.body.classList.contains("account-view")) {
         location.hash = "catalog";
     }
+}
+
+// Supabase returns English messages; map the common ones to the site's copy
+// and fall back to the raw text so nothing is silently swallowed.
+function authErrorKey(error) {
+    const m = (error && error.message || "").toLowerCase();
+    if (m.includes("already registered") || m.includes("already been registered")) return "auth-err-exists";
+    if (m.includes("invalid login credentials")) return "auth-err-invalid";
+    if (m.includes("password")) return "auth-err-password";
+    if (m.includes("email")) return "auth-err-email";
+    return null;
 }
 
 function updateAuthUI() {
@@ -1557,8 +2055,7 @@ function openAuthModal() {
     showAuthError(null);
     document.getElementById("auth-email-input").value = "";
     document.getElementById("auth-password-input").value = "";
-    document.getElementById("google-email-input").value = "";
-    document.getElementById("google-mock-view").classList.add("hidden");
+    document.getElementById("auth-notice").classList.add("hidden");
     document.getElementById("auth-main-view").classList.remove("hidden");
     document.getElementById("auth-modal").classList.add("open");
     setupGoogleButton(); // swaps in the official Google button when a client ID is configured
@@ -1574,51 +2071,87 @@ function setAuthMode(mode) {
     showAuthError(null);
 }
 
-function showAuthError(key) {
+// `fallback` carries Supabase's own wording for cases we have no translation
+// for, so an unexpected failure is still visible instead of silent.
+function showAuthError(key, fallback) {
     const box = document.getElementById("auth-error");
-    if (key) {
-        box.innerText = t(key);
+    const notice = document.getElementById("auth-notice");
+    if (notice) notice.classList.add("hidden");
+    if (key || fallback) {
+        box.innerText = key ? t(key) : fallback;
         box.classList.remove("hidden");
     } else {
         box.classList.add("hidden");
     }
 }
 
-function handleAuthSubmit() {
+// Green, non-error feedback: "check your inbox" and friends
+function showAuthNotice(key) {
+    const box = document.getElementById("auth-notice");
+    if (!box) return;
+    document.getElementById("auth-error").classList.add("hidden");
+    box.innerText = t(key);
+    box.classList.remove("hidden");
+}
+
+async function handleAuthSubmit() {
     const email = document.getElementById("auth-email-input").value.trim().toLowerCase();
     const password = document.getElementById("auth-password-input").value;
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError("auth-err-email"); return; }
     if (password.length < 6) { showAuthError("auth-err-password"); return; }
+    if (!sbClient) { showAuthError("auth-err-offline"); return; }
 
-    const accounts = loadAccounts();
+    const btn = document.getElementById("auth-submit-btn");
+    const label = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = t("co-processing");
+    showAuthError(null);
 
-    if (authMode === "register") {
-        if (accounts[email]) { showAuthError("auth-err-exists"); return; }
-        accounts[email] = { email: email, password: password, provider: "email", profile: null, orders: [], cards: [] };
-        saveAccounts(accounts);
-    } else {
-        const acc = accounts[email];
-        if (!acc || acc.provider !== "email" || acc.password !== password) { showAuthError("auth-err-invalid"); return; }
+    try {
+        if (authMode === "register") {
+            const { data, error } = await sbClient.auth.signUp({ email, password });
+            if (error) { showAuthError(authErrorKey(error), error.message); return; }
+
+            // With "Confirm email" switched on in Supabase, signUp returns no
+            // session — the shopper has to click the link in their inbox first.
+            if (!data.session) { showAuthNotice("auth-confirm-sent"); return; }
+            await applySession(data.session);
+        } else {
+            const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
+            if (error) { showAuthError(authErrorKey(error) || "auth-err-invalid", error.message); return; }
+            await applySession(data.session);
+        }
+        finishAuth();
+    } finally {
+        btn.disabled = false;
+        btn.innerText = label;
     }
-
-    setSession({ email: email, provider: "email" });
-    finishAuth();
 }
 
-function handleGoogleContinue() {
-    const email = document.getElementById("google-email-input").value.trim().toLowerCase();
+// "Forgot password" — Supabase mails a one-time link back to the site
+async function handlePasswordReset() {
+    const email = document.getElementById("auth-email-input").value.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError("auth-err-email"); return; }
+    if (!sbClient) { showAuthError("auth-err-offline"); return; }
 
-    // Google accounts are auto-registered on first sign-in
-    const accounts = loadAccounts();
-    if (!accounts[email]) {
-        accounts[email] = { email: email, password: null, provider: "google", profile: null, orders: [], cards: [] };
-        saveAccounts(accounts);
-    }
+    const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+        redirectTo: location.origin + location.pathname + "#account"
+    });
+    if (error) { showAuthError(authErrorKey(error), error.message); return; }
+    showAuthNotice("auth-reset-sent");
+}
 
-    setSession({ email: email, provider: "google" });
-    finishAuth();
+// Real Google OAuth through Supabase. The browser leaves the page and comes
+// back with a session already established, which onAuthStateChange picks up —
+// so there is nothing to do here but hand off.
+async function handleGoogleSignIn() {
+    if (!sbClient) { showAuthError("auth-err-offline"); return; }
+    const { error } = await sbClient.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: location.origin + location.pathname + (state.afterAuthHash ? `#${state.afterAuthHash}` : "") }
+    });
+    if (error) showAuthError(authErrorKey(error), error.message);
 }
 
 function finishAuth() {
@@ -1642,11 +2175,12 @@ function renderCheckoutPage(p) {
     const container = document.getElementById("checkout-content");
     if (!container) return;
 
+    if (typeof trackBeginCheckout === "function") trackBeginCheckout(p);
+
     const lang = state.currentLang;
     const localizedTitle = p.title[lang];
     const isGuest = !state.user;
-    const accounts = loadAccounts();
-    const profile = (!isGuest && accounts[state.user.email] && accounts[state.user.email].profile) || {};
+    const profile = isGuest ? {} : getCurrentAccount().profile;
 
     const identityLine = isGuest
         ? `${t("co-guest-label")} <a href="#" id="co-login-link">${t("auth-login-btn")}</a>`
@@ -1808,16 +2342,18 @@ function renderCheckoutPage(p) {
 
         // Remember the profile for the next purchase (accounts only — guests aren't stored)
         if (!isGuest) {
-            const accounts = loadAccounts();
-            if (accounts[state.user.email]) {
-                accounts[state.user.email].profile = { firstName, lastName, phone, address, idNumber };
-                saveAccounts(accounts);
-            }
+            saveProfile({
+                first_name: firstName, last_name: lastName,
+                phone: phone, address: address, personal_id: idNumber
+            });
         }
 
         const withInstall = document.getElementById("co-install-toggle").checked;
         const bankVal = document.querySelector('input[name="co-bank"]:checked').value;
         const bankName = bankVal === "tbc" ? "TBC Bank" : "Bank of Georgia";
+
+        // Analytics is optional — never let a missing/blocked script break checkout
+        const track = (fn, ...args) => { if (typeof window[fn] === "function") window[fn](...args); };
 
         // Mock card processing (no real gateway on a static site)
         const payBtn = document.getElementById("co-pay-btn");
@@ -1826,9 +2362,13 @@ function renderCheckoutPage(p) {
 
         setTimeout(() => {
             const refNum = "ORD-" + Math.floor(100000 + Math.random() * 900000);
+            track("trackPurchase", p, refNum);
 
-            // Persist to the database for the admin page (works for guests too)
+            // Persist to the database — this is now the ONLY copy of the order.
+            // user_id ties it to the account, which is what lets the shopper see
+            // it on the account page from any device (RLS: orders_select_own).
             saveOrderToDb({
+                user_id: isGuest ? null : state.user.id,
                 user_email: isGuest ? guestEmail : state.user.email,
                 customer_name: `${firstName} ${lastName}`,
                 phone: phone,
@@ -1843,25 +2383,7 @@ function renderCheckoutPage(p) {
                 payment_status: "pending",
                 status: "new"
             });
-
-            // Record the order on the account (guests aren't stored)
-            if (!isGuest) {
-                const accs = loadAccounts();
-                const acc = accs[state.user.email];
-                if (acc) {
-                    acc.orders = acc.orders || [];
-                    acc.orders.unshift({
-                        ref: refNum,
-                        date: new Date().toISOString(),
-                        productId: p.id,
-                        title: p.title,
-                        price: p.price,
-                        bank: bankName,
-                        install: withInstall
-                    });
-                    saveAccounts(accs);
-                }
-            }
+            state.ordersLoaded = false; // account page refetches on next visit
 
             document.getElementById("success-title").innerText = t("co-success-title");
             document.getElementById("success-message").innerText =
@@ -1896,29 +2418,21 @@ function realGoogleAvailable() {
     return !!GOOGLE_CLIENT_ID && !!(window.google && google.accounts && google.accounts.id);
 }
 
-// Decode a JWT payload (unicode-safe) — client-side only; the future .NET backend must verify the signature
-function decodeJwtPayload(token) {
-    const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-    const json = decodeURIComponent(atob(base64).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
-    return JSON.parse(json);
-}
-
-function handleGoogleCredential(response) {
-    let payload = null;
-    try { payload = decodeJwtPayload(response.credential); } catch (err) { /* fall through */ }
-    if (!payload || !payload.email) { showAuthError("auth-err-invalid"); return; }
-
-    const email = payload.email.toLowerCase();
-    const accounts = loadAccounts();
-    if (!accounts[email]) {
-        accounts[email] = { email: email, password: null, provider: "google", profile: null, orders: [], cards: [] };
-        saveAccounts(accounts);
-    }
-    setSession({ email: email, provider: "google" });
+// Google One Tap credentials are passed to Supabase, which verifies the token
+// server-side and issues its own session — the ID token alone is not trusted.
+async function handleGoogleCredential(response) {
+    if (!sbClient) { showAuthError("auth-err-offline"); return; }
+    const { data, error } = await sbClient.auth.signInWithIdToken({
+        provider: "google",
+        token: response.credential
+    });
+    if (error) { showAuthError(authErrorKey(error), error.message); return; }
+    await applySession(data.session);
     finishAuth();
 }
 
-// Swap the mock button for the official Google button when real sign-in is configured
+// Renders Google's own button when a client ID is configured; the plain
+// button below it falls back to the redirect flow.
 function setupGoogleButton() {
     if (!realGoogleAvailable()) return;
     const container = document.getElementById("google-btn-container");
@@ -1937,22 +2451,36 @@ function setupGoogleButton() {
 // ==========================================================================
 let accountActiveTab = "orders";
 
+// Shapes the cached profile row + session into the object the tabs render from
 function getCurrentAccount() {
-    const accounts = loadAccounts();
-    let acc = accounts[state.user.email];
-    if (!acc) {
-        // Session exists but the account record is missing (e.g. cleared storage) — recreate it
-        acc = { email: state.user.email, password: null, provider: state.user.provider, profile: null, orders: [], cards: [] };
-        accounts[state.user.email] = acc;
-        saveAccounts(accounts);
-    }
-    return acc;
+    const p = state.profile || {};
+    return {
+        email: state.user.email,
+        provider: state.user.provider,
+        profile: {
+            firstName: p.first_name || "",
+            lastName: p.last_name || "",
+            phone: p.phone || "",
+            address: p.address || "",
+            idNumber: p.personal_id || ""
+        },
+        cards: Array.isArray(p.cards) ? p.cards : [],
+        orders: state.orders || []
+    };
 }
 
 function renderAccountPage(tab) {
     if (tab) accountActiveTab = tab;
     const container = document.getElementById("account-content");
     if (!container) return;
+
+    // Orders live in the database now; fetch once, then re-render in place
+    if (accountActiveTab === "orders" && !state.ordersLoaded) {
+        state.ordersLoaded = true;
+        loadMyOrders().then(() => {
+            if (document.body.classList.contains("account-view")) renderAccountPage();
+        });
+    }
 
     const acc = getCurrentAccount();
 
@@ -2010,19 +2538,25 @@ function buildAccountTab(acc, tab) {
                     <a href="#catalog" class="btn btn-primary">${t("hero-cta-explore")}</a>
                 </div>`;
         }
+        const STATUS_KEY = {
+            new: "acc-status-received", confirmed: "acc-status-confirmed",
+            delivering: "acc-status-delivering", completed: "acc-status-completed",
+            cancelled: "acc-status-cancelled"
+        };
         return `<h3>${t("acc-nav-orders")}</h3>` + orders.map(o => {
-            const dateStr = new Date(o.date).toLocaleDateString(lang === 'ka' ? 'ka-GE' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
-            const installTag = o.install ? ` · ${t("co-install-line").replace(':', '')} (${t("co-install-onsite")})` : '';
+            const dateStr = new Date(o.created_at).toLocaleDateString(lang === 'ka' ? 'ka-GE' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+            const bank = o.payment_method === "tbc" ? "TBC Bank" : (o.payment_method === "bog" ? "Bank of Georgia" : "");
+            const installTag = o.needs_install ? ` · ${t("co-install-line").replace(':', '')} (${t("co-install-onsite")})` : '';
             return `
                 <div class="order-item">
                     <div class="order-main">
-                        <span class="order-ref">${o.ref}</span>
-                        <p class="order-title-line">${o.title[lang]}</p>
-                        <span class="order-meta">${dateStr} · ${o.bank}${installTag}</span>
+                        <span class="order-ref">ORD-${o.order_no}</span>
+                        <p class="order-title-line">${o.product_title}</p>
+                        <span class="order-meta">${dateStr}${bank ? ' · ' + bank : ''}${installTag}</span>
                     </div>
                     <div class="order-side">
-                        <strong>${o.price.toLocaleString()} ₾</strong>
-                        <span class="order-status">${t("acc-status-received")}</span>
+                        <strong>${Number(o.amount).toLocaleString()} ₾</strong>
+                        <span class="order-status">${t(STATUS_KEY[o.status] || "acc-status-received")}</span>
                     </div>
                 </div>`;
         }).join('');
@@ -2153,19 +2687,18 @@ function bindAccountTabEvents() {
     // Personal details
     const detailsForm = document.getElementById("acc-details-form");
     if (detailsForm) {
-        detailsForm.addEventListener("submit", (e) => {
+        detailsForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const idNumber = document.getElementById("acc-idnum").value.trim();
             if (idNumber && !/^\d{11}$/.test(idNumber)) { alert(t("co-err-id")); return; }
-            const accounts = loadAccounts();
-            accounts[state.user.email].profile = {
-                firstName: document.getElementById("acc-firstname").value.trim(),
-                lastName: document.getElementById("acc-lastname").value.trim(),
-                phone: document.getElementById("acc-phone").value.trim(),
-                address: document.getElementById("acc-address").value.trim(),
-                idNumber: idNumber
-            };
-            saveAccounts(accounts);
+            const { error } = await saveProfile({
+                first_name:  document.getElementById("acc-firstname").value.trim(),
+                last_name:   document.getElementById("acc-lastname").value.trim(),
+                phone:       document.getElementById("acc-phone").value.trim(),
+                address:     document.getElementById("acc-address").value.trim(),
+                personal_id: idNumber
+            });
+            if (error) { alert(error.message); return; }
             flashSaved("acc-details-saved");
         });
     }
@@ -2173,7 +2706,7 @@ function bindAccountTabEvents() {
     // Saved cards
     const cardForm = document.getElementById("acc-card-form");
     if (cardForm) {
-        cardForm.addEventListener("submit", (e) => {
+        cardForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const num = document.getElementById("acc-card-number").value.replace(/\D/g, "");
             const expiry = document.getElementById("acc-card-expiry").value.trim();
@@ -2183,57 +2716,58 @@ function bindAccountTabEvents() {
                 return;
             }
             const brand = num[0] === '4' ? 'VISA' : (num[0] === '5' ? 'MC' : 'CARD');
-            const accounts = loadAccounts();
-            const acc = accounts[state.user.email];
-            acc.cards = acc.cards || [];
-            acc.cards.push({ last4: num.slice(-4), brand: brand, expiry: expiry, holder: holder }); // last4 only — never the full number
-            saveAccounts(accounts);
+            const cards = (state.profile && Array.isArray(state.profile.cards)) ? [...state.profile.cards] : [];
+            // last4 only — the full number and CVV are never stored
+            cards.push({ last4: num.slice(-4), brand: brand, expiry: expiry, holder: holder });
+            const { error } = await saveProfile({ cards });
+            if (error) { alert(error.message); return; }
             renderAccountPage("cards");
         });
 
         document.querySelectorAll(".card-remove-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const accounts = loadAccounts();
-                accounts[state.user.email].cards.splice(parseInt(btn.getAttribute("data-idx")), 1);
-                saveAccounts(accounts);
+            btn.addEventListener("click", async () => {
+                const cards = (state.profile && Array.isArray(state.profile.cards)) ? [...state.profile.cards] : [];
+                cards.splice(parseInt(btn.getAttribute("data-idx")), 1);
+                const { error } = await saveProfile({ cards });
+                if (error) { alert(error.message); return; }
                 renderAccountPage("cards");
             });
         });
     }
 
-    // Change email (re-keys the account record and refreshes the session)
+    // Change email — Supabase mails a confirmation link to the NEW address and
+    // only switches it once that link is clicked.
     const emailForm = document.getElementById("acc-email-form");
     if (emailForm) {
-        emailForm.addEventListener("submit", (e) => {
+        emailForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const newEmail = document.getElementById("acc-email-input").value.trim().toLowerCase();
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { alert(t("auth-err-email")); return; }
             if (newEmail === state.user.email) { flashSaved("acc-email-saved"); return; }
-            const accounts = loadAccounts();
-            if (accounts[newEmail]) { alert(t("auth-err-exists")); return; }
-            const record = accounts[state.user.email];
-            delete accounts[state.user.email];
-            record.email = newEmail;
-            accounts[newEmail] = record;
-            saveAccounts(accounts);
-            setSession({ email: newEmail, provider: record.provider });
-            renderAccountPage("security");
+            const { error } = await sbClient.auth.updateUser({ email: newEmail });
+            if (error) { alert(error.message); return; }
+            alert(t("acc-email-confirm"));
         });
     }
 
-    // Change password
+    // Change password. Supabase's updateUser does not ask for the current one,
+    // so it is verified explicitly first — otherwise anyone who walked up to an
+    // unlocked, signed-in browser could silently take the account over.
     const passForm = document.getElementById("acc-pass-form");
     if (passForm) {
-        passForm.addEventListener("submit", (e) => {
+        passForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const current = document.getElementById("acc-pass-current").value;
             const next = document.getElementById("acc-pass-new").value;
-            const accounts = loadAccounts();
-            const acc = accounts[state.user.email];
-            if (acc.password !== current) { alert(t("acc-err-current")); return; }
             if (next.length < 6) { alert(t("auth-err-password")); return; }
-            acc.password = next;
-            saveAccounts(accounts);
+
+            const { error: checkErr } = await sbClient.auth.signInWithPassword({
+                email: state.user.email, password: current
+            });
+            if (checkErr) { alert(t("acc-err-current")); return; }
+
+            const { error } = await sbClient.auth.updateUser({ password: next });
+            if (error) { alert(error.message); return; }
             passForm.reset();
             flashSaved("acc-pass-saved");
         });
@@ -2632,6 +3166,11 @@ function switchCategory(category) {
     // If we're on a product detail page, jump back to the (now filtered) catalog
     if (document.body.classList.contains("product-view")) {
         location.hash = "catalog";
+    } else {
+        // Otherwise (e.g. picked from the homepage nav dropdown) scroll the
+        // now-filtered catalog into view — filtering alone leaves the page
+        // exactly where it was, which looks like the click did nothing.
+        document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
     }
 }
 
@@ -3186,6 +3725,15 @@ function bindUIEventListeners() {
         });
     });
 
+    // Footer category link click listeners (same filter-by-category behavior)
+    document.querySelectorAll('.footer-cat-link').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const cat = item.getAttribute('data-category');
+            switchCategory(cat);
+        });
+    });
+
     // Catalog grid clicks (event delegation)
     document.getElementById("products-grid").addEventListener("click", (e) => {
         const addBtn = e.target.closest(".add-cart-btn");
@@ -3241,13 +3789,13 @@ function bindUIEventListeners() {
         setAuthMode(authMode === "login" ? "register" : "login");
     });
 
-    document.getElementById("google-signin-btn").addEventListener("click", () => {
-        document.getElementById("auth-main-view").classList.add("hidden");
-        document.getElementById("google-mock-view").classList.remove("hidden");
-        showAuthError(null);
-    });
+    // Real Google OAuth — leaves the page and returns with a session
+    document.getElementById("google-signin-btn").addEventListener("click", handleGoogleSignIn);
 
-    document.getElementById("google-continue-btn").addEventListener("click", handleGoogleContinue);
+    document.getElementById("auth-forgot-link").addEventListener("click", (e) => {
+        e.preventDefault();
+        handlePasswordReset();
+    });
 
     // Continue without registering (guest checkout)
     document.getElementById("guest-continue-btn").addEventListener("click", () => {

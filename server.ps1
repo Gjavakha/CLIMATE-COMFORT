@@ -1,5 +1,8 @@
 # PowerShell Static File Server for Climate Comfort
-$port = 8000
+# Usage: .\server.ps1            → http://localhost:8000/
+#        .\server.ps1 -Port 8123 → when 8000 is taken or reserved by the OS
+param([int]$Port = 8000)
+$port = $Port
 $httpListener = New-Object System.Net.HttpListener
 $httpListener.Prefixes.Add("http://localhost:$port/")
 
@@ -62,6 +65,11 @@ while ($httpListener.IsListening) {
             elseif ($ext -eq ".jpg" -or $ext -eq ".jpeg") { $response.ContentType = "image/jpeg" }
             elseif ($ext -eq ".svg") { $response.ContentType = "image/svg+xml" }
             elseif ($ext -eq ".ico") { $response.ContentType = "image/x-icon" }
+            elseif ($ext -eq ".webp") { $response.ContentType = "image/webp" }
+            elseif ($ext -eq ".xml") { $response.ContentType = "application/xml; charset=utf-8" }
+            elseif ($ext -eq ".txt") { $response.ContentType = "text/plain; charset=utf-8" }
+            elseif ($ext -eq ".json") { $response.ContentType = "application/json; charset=utf-8" }
+            elseif ($ext -eq ".webmanifest") { $response.ContentType = "application/manifest+json; charset=utf-8" }
 
             # Always serve fresh files — browsers must not cache stale app code
             $response.Headers.Add("Cache-Control", "no-store")

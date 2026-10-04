@@ -3,7 +3,10 @@
 // Flow: drop .xlsx → detect supplier (importer-profiles.js) → parse rows →
 // diff against the database → admin approves → publish:
 //   1. insert new products            4. recompute display prices site-wide
-//   2. upsert supplier offers         5. record the import batch
+//   1.5 fetch specs/photos from the   5. record the import batch
+//       supplier's own product page
+//       (fetch-product-details edge fn)
+//   2. upsert supplier offers
 //   3. hide offers missing from file
 // Nothing changes in the database until "Approve & publish" is clicked.
 // ============================================================================
@@ -86,12 +89,16 @@ async function handleFile(file) {
     const headerRow = (XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: null })[0] || []).map(c => String(c || ""));
     const profile = detectSupplier(wb.SheetNames, headerRow);
     if (!profile) {
-        importError("Could not recognize the supplier of this file. Expected an Elit Electronics workbook (sheet 'ელიტი') or a Kontakt workbook (sheet 'გათბობა-გაგრილება').");
+        importError("Could not recognize the supplier of this file. Expected an Elit Electronics, Kontakt, Chigo or Alneo.ge price list.");
         return;
     }
 
     const ws = wb.Sheets[profile.pickSheet(wb.SheetNames)];
-    const rawRows = XLSX.utils.sheet_to_json(ws, { defval: null });
+    // range: profile.headerRow lets a profile's real header sit below row 1
+    // (e.g. Alneo has a banner line above its header row).
+    const rawRows = XLSX.utils.sheet_to_json(ws, { defval: null, range: profile.headerRow });
+    attachColumnLinks(ws, rawRows, profile.headerRow, profile.linkColumns);
+    if (profile.preprocess) profile.preprocess(rawRows);
 
     // Parse + dedupe by supplier item code (keep the first occurrence)
     const seenCodes = new Set();
@@ -286,6 +293,44 @@ async function applyImport() {
         const { data: allProducts, error: apErr } = await sbClient.from("products").select("*");
         if (apErr) throw new Error(apErr.message);
         allProducts.forEach(p => { prodByKey[p.brand + "|" + p.model] = p; });
+
+        // -- 1.5. enrich products missing photos/specs. Prefer this file's own
+        // supplier-page link when there is one; the edge function falls back
+        // to searching Kontakt.ge by brand+model otherwise (or if the direct
+        // link fails), so a product is never left with no photo just because
+        // its own supplier's list carries no product-page link.
+        const enrichCandidates = records
+            .filter(rec => rec.brand && rec.model)
+            .map(rec => ({ rec, prod: prodByKey[rec.brand + "|" + rec.model] }))
+            .filter(({ prod }) => prod && (!prod.image_url || !prod.specs || prod.specs.length === 0));
+
+        if (enrichCandidates.length) {
+            setProgress("Fetching specs & photos for " + enrichCandidates.length + " products from " + profile.name + "…");
+            let enriched = 0, failed = 0;
+            for (const { rec, prod } of enrichCandidates) {
+                try {
+                    const { data, error } = await sbClient.functions.invoke("fetch-product-details", {
+                        body: { url: rec.referenceUrl || null, supplier: profile.slug, brand: rec.brand, model: rec.model }
+                    });
+                    if (error || !data || data.error) throw new Error(error?.message || data?.error || "no data");
+                    const update = {};
+                    if (data.images && data.images.length) {
+                        update.images = data.images;
+                        if (!prod.image_url) update.image_url = data.images[0];
+                    }
+                    if (data.specs && data.specs.length) update.specs = data.specs;
+                    if (data.description && !prod.description_ka) update.description_ka = data.description;
+                    if (Object.keys(update).length) {
+                        await sbClient.from("products").update(update).eq("id", prod.id);
+                        Object.assign(prod, update); // keep in sync for the price/publish step below
+                        enriched++;
+                    }
+                } catch (err) {
+                    failed++; // one product's fetch failing must not abort the import
+                }
+            }
+            setProgress(`Photos/specs: ${enriched} updated, ${failed} skipped…`);
+        }
 
         // -- 2. upsert offers ----------------------------------------------
         const sellable = records.filter(rec => {

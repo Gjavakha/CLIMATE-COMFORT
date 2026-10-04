@@ -50,7 +50,9 @@ create table if not exists products (
     title_en        text,
     description_ka  text,
     description_en  text,
-    image_url       text,
+    image_url       text,                     -- main/cover photo
+    images          jsonb not null default '[]'::jsonb, -- full gallery, fetched from supplier site
+    specs           jsonb not null default '[]'::jsonb, -- [{group, items:[{name,value}]}], fetched from supplier site
     reference_url   text,                     -- e.g. Elit's EE LINK, admin reference only
     display_price     numeric(10,2),          -- storefront price (chosen by pricing rule)
     display_old_price numeric(10,2),          -- crossed-out price, optional
@@ -60,6 +62,11 @@ create table if not exists products (
     updated_at      timestamptz not null default now(),
     unique (brand, model)
 );
+
+-- added later: safe to re-run against a table that already exists
+alter table products add column if not exists images jsonb not null default '[]'::jsonb;
+alter table products add column if not exists specs  jsonb not null default '[]'::jsonb;
+alter table products add column if not exists stock_status text; -- 'in' | 'low' | null, set by the importer
 
 -- ----------------------------------------------------------------------------
 -- Supplier offers: one row per supplier per product. Holds ALL price levels
@@ -246,6 +253,76 @@ create policy bookings_admin_select on service_bookings
 drop policy if exists bookings_admin_update on service_bookings;
 create policy bookings_admin_update on service_bookings
     for update using (is_admin()) with check (is_admin());
+
+-- ----------------------------------------------------------------------------
+-- Customer profiles: one row per Supabase Auth user, holding the delivery and
+-- financing details the shopper re-uses between orders.
+--
+-- The storefront used to keep accounts (passwords included) in localStorage,
+-- which meant the account only existed in one browser and the password sat
+-- there in plain text. Authentication now belongs to Supabase Auth; this table
+-- holds only the non-secret profile that goes with it.
+--
+-- `cards` stores the last 4 digits and expiry for display convenience only —
+-- never a full card number and never a CVV.
+-- ----------------------------------------------------------------------------
+create table if not exists profiles (
+    id          uuid primary key references auth.users (id) on delete cascade,
+    email       text,
+    first_name  text,
+    last_name   text,
+    phone       text,
+    address     text,
+    personal_id text,                                   -- 11-digit ID, for financing
+    cards       jsonb not null default '[]'::jsonb,     -- [{last4, brand, expiry, holder}]
+    created_at  timestamptz not null default now(),
+    updated_at  timestamptz not null default now()
+);
+
+drop trigger if exists trg_profiles_touch on profiles;
+create trigger trg_profiles_touch before update on profiles
+    for each row execute function touch_updated_at();
+
+-- Every new auth user gets a profile row automatically, so the storefront
+-- never has to branch on "profile missing".
+create or replace function handle_new_user()
+returns trigger
+language plpgsql security definer set search_path = public
+as $$
+begin
+    insert into profiles (id, email) values (new.id, new.email)
+    on conflict (id) do nothing;
+    return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+    after insert on auth.users
+    for each row execute function handle_new_user();
+
+alter table profiles enable row level security;
+
+-- A shopper sees and edits only their own profile; admins can read all.
+drop policy if exists profiles_select_own on profiles;
+create policy profiles_select_own on profiles
+    for select using (auth.uid() = id or is_admin());
+
+drop policy if exists profiles_insert_own on profiles;
+create policy profiles_insert_own on profiles
+    for insert with check (auth.uid() = id);
+
+drop policy if exists profiles_update_own on profiles;
+create policy profiles_update_own on profiles
+    for update using (auth.uid() = id) with check (auth.uid() = id);
+
+-- Orders are looked up by owner on the account page
+create index if not exists idx_orders_user on orders (user_id);
+
+-- Backfill profiles for anyone who signed up before this table existed
+insert into profiles (id, email)
+select u.id, u.email from auth.users u
+on conflict (id) do nothing;
 
 -- ----------------------------------------------------------------------------
 -- Seed the two suppliers we already have price lists for

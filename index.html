@@ -4,6 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="doc-title">Climate Comfort | Premium Air Conditioners & Installation</title>
+
+    <!-- SEO: description + canonical. Search engines and social networks read
+         these; the description is also re-written per language by app.js. -->
+    <meta name="description" data-i18n-meta="meta-description" content="კონდიციონერები და ცენტრალური გათბობის ქვაბები საქართველოში — Samsung, LG, Midea, Bosch, Gree და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.">
+    <meta name="keywords" content="კონდიციონერი, კონდიციონერები, გათბობის ქვაბი, ინვერტორული კონდიციონერი, კონდიციონერის მონტაჟი, განვადება, თბილისი, air conditioner Georgia, boiler Tbilisi">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0ec1f5">
+    <link rel="canonical" href="https://climate-comfort.ge/">
+    <link rel="alternate" hreflang="ka" href="https://climate-comfort.ge/">
+    <link rel="alternate" hreflang="en" href="https://climate-comfort.ge/?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://climate-comfort.ge/">
+
+    <!-- Open Graph: what Facebook, LinkedIn, WhatsApp and Viber show on a share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Climate Comfort">
+    <meta property="og:locale" content="ka_GE">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:url" content="https://climate-comfort.ge/">
+    <meta property="og:title" content="Climate Comfort — კონდიციონერები და გათბობის სისტემები">
+    <meta property="og:description" content="ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.">
+    <meta property="og:image" content="https://climate-comfort.ge/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Climate Comfort — უფასო მიწოდება თბილისში">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Climate Comfort — კონდიციონერები და გათბობის სისტემები">
+    <meta name="twitter:description" content="ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.">
+    <meta name="twitter:image" content="https://climate-comfort.ge/assets/og-image.jpg">
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +47,62 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- CSS stylesheet -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Structured data: lets Google show the business card, opening hours and
+         a sitelinks search box. ⚠ Replace the placeholder phone/address/social
+         URLs with the real ones — Google flags mismatched NAP data. -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": ["Organization", "HVACBusiness"],
+                "@id": "https://climate-comfort.ge/#organization",
+                "name": "Climate Comfort",
+                "url": "https://climate-comfort.ge/",
+                "logo": "https://climate-comfort.ge/assets/logo.png",
+                "image": "https://climate-comfort.ge/assets/og-image.jpg",
+                "description": "კონდიციონერების და ცენტრალური გათბობის ქვაბების გაყიდვა, მონტაჟი და სერვისი საქართველოში.",
+                "priceRange": "₾₾",
+                "currenciesAccepted": "GEL",
+                "paymentAccepted": "Credit Card, Instalment",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "ალ. ყაზბეგის გამზ. 12",
+                    "addressLocality": "თბილისი",
+                    "postalCode": "0160",
+                    "addressCountry": "GE"
+                },
+                "telephone": "+995599000000",
+                "email": "info@climate-comfort.ge",
+                "openingHoursSpecification": [{
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    "opens": "09:00",
+                    "closes": "20:00"
+                }],
+                "areaServed": { "@type": "Country", "name": "Georgia" },
+                "sameAs": []
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://climate-comfort.ge/#website",
+                "url": "https://climate-comfort.ge/",
+                "name": "Climate Comfort",
+                "inLanguage": "ka",
+                "publisher": { "@id": "https://climate-comfort.ge/#organization" },
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://climate-comfort.ge/?q={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 <body>
 
@@ -88,14 +177,8 @@
                 </div>
             </div>
 
-            <!-- ============================================================
-                 VENDOR PROMO BANNER — PLACEHOLDER
-                 Replace the img src below with the real vendor banner/logo
-                 when it arrives. The image is cropped to a near-square
-                 (4:3) frame, so any size they send will fit.
-                 ============================================================ -->
             <div class="hero-banner">
-                <img src="https://picsum.photos/seed/climatecomfort/900/675" alt="პარტნიორის სარეკლამო ბანერი">
+                <img src="assets/hero-banner.webp" alt="უფასო მიწოდება თბილისში">
             </div>
             </div>
             <div class="hero-stats">
@@ -370,6 +453,11 @@
     <!-- Account Page (SPA view — rendered by app.js on #account, requires login) -->
     <section class="account-page" id="account-page">
         <div class="container" id="account-content"></div>
+    </section>
+
+    <!-- Legal Pages (SPA views — rendered by app.js on #terms / #privacy / #returns) -->
+    <section class="legal-page" id="legal-page">
+        <div class="container" id="legal-content"></div>
     </section>
 
     <!-- Financing Banner / Info Section -->
@@ -749,6 +837,7 @@
             <div class="modal-body">
                 <p class="auth-subtitle" data-i18n="auth-subtitle">შესყიდვის გასაგრძელებლად საჭიროა ავტორიზაცია</p>
                 <div class="auth-error hidden" id="auth-error"></div>
+                <div class="auth-notice hidden" id="auth-notice"></div>
 
                 <!-- Email / password view -->
                 <div id="auth-main-view">
@@ -762,6 +851,9 @@
                             <input type="password" id="auth-password-input" class="form-input" placeholder="••••••" autocomplete="current-password">
                         </div>
                         <button type="submit" class="btn btn-accent w-full mt-2" id="auth-submit-btn">რეგისტრაცია</button>
+                        <p class="auth-forgot">
+                            <a href="#" id="auth-forgot-link" data-i18n="auth-forgot">დაგავიწყდათ პაროლი?</a>
+                        </p>
                     </form>
 
                     <div class="auth-divider"><span data-i18n="auth-or">ან</span></div>
@@ -784,13 +876,6 @@
                     </button>
                 </div>
 
-                <!-- Mock Google account view (no real OAuth on a static site) -->
-                <div class="google-mock hidden" id="google-mock-view">
-                    <p class="google-mock-title" data-i18n="auth-google-title">Google ანგარიშით გაგრძელება</p>
-                    <p class="google-mock-hint" data-i18n="auth-google-hint">შეიყვანეთ თქვენი Google ელ. ფოსტა</p>
-                    <input type="email" id="google-email-input" class="form-input" placeholder="you@gmail.com" autocomplete="email">
-                    <button type="button" class="btn btn-primary w-full mt-2" id="google-continue-btn" data-i18n="auth-google-continue">გაგრძელება</button>
-                </div>
             </div>
         </div>
     </div>
@@ -818,55 +903,54 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-grid">
-            <div class="footer-info">
-                <a href="#" class="footer-logo">
-                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img" style="width: 38px; height: 38px; filter: drop-shadow(0 2px 4px rgba(14, 193, 245, 0.2));">
-                    <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
-                </a>
-                <p class="footer-text" data-i18n="footer-text">გთავაზობთ საიმედო გათბობისა და კონდიცირების სისტემებს საქართველოს მასშტაბით. უმაღლესი ხარისხი, სწრაფი სერვისი, მორგებული განვადება.</p>
-                <div class="social-links">
-                    <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-            
             <div class="footer-links-col">
-                <h4 data-i18n="footer-products-title">პროდუქცია</h4>
+                <h4 data-i18n="footer-products-title">პროდუქცია და სერვისი</h4>
                 <ul class="footer-links">
                     <li><a href="#catalog" class="footer-cat-link" data-category="ac" data-i18n="footer-prod-1">კონდიციონერები</a></li>
                     <li><a href="#catalog" class="footer-cat-link" data-category="boiler" data-i18n="footer-prod-2">ცენტრალური გათბობის ქვაბები</a></li>
-                    <li><a href="#booking-section" data-i18n="nav-booking">სამონტაჟო სერვისები</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-links-col">
-                <h4 data-i18n="footer-services-title">სერვისები</h4>
-                <ul class="footer-links">
                     <li><a href="#booking-section" data-i18n="footer-serv-1">კონდიციონერის მონტაჟი</a></li>
-                    <li><a href="#booking-section" data-i18n="footer-serv-2">გათბობის ქვაბის მონტაჟი</a></li>
                     <li><a href="#booking-section" data-i18n="footer-serv-3">ფრეონით შევსება / მოვლა</a></li>
                     <li><a href="#booking-section" data-i18n="footer-serv-4">სრული პროფილაქტიკა</a></li>
                 </ul>
             </div>
 
             <div class="footer-links-col">
-                <h4 data-i18n="footer-contact-title">კონტაქტი</h4>
+                <h4 data-i18n="footer-legal-title">წესები და პირობები</h4>
+                <ul class="footer-links">
+                    <li><a href="#terms" data-i18n="footer-terms">წესები და პირობები</a></li>
+                    <li><a href="#returns" data-i18n="footer-returns">დაბრუნება და გარანტია</a></li>
+                    <li><a href="#privacy" data-i18n="footer-privacy">კონფიდენციალურობის პოლიტიკა</a></li>
+                    <li><a href="#" id="cookie-settings-link" data-i18n="footer-cookies">Cookie პარამეტრები</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-col">
+                <h4 data-i18n="footer-follow-title">გამოგვყევი</h4>
+                <ul class="footer-social-list">
+                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-facebook-f"></i></span>Facebook</a></li>
+                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-instagram"></i></span>Instagram</a></li>
+                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-tiktok"></i></span>TikTok</a></li>
+                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-youtube"></i></span>YouTube</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-col">
+                <h4 data-i18n="footer-contact-title">დაგვიკავშირდი</h4>
                 <ul class="footer-contacts">
                     <li>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>ალ. ყაზბეგის გამზ. 12, თბილისი, საქართველო</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-phone"></i>
-                        <a href="tel:+995599000000">+995 599 00 00 00</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-envelope"></i>
+                        <span class="footer-icon"><i class="fa-solid fa-envelope"></i></span>
                         <a href="mailto:info@climate-comfort.ge">info@climate-comfort.ge</a>
                     </li>
                     <li>
-                        <i class="fa-solid fa-clock"></i>
+                        <span class="footer-icon"><i class="fa-solid fa-phone"></i></span>
+                        <a href="tel:+995599000000">+995 599 00 00 00</a>
+                    </li>
+                    <li>
+                        <span class="footer-icon"><i class="fa-solid fa-location-dot"></i></span>
+                        <span>ალ. ყაზბეგის გამზ. 12, თბილისი</span>
+                    </li>
+                    <li>
+                        <span class="footer-icon"><i class="fa-solid fa-clock"></i></span>
                         <span data-i18n="footer-workhours">ორშ - შაბ: 09:00 - 20:00</span>
                     </li>
                 </ul>
@@ -874,6 +958,10 @@
         </div>
         <div class="footer-bottom">
             <div class="container footer-bottom-container">
+                <a href="#" class="footer-logo">
+                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img">
+                    <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
+                </a>
                 <p data-i18n="footer-copyright">საავტორო უფლება © 2026 Climate Comfort. ყველა უფლება დაცულია</p>
                 <a class="made-by-chip" href="https://swichsolutions.ge" target="_blank" rel="noopener">
                     <i class="fa-solid fa-bolt"></i>
@@ -889,5 +977,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="app.js"></script>
+    <!-- Analytics (GA4 + Meta Pixel) — loads only after cookie consent -->
+    <script src="analytics.js"></script>
 </body>
 </html>

@@ -1,0 +1,12 @@
+# Climate Comfort — https://climate-comfort.ge
+# The storefront is fully crawlable; the admin panel is not.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin
+
+# Supabase Edge Functions and raw data files are not pages
+Disallow: /supabase/
+
+Sitemap: https://climate-comfort.ge/sitemap.xml
