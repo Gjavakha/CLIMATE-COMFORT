@@ -34,7 +34,7 @@ const translations = {
         "whyus-f2-title": "ოფიციალური გარანტია",
         "whyus-f2-desc": "ყველა შესყიდვაზე ვრცელდება მწარმოებლის ოფიციალური გარანტია და ჩვენი სამონტაჟო სამუშაოების ხარისხის გარანტია.",
         "whyus-f3-title": "მოქნილი განვადება",
-        "whyus-f3-desc": "მიიღეთ მყისიერი დასტური საქართველოს ბანკისგან, თიბისისგან ან ლიბერტისგან თქვენთვის მოსახერხებელი პირობებით.",
+        "whyus-f3-desc": "მიიღეთ მყისიერი დასტური საქართველოს ბანკისგან ან თიბისისგან თქვენთვის მოსახერხებელი პირობებით.",
         "whyus-f4-title": "სერტიფიცირებული ტექნიკოსები",
         "whyus-f4-desc": "ჩვენი პროფესიონალი გუნდი სრულად ლიცენზირებულია ნებისმიერი ტიპის კლიმატური ტექნიკის დასამონტაჟებლად.",
         
@@ -76,7 +76,6 @@ const translations = {
         "finance-description": "ნუ გადადებთ კომფორტს. შეიძინეთ სასურველი პროდუქტი დღესვე და გადაიხადეთ ეტაპობრივად. ჩვენ ვთანამშრომლობთ წამყვან ქართულ ბანკებთან, რათა შემოგთავაზოთ საუკეთესო პირობები, მათ შორის 0%-იანი უპროცენტო განვადება.",
         "bank-promo-bog": "6 თვემდე 0%",
         "bank-promo-tbc": "3 თვემდე 0%",
-        "bank-promo-liberty": "მარტივი დასტური",
         
         "calc-preview-header": "განვადების კალკულატორი",
         "calc-preview-help": "კალკულატორის გამოსაყენებლად და სასურველი განვადების პირობების მოსარგებად, დააჭირეთ „ყიდვა“ ღილაკს ნებისმიერი პროდუქტის ბარათზე და აირჩიეთ განვადება.",
@@ -159,7 +158,7 @@ const translations = {
         "pay-method-card": "ბარათით გადახდა",
         "pay-method-card-desc": "სწრაფი და უსაფრთხო გადახდა ნებისმიერი ბანკის ბარათით",
         "pay-method-finance": "განვადებით ყიდვა",
-        "pay-method-finance-desc": "ონლაინ განვადება 0%-დან საქართველოს ბანკის, თიბისის ან ლიბერტის მეშვეობით",
+        "pay-method-finance-desc": "ონლაინ განვადება 0%-დან საქართველოს ბანკის ან თიბისის მეშვეობით",
         
         // Dynamic labels
         "ac-type-split": "სპლიტ სისტემა",
@@ -233,6 +232,10 @@ const translations = {
         "co-install-toggle": "მჭირდება მონტაჟის სერვისი",
         "co-payment-header": "გადახდის მეთოდი",
         "co-pay-card-desc": "ბარათით გადახდა",
+        "co-pay-cash": "ნაღდი ანგარიშსწორება",
+        "co-pay-cash-desc": "გადაიხადეთ კურიერთან ჩაბარებისას",
+        "co-idnum-hint": "საჭიროა მხოლოდ განვადებისთვის — ბარათით ან ნაღდით გადახდისას შეგიძლიათ გამოტოვოთ",
+        "co-order-btn": "შეკვეთის გაფორმება",
         "co-summary-header": "თქვენი შეკვეთა",
         "co-total": "ჯამი:",
         "co-install-line": "მონტაჟი:",
@@ -279,7 +282,6 @@ const translations = {
         "acc-title": "ჩემი ანგარიში",
         "acc-nav-orders": "ჩემი შეკვეთები",
         "acc-nav-details": "პირადი მონაცემები",
-        "acc-nav-cards": "გადახდის მეთოდები",
         "acc-nav-security": "ანგარიშის უსაფრთხოება",
         "acc-orders-empty": "შეკვეთები ჯერ არ გაქვთ",
         "acc-status-received": "მიღებულია",
@@ -292,14 +294,6 @@ const translations = {
         "acc-pass-changed": "პაროლი შეიცვალა",
         "acc-err-current": "მიმდინარე პაროლი არასწორია",
         "acc-google-note": "თქვენ Google ანგარიშით ხართ ავტორიზებული — ელ. ფოსტა და პაროლი Google-იდან იმართება.",
-        "acc-card-number": "ბარათის ნომერი",
-        "acc-card-expiry": "მოქმედების ვადა (MM/YY)",
-        "acc-card-holder": "მფლობელის სახელი",
-        "acc-add-card": "ბარათის დამატება",
-        "acc-no-cards": "შენახული ბარათები არ გაქვთ",
-        "acc-card-note": "ინახება მხოლოდ ბარათის ბოლო 4 ციფრი — სრული მონაცემები და CVV არასდროს ინახება.",
-        "acc-err-card": "შეიყვანეთ სწორი ბარათის მონაცემები",
-        "acc-remove": "წაშლა",
 
         "calc-modal-title": "განვადების კალკულატორი",
         "calc-modal-cost-label": "პროდუქტის ფასი:",
@@ -357,7 +351,7 @@ const translations = {
         "whyus-f2-title": "Official Warranty",
         "whyus-f2-desc": "Every purchase comes with an official manufacturer's warranty and our installation quality guarantee.",
         "whyus-f3-title": "Flexible Financing",
-        "whyus-f3-desc": "Get instant approval from TBC Bank, Bank of Georgia, or Liberty Bank with options up to 36 months.",
+        "whyus-f3-desc": "Get instant approval from TBC Bank or Bank of Georgia with options up to 36 months.",
         "whyus-f4-title": "Certified Technicians",
         "whyus-f4-desc": "Our professional crew is fully licensed to install and maintain all major heating and cooling brands.",
         
@@ -399,7 +393,6 @@ const translations = {
         "finance-description": "Don't put off your comfort. Buy any product today and pay in easy monthly installments. We partner with the leading banks in Georgia to offer you the best rates, including 0% interest promo periods.",
         "bank-promo-bog": "Up to 6 Months 0%",
         "bank-promo-tbc": "Up to 3 Months 0%",
-        "bank-promo-liberty": "Low Monthly Rates",
         
         "calc-preview-header": "Financing Calculator",
         "calc-preview-help": "Select 'Buy' on any product card above to open the payment options, then choose the financing calculator to customize your installment terms.",
@@ -482,7 +475,7 @@ const translations = {
         "pay-method-card": "Pay by Card",
         "pay-method-card-desc": "Fast and secure checkout using any bank card",
         "pay-method-finance": "Buy in Installments",
-        "pay-method-finance-desc": "Online financing from 0% interest via BOG, TBC, or Liberty",
+        "pay-method-finance-desc": "Online financing from 0% interest via TBC or BOG",
         
         // Dynamic labels
         "ac-type-split": "Split System",
@@ -556,6 +549,10 @@ const translations = {
         "co-install-toggle": "I need installation service",
         "co-payment-header": "Payment Method",
         "co-pay-card-desc": "Card payment",
+        "co-pay-cash": "Cash on delivery",
+        "co-pay-cash-desc": "Pay the courier when the product arrives",
+        "co-idnum-hint": "Only needed for instalments — you can skip it for card or cash orders",
+        "co-order-btn": "Place Order",
         "co-summary-header": "Order Summary",
         "co-total": "Total:",
         "co-install-line": "Installation:",
@@ -602,7 +599,6 @@ const translations = {
         "acc-title": "My Account",
         "acc-nav-orders": "My Orders",
         "acc-nav-details": "Personal Details",
-        "acc-nav-cards": "Payment Methods",
         "acc-nav-security": "Account Security",
         "acc-orders-empty": "You have no orders yet",
         "acc-status-received": "Received",
@@ -615,14 +611,6 @@ const translations = {
         "acc-pass-changed": "Password changed",
         "acc-err-current": "Current password is incorrect",
         "acc-google-note": "You signed in with Google — your email and password are managed by Google.",
-        "acc-card-number": "Card Number",
-        "acc-card-expiry": "Expiry (MM/YY)",
-        "acc-card-holder": "Cardholder Name",
-        "acc-add-card": "Add Card",
-        "acc-no-cards": "No saved cards yet",
-        "acc-card-note": "Only the last 4 digits are stored — full card details and CVV are never saved.",
-        "acc-err-card": "Please enter valid card details",
-        "acc-remove": "Remove",
         
         "calc-modal-title": "Financing Calculator",
         "calc-modal-cost-label": "Product Price:",
@@ -1030,13 +1018,6 @@ const banksConfig = {
         maxTerm: 36,
         promoMonths: 3,
         standardRate: 1.5
-    },
-    liberty: {
-        name: "Liberty Bank",
-        minTerm: 3,
-        maxTerm: 36,
-        promoMonths: 0,
-        standardRate: 2.0
     }
 };
 
@@ -1061,7 +1042,7 @@ let state = {
     activeFinancedProduct: null,
     checkoutMode: "standard",
     user: null,               // signed-in account ({id, email, provider}) or null — from Supabase Auth
-    profile: null,            // cached `profiles` row: delivery details + saved cards
+    profile: null,            // cached `profiles` row: delivery details
     orders: [],               // this user's orders, read from the database
     ordersLoaded: false,      // so the account page fetches them once per visit
     afterAuthHash: null,      // hash to navigate to once the user authenticates (checkout/N, account)
@@ -1429,15 +1410,16 @@ function getTechLabel(p) {
 // review the text once — the wording follows the law but is not legal advice.
 // ==========================================================================
 const COMPANY = {
-    legalName: "შპს Climate Comfort",       // ← იურიდიული დასახელება ამონაწერის მიხედვით
-    legalNameEn: "Climate Comfort LLC",
-    taxId: "000000000",                      // ← საიდენტიფიკაციო კოდი (9 ციფრი)
-    address: "ალ. ყაზბეგის გამზ. 12, თბილისი 0160, საქართველო",
-    addressEn: "12 Al. Kazbegi Ave, Tbilisi 0160, Georgia",
-    phone: "+995 599 00 00 00",              // ← რეალური ნომერი
-    email: "info@climate-comfort.ge",        // ← რეალური, მოქმედი მისამართი
-    site: "https://climate-comfort.ge",
-    updated: "2026-09-30"                    // ← ბოლო რედაქტირების თარიღი
+    legalName: "შპს კლიმატ კომფორტი+",
+    legalNameEn: "Climate-Comfort+ LLC",
+    taxId: "405772926",
+    address: "მ. გელოვანის ქ. N4, თბილისი, საქართველო",
+    addressEn: "M. Gelovani Str. N4, Tbilisi, Georgia",
+    phone: "+995 32 2 111 848",
+    email: "climatecomfortgroup@gmail.com",
+    site: "https://climatecomfort.ge",
+    updated: "2026-10-05",                   // ← ბოლო რედაქტირების თარიღი
+    installWarrantyMonths: 12                // ← გარანტია ჩვენს სამონტაჟო სამუშაოზე (თვე)
 };
 
 const LEGAL_SLUGS = ["terms", "privacy", "returns"];
@@ -1446,6 +1428,9 @@ const LEGAL_SLUGS = ["terms", "privacy", "returns"];
 // innerText and would strip the markup; the language switch re-renders instead.
 function legalContent() {
     const c = COMPANY;
+    const tel = c.phone.replace(/\s/g, "");
+    const w = c.installWarrantyMonths;
+
     const ka = {
         terms: {
             title: "წესები და პირობები",
@@ -1457,129 +1442,152 @@ function legalContent() {
     <li>იურიდიული დასახელება: <strong>${c.legalName}</strong></li>
     <li>საიდენტიფიკაციო კოდი: <strong>${c.taxId}</strong></li>
     <li>მისამართი: ${c.address}</li>
-    <li>ტელეფონი: <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a></li>
+    <li>ტელეფონი: <a href="tel:${tel}">${c.phone}</a></li>
     <li>ელ. ფოსტა: <a href="mailto:${c.email}">${c.email}</a></li>
 </ul>
 
 <h3>2. პროდუქცია და ფასები</h3>
-<p>ვებგვერდზე განთავსებული ფასები მითითებულია საქართველოს ლარში და მოიცავს დღგ-ს. ფასი, რომელიც მოქმედებს შეკვეთის განთავსების მომენტში, არის სავალდებულო ორივე მხარისთვის.</p>
-<p>ვებგვერდზე მითითებული ტექნიკური მახასიათებლები და ფოტოსურათები მოწოდებულია მწარმოებლისა და ოფიციალური დისტრიბუტორის მიერ. მწარმოებელი უფლებას იტოვებს შეიტანოს ცვლილება პროდუქციის კომპლექტაციაში; ფოტოსურათი შეიძლება ატარებდეს საილუსტრაციო ხასიათს. თუ მიღებული პროდუქტი არსებითად განსხვავდება აღწერილობისგან, გამოიყენება <a href="#returns">დაბრუნებისა და გარანტიის</a> პირობები.</p>
-<p>ვიტოვებთ უფლებას უარი განვაცხადოთ შეკვეთის დადასტურებაზე, თუ პროდუქტი ამოწურულია ან ფასი/მახასიათებელი აშკარა ტექნიკური შეცდომით იყო გამოქვეყნებული. ასეთ შემთხვევაში დაგიკავშირდებით და გადახდილი თანხა სრულად დაგიბრუნდებათ.</p>
+<p>ფასები მითითებულია ლარში და მოიცავს დღგ-ს. შეკვეთის განთავსების მომენტში მოქმედი ფასი სავალდებულოა ორივე მხარისთვის.</p>
+<p>ვებგვერდზე მითითებული ტექნიკური მახასიათებლები და ფოტოსურათები მოწოდებულია მწარმოებლისა და ოფიციალური დისტრიბუტორის მიერ. მწარმოებელმა შესაძლოა შეცვალოს პროდუქტის კომპლექტაცია, ხოლო ფოტო შესაძლოა იყოს საილუსტრაციო. თუ მიღებული პროდუქტი არსებითად განსხვავდება აღწერისგან, მოქმედებს <a href="#returns">დაბრუნებისა და გარანტიის</a> პირობები.</p>
+<p>უფლებას ვიტოვებთ არ დავადასტუროთ შეკვეთა, თუ პროდუქტი მარაგში აღარ არის ან მისი ფასი/მახასიათებლები აშკარა ტექნიკური შეცდომით გამოქვეყნდა. ასეთ შემთხვევაში დაგიკავშირდებით და გადახდილ თანხას სრულად დაგიბრუნებთ.</p>
 
-<h3>3. შეკვეთა და მისი დადასტურება</h3>
-<p>შეკვეთა მიღებულად ითვლება მას შემდეგ, რაც მიიღებთ დადასტურებას ელექტრონული ფოსტით ან ტელეფონით. შეკვეთის განთავსებისას ვალდებული ხართ მიუთითოთ ზუსტი და უტყუარი ინფორმაცია — არასწორი მონაცემების გამო წარმოშობილი დაგვიანებისთვის ან მიუწოდებლობისთვის პასუხისმგებლობა არ გვეკისრება.</p>
+<h3>3. შეკვეთა და დადასტურება</h3>
+<p>შეკვეთა მიღებულად ითვლება, როდესაც მიიღებთ დადასტურებას ელ. ფოსტით ან ტელეფონით. ვალდებული ხართ მიუთითოთ ზუსტი მონაცემები; არასწორი ინფორმაციით გამოწვეულ დაგვიანებასა თუ ჩაუბარებელ მიწოდებაზე პასუხისმგებლობას არ ვიღებთ.</p>
 
 <h3>4. გადახდა</h3>
-<p>გადახდა შესაძლებელია ბანკის ბარათით ან პარტნიორი ბანკის განვადებით. განვადების პირობებს, მათ შორის საპროცენტო განაკვეთსა და ვადას, განსაზღვრავს შესაბამისი ბანკი და მასთან ფორმდება ცალკე ხელშეკრულება — ${c.legalName} განვადების ხელშეკრულების მხარე არ არის.</p>
-<p>ბარათის სრულ მონაცემებს ვებგვერდი არ ინახავს: გადახდა მუშავდება ბანკის მხარეს, უსაფრთხო გვერდზე.</p>
+<p>ვებგვერდზე ხელმისაწვდომია გადახდის შემდეგი მეთოდები:</p>
+<ul>
+    <li><strong>ბარათით ონლაინ</strong> — Visa / Mastercard ბარათით, თიბისი ბანკის ან საქართველოს ბანკის დაცულ გადახდის გვერდზე. ბარათის მონაცემებს შეიყვანთ მხოლოდ ბანკის გვერდზე; ვებგვერდი მათ არ იღებს და არ ინახავს.</li>
+    <li><strong>განვადება</strong> — თიბისი ბანკის ან საქართველოს ბანკის ონლაინ განვადებით. განვადების დამტკიცებას, პროცენტს, ვადასა და სხვა პირობებს განსაზღვრავს ბანკი ცალკე ხელშეკრულებით, რომლის მხარეც ${c.legalName} არ არის. ვებგვერდზე ნაჩვენები ყოველთვიური გადასახადი საორიენტაციოა. განვადების განაცხადისთვის აუცილებელია პირადი ნომერი.</li>
+    <li><strong>ნაღდი ანგარიშსწორება მიწოდებისას</strong> — თანხას იხდით ლარში კურიერთან პროდუქტის ჩაბარებისას და მიიღებთ ჩეკს. ნაღდი ანგარიშსწორებით შეკვეთა ძალაში შედის მას შემდეგ, რაც მას ტელეფონით დავადასტურებთ.</li>
+</ul>
+<p>სამონტაჟო სამუშაო პროდუქტის ფასში არ შედის და ანაზღაურდება ცალკე, ადგილზე, სამუშაოს დასრულების შემდეგ (იხ. პუნქტი 6).</p>
 
 <h3>5. მიწოდება</h3>
-<p>მიწოდება ხორციელდება შეკვეთის დადასტურებიდან შეთანხმებულ ვადაში. მიწოდების მომენტში შეამოწმეთ შეფუთვის მთლიანობა და პროდუქტის გარეგნული მდგომარეობა. ტრანსპორტირებით გამოწვეული ხილული დაზიანება უნდა დაფიქსირდეს მიღებისთანავე — ამის შემდეგ წარმოდგენილი ასეთი პრეტენზიის დაკმაყოფილება შეუძლებელია.</p>
+<p>მიწოდება ხორციელდება შეკვეთის დადასტურების შემდეგ შეთანხმებულ ვადაში, როგორც წესი, 2–5 სამუშაო დღეში. მიწოდებისას შეამოწმეთ შეფუთვის მთლიანობა და პროდუქტის მდგომარეობა. ტრანსპორტირებისას მიყენებული ხილული დაზიანება უნდა დაფიქსირდეს ჩაბარების მომენტში; მოგვიანებით წარმოდგენილი ამ ტიპის პრეტენზია ვერ მიიღება.</p>
 
 <h3>6. მონტაჟი</h3>
-<p>მონტაჟი ცალკე მომსახურებაა და არ შედის პროდუქტის ფასში, თუ სხვა რამ პირდაპირ არ არის მითითებული. სამუშაოს ღირებულება დამოკიდებულია ობიექტის სპეციფიკაზე და დგინდება ადგილზე დათვალიერების შემდეგ; გადახდა ხდება სამუშაოს დასრულების შემდეგ.</p>
-<p>ყურადღება: მწარმოებლის გარანტია, როგორც წესი, ძალას კარგავს, თუ მონტაჟი შეასრულა არაავტორიზებულმა პირმა. გირჩევთ მონტაჟი შეგვიკვეთოთ ჩვენთან ან ავტორიზებულ სერვისცენტრში.</p>
+<p>მონტაჟი ცალკე მომსახურებაა და პროდუქტის ფასში არ შედის, თუ აშკარად სხვაგვარად არ არის მითითებული. მისი ღირებულება დამოკიდებულია ობიექტზე და დგინდება ადგილზე დათვალიერების შემდეგ; ანაზღაურება ხდება სამუშაოს დასრულების შემდეგ.</p>
+<p>გაითვალისწინეთ: მწარმოებლის გარანტია, როგორც წესი, უქმდება, თუ მონტაჟი არაუფლებამოსილმა პირმა შეასრულა. გირჩევთ, მონტაჟი შეუკვეთოთ ჩვენთან ან ავტორიზებულ სერვისცენტრში. ჩვენ მიერ შესრულებულ სამონტაჟო სამუშაოზე ვრცელდება <strong>${w}-თვიანი</strong> გარანტია (იხ. <a href="#returns">დაბრუნება და გარანტია</a>).</p>
 
 <h3>7. ინტელექტუალური საკუთრება</h3>
-<p>ვებგვერდის დიზაინი, ტექსტები და მასზე განთავსებული მასალა დაცულია საავტორო უფლებით. ბრენდების სასაქონლო ნიშნები მათ მფლობელებს ეკუთვნის და გამოყენებულია პროდუქციის იდენტიფიცირების მიზნით.</p>
+<p>ვებგვერდის დიზაინი, ტექსტები და მასალები დაცულია საავტორო უფლებით. ბრენდების სასაქონლო ნიშნები ეკუთვნის მათ მფლობელებს და გამოიყენება მხოლოდ პროდუქციის იდენტიფიცირებისთვის.</p>
 
 <h3>8. პასუხისმგებლობის შეზღუდვა</h3>
-<p>ვებგვერდი მოწოდებულია „როგორც არის". არ ვიღებთ პასუხისმგებლობას ტექნიკური შეფერხების ან ვებგვერდის დროებითი მიუწვდომლობის შედეგად წარმოშობილ ზიანზე. ეს პუნქტი არ ზღუდავს თქვენს უფლებებს, რომლებიც გარანტირებულია „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონით.</p>
+<p>ვებგვერდი მოწოდებულია „როგორც არის" პრინციპით. ტექნიკური ხარვეზით ან დროებითი მიუწვდომლობით გამოწვეულ ზიანზე პასუხისმგებლობას არ ვიღებთ. ეს პუნქტი არ ზღუდავს „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონით გარანტირებულ უფლებებს.</p>
 
-<h3>9. მოქმედი კანონმდებლობა და დავები</h3>
-<p>წესებს არეგულირებს საქართველოს კანონმდებლობა. დავის შემთხვევაში მხარეები შეეცდებიან მოლაპარაკებით მოგვარებას; შეთანხმების მიუღწევლობისას დავა განიხილება საქართველოს სასამართლოში. მომხმარებელს ასევე უფლება აქვს მიმართოს <a href="https://www.competition.ge" target="_blank" rel="noopener">კონკურენციისა და მომხმარებლის დაცვის სააგენტოს</a>.</p>
+<h3>9. მარეგულირებელი კანონმდებლობა და დავები</h3>
+<p>წინამდებარე პირობები რეგულირდება საქართველოს კანონმდებლობით. მხარეები დავას პირველ რიგში მოლაპარაკებით მოაგვარებენ; წარუმატებლობის შემთხვევაში დავას განიხილავს საქართველოს სასამართლო. მომხმარებელს ასევე შეუძლია მიმართოს <a href="https://www.competition.ge" target="_blank" rel="noopener">კონკურენციისა და მომხმარებლის დაცვის სააგენტოს</a>.</p>
 
-<h3>10. პირობების ცვლილება</h3>
-<p>ვიტოვებთ უფლებას შევცვალოთ ეს პირობები. ცვლილება ძალაში შედის ვებგვერდზე გამოქვეყნებისთანავე და არ ვრცელდება უკან, უკვე დადასტურებულ შეკვეთებზე.</p>`
+<h3>10. ცვლილებები</h3>
+<p>უფლებას ვიტოვებთ შევცვალოთ წინამდებარე პირობები. ცვლილება ძალაში შედის გამოქვეყნებისთანავე და უკვე დადასტურებულ შეკვეთებზე უკუძალით არ ვრცელდება.</p>`
         },
         privacy: {
             title: "კონფიდენციალურობის პოლიტიკა",
             html: `
-<p class="legal-lead">ეს პოლიტიკა განმარტავს, რომელ პერსონალურ მონაცემებს ვამუშავებთ, რა მიზნით და რა უფლებები გაქვთ. მონაცემებს ვამუშავებთ „პერსონალურ მონაცემთა დაცვის შესახებ" საქართველოს კანონის შესაბამისად.</p>
+<p class="legal-lead">ეს პოლიტიკა განმარტავს, რომელ პერსონალურ მონაცემებს ვამუშავებთ, რატომ და რა უფლებები გაქვთ. მონაცემებს ვამუშავებთ „პერსონალურ მონაცემთა დაცვის შესახებ" საქართველოს კანონის შესაბამისად.</p>
 
 <h3>1. მონაცემთა დამმუშავებელი</h3>
-<p>${c.legalName} (ს/კ ${c.taxId}), ${c.address}. კონფიდენციალურობასთან დაკავშირებული ნებისმიერი საკითხზე მოგვწერეთ: <a href="mailto:${c.email}">${c.email}</a>.</p>
+<p>${c.legalName} (ს/კ ${c.taxId}), ${c.address}. კონფიდენციალურობასთან დაკავშირებულ ნებისმიერ საკითხზე მოგვწერეთ: <a href="mailto:${c.email}">${c.email}</a>.</p>
 
 <h3>2. რა მონაცემებს ვაგროვებთ</h3>
 <ul>
-    <li><strong>საკონტაქტო და საიდენტიფიკაციო:</strong> სახელი, გვარი, ტელეფონი, ელ. ფოსტა, მისამართი.</li>
-    <li><strong>პირადი ნომერი:</strong> მხოლოდ მაშინ, როცა ეს საჭიროა განვადების გასაფორმებლად ან ანგარიშ-ფაქტურის გამოსაწერად.</li>
-    <li><strong>შეკვეთის მონაცემები:</strong> შეძენილი პროდუქტი, თანხა, გადახდის მეთოდი და შეკვეთის სტატუსი.</li>
-    <li><strong>ტექნიკური მონაცემები:</strong> IP მისამართი, ბრაუზერის ტიპი, ვებგვერდზე მოქმედებების სტატისტიკა.</li>
+    <li><strong>ანგარიში:</strong> ელ. ფოსტა და პაროლი (დაშიფრული სახით), ან — Google-ით შესვლისას — თქვენი Google ანგარიშის სახელი და ელ. ფოსტა.</li>
+    <li><strong>შეკვეთა:</strong> სახელი და გვარი, ტელეფონი, ელ. ფოსტა, მიწოდების მისამართი, შეკვეთილი პროდუქტი, თანხა, გადახდის მეთოდი და შეკვეთის სტატუსი. შეკვეთა შესაძლებელია ანგარიშის გარეშეც — ასეთ შემთხვევაში ვინახავთ მხოლოდ შეკვეთის მონაცემებს.</li>
+    <li><strong>პირადი ნომერი:</strong> მხოლოდ განვადების განაცხადისას, რადგან მას ბანკი ითხოვს. ბარათით ან ნაღდი ანგარიშსწორებით შეკვეთისთვის პირადი ნომერი არ არის სავალდებულო.</li>
+    <li><strong>სერვისის ჯავშანი:</strong> სახელი, ტელეფონი, მისამართი, სასურველი თარიღი და თქვენ მიერ დატოვებული შენიშვნა — მონტაჟის, დემონტაჟის ან მომსახურების შეკვეთისას.</li>
+    <li><strong>ტექნიკური მონაცემები:</strong> ანალიტიკურ ინსტრუმენტებს ამჟამად არ ვიყენებთ. მონაცემთა ბაზის პროვაიდერი (Supabase) უსაფრთხოების მიზნით ინახავს სტანდარტულ სერვერულ ჟურნალს (IP მისამართი, მოთხოვნის დრო).</li>
 </ul>
-<p><strong>ბარათის სრულ მონაცემებს არ ვაგროვებთ და არ ვინახავთ.</strong> გადახდა მუშავდება ბანკის მხარეს; ჩვენთან შეიძლება შეინახოს მხოლოდ ბარათის ბოლო 4 ციფრი და ტიპი, თქვენივე მოხერხებულობისთვის.</p>
+<p><strong>ბარათის მონაცემებს არ ვაგროვებთ და არ ვინახავთ.</strong> ბარათით გადახდა სრულად ხორციელდება თიბისი ბანკის ან საქართველოს ბანკის დაცულ გვერდზე. ვებგვერდი ინახავს მხოლოდ იმას, რომელი ბანკი აირჩიეთ.</p>
 
-<h3>3. დამუშავების საფუძველი და მიზანი</h3>
+<h3>3. სამართლებრივი საფუძველი და მიზანი</h3>
 <ul>
-    <li><strong>ხელშეკრულების შესრულება</strong> — შეკვეთის დამუშავება, მიწოდება, მონტაჟი, გარანტიის მომსახურება.</li>
-    <li><strong>კანონით დაკისრებული ვალდებულება</strong> — საბუღალტრო და საგადასახადო აღრიცხვა.</li>
-    <li><strong>თანხმობა</strong> — მარკეტინგული შეტყობინებები და არააუცილებელი cookie-ები. თანხმობის გამოთხოვა შესაძლებელია ნებისმიერ დროს.</li>
+    <li><strong>ხელშეკრულების შესრულება</strong> — შეკვეთის დამუშავება, მიწოდება, მონტაჟი, საგარანტიო მომსახურება.</li>
+    <li><strong>კანონისმიერი ვალდებულება</strong> — საბუღალტრო და საგადასახადო აღრიცხვა.</li>
+    <li><strong>თანხმობა</strong> — ანალიტიკური ან მარკეტინგული cookie-ები, თუ მომავალში დავნერგავთ. თანხმობის გამოხმობა შესაძლებელია ნებისმიერ დროს.</li>
     <li><strong>ლეგიტიმური ინტერესი</strong> — ვებგვერდის უსაფრთხოება და გაუმჯობესება.</li>
 </ul>
 
 <h3>4. ვის ვუზიარებთ</h3>
-<p>მონაცემებს არ ვყიდით. ვუზიარებთ მხოლოდ იმდენს, რამდენიც აუცილებელია: საკურიერო და სამონტაჟო პარტნიორს (მიწოდების მისამართი და ტელეფონი), ბანკს (გადახდისა და განვადების გასაფორმებლად), ავტორიზებულ სერვისცენტრს (გარანტიის შემთხვევაში), ბუღალტრულ და IT მომსახურე კომპანიას, ასევე უფლებამოსილ ორგანოს კანონით დადგენილი მოთხოვნისას.</p>
-<p>ვებგვერდი იყენებს გარე სერვისებს, რომლებსაც შესაძლოა მონაცემები საქართველოს ფარგლებს გარეთ დამუშავდეს: <strong>Supabase</strong> (მონაცემთა ბაზა და ავტორიზაცია), <strong>Google Analytics</strong> (სტატისტიკა), <strong>Meta Pixel</strong> (რეკლამის ეფექტურობა) და <strong>Google Sign-In</strong>. ეს სერვისები უზრუნველყოფენ დაცვის ადეკვატურ დონეს.</p>
+<p>მონაცემებს არ ვყიდით. ვუზიარებთ მხოლოდ იმას, რაც აუცილებელია: კურიერსა და სამონტაჟო ჯგუფს (მისამართი და ტელეფონი), თიბისი ბანკს ან საქართველოს ბანკს (გადახდის ან განვადების გასაფორმებლად), პროდუქტის ოფიციალური დისტრიბუტორის სერვისცენტრს (საგარანტიო მომსახურებისთვის), ჩვენს საბუღალტრო და IT მომსახურების მიმწოდებლებს, ასევე უფლებამოსილ სახელმწიფო ორგანოებს — კანონით გათვალისწინებულ შემთხვევებში.</p>
+<p>ვებგვერდი იყენებს შემდეგ გარე სერვისებს, რომლებსაც მონაცემები შესაძლოა საქართველოს ფარგლებს გარეთ დაამუშაონ:</p>
+<ul>
+    <li><strong>Supabase</strong> — მონაცემთა ბაზა და ავტორიზაცია; სერვერები განთავსებულია ევროკავშირში (ფრანკფურტი).</li>
+    <li><strong>Google</strong> — Google-ით შესვლა, მხოლოდ თუ თავად აირჩევთ ამ მეთოდს.</li>
+</ul>
 
 <h3>5. შენახვის ვადა</h3>
-<p>შეკვეთისა და საბუღალტრო დოკუმენტაციას ვინახავთ კანონით დადგენილი <strong>6 წლის</strong> განმავლობაში. მომხმარებლის ანგარიშის მონაცემები ინახება ანგარიშის აქტიურობის პერიოდში; წაშლის მოთხოვნისას ვშლით, გარდა იმ ნაწილისა, რომლის შენახვაც კანონით გვევალება.</p>
+<p>შეკვეთისა და საბუღალტრო ჩანაწერები ინახება კანონით გათვალისწინებული <strong>6 წლის</strong> განმავლობაში. სერვისის ჯავშნის მონაცემები ინახება სამუშაოს დასრულებიდან 1 წლის განმავლობაში (საგარანტიო მომსახურებისთვის). ანგარიშის მონაცემები ინახება ანგარიშის მოქმედების პერიოდში; წაშლის მოთხოვნისას მათ ვშლით, გარდა იმ მონაცემებისა, რომელთა შენახვაც კანონით გვევალება.</p>
 
 <h3>6. თქვენი უფლებები</h3>
-<p>უფლება გაქვთ: მიიღოთ ინფორმაცია დამუშავების შესახებ; მოითხოვოთ ასლი, შესწორება, განახლება, დაბლოკვა, წაშლა ან განადგურება; გამოითხოვოთ თანხმობა; მოითხოვოთ მონაცემთა გადატანა. მოთხოვნაზე პასუხს გაიცემა კანონით დადგენილ ვადაში, უსასყიდლოდ.</p>
+<p>უფლება გაქვთ: მიიღოთ ინფორმაცია დამუშავების შესახებ; მოითხოვოთ ასლი, შესწორება, განახლება, დაბლოკვა, წაშლა ან განადგურება; გამოიხმოთ თანხმობა; მოითხოვოთ მონაცემთა გადატანა. მოთხოვნაზე პასუხს გაიცემა კანონით დადგენილ ვადაში, უსასყიდლოდ.</p>
 <p>მოგვწერეთ <a href="mailto:${c.email}">${c.email}</a>. თუ პასუხი არ დაგაკმაყოფილებთ, უფლება გაქვთ მიმართოთ <a href="https://personaldata.ge" target="_blank" rel="noopener">პერსონალურ მონაცემთა დაცვის სამსახურს</a> ან სასამართლოს.</p>
 
-<h3>7. Cookie-ები</h3>
-<p>აუცილებელი cookie-ები უზრუნველყოფს კალათის, ავტორიზაციისა და ენის არჩევის მუშაობას — მათ გარეშე ვებგვერდი ვერ იმუშავებს. ანალიტიკური და მარკეტინგული cookie-ები გამოიყენება მხოლოდ თქვენი თანხმობით. თანხმობა შეგიძლიათ შეცვალოთ ბრაუზერის პარამეტრებიდან.</p>
+<h3>7. Cookie-ები და მსგავსი ტექნოლოგიები</h3>
+<p><strong>აუცილებელი.</strong> ვებგვერდი თქვენს ბრაუზერში ინახავს მხოლოდ ორ რამეს: არჩეულ ენას და — თუ შეხვედით ანგარიშში — შესვლის სესიას. ამათ გარეშე ვებგვერდი ვერ იმუშავებს, ამიტომ მათთვის თანხმობა არ არის საჭირო. ეს ჩანაწერები სხვა ვებგვერდებისთვის მიუწვდომელია.</p>
+<p><strong>ანალიტიკური და მარკეტინგული.</strong> ამჟამად ვებგვერდი არ იყენებს ანალიტიკურ ან სარეკლამო cookie-ებს და თქვენს ვიზიტს არ ითვლის. თუ მომავალში ასეთ ინსტრუმენტს დავნერგავთ, ის ჩაიტვირთება მხოლოდ მას შემდეგ, რაც ვებგვერდზე გამოჩენილ ბანერზე თანხმობას განაცხადებთ, და ეს პოლიტიკა შესაბამისად განახლდება.</p>
+<p><strong>მესამე მხარის.</strong> Google-ით შესვლის გამოყენებისას Google საკუთარ cookie-ებს აყენებს საკუთარი <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">კონფიდენციალურობის პოლიტიკის</a> შესაბამისად. თუ Google-ით შესვლას არ იყენებთ, ეს cookie-ები არ იქმნება.</p>
+<p><strong>წაშლა.</strong> ბრაუზერის პარამეტრებში ვებგვერდის მონაცემების წაშლით ენის არჩევანი და სესია იშლება; ვებგვერდი ჩვეულებრივ გააგრძელებს მუშაობას.</p>
 
 <h3>8. უსაფრთხოება</h3>
-<p>კავშირი დაშიფრულია (HTTPS), ბაზაზე წვდომა შეზღუდულია და ადმინისტრირების პანელი ხელმისაწვდომია მხოლოდ უფლებამოსილი პირებისთვის.</p>`
+<p>კავშირი დაშიფრულია (HTTPS), ბაზაზე წვდომა შეზღუდულია მონაცემთა მფლობელითა და უფლებამოსილი პერსონალით, ხოლო ადმინისტრირების პანელი ხელმისაწვდომია მხოლოდ უფლებამოსილი პირებისთვის.</p>`
         },
         returns: {
             title: "დაბრუნება და გარანტია",
             html: `
-<p class="legal-lead">ამ გვერდზე აღწერილია პროდუქტის უკან დაბრუნებისა და გარანტიის პირობები. ისინი ეფუძნება „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონს და არ ზღუდავს კანონით მოცემულ თქვენს უფლებებს.</p>
+<p class="legal-lead">ეს გვერდი აღწერს პროდუქტის დაბრუნებისა და საგარანტიო მომსახურების წესებს. იგი ეფუძნება „მომხმარებლის უფლებების დაცვის შესახებ" საქართველოს კანონს და არ ზღუდავს ამ კანონით მინიჭებულ უფლებებს.</p>
 
-<h3>1. 14-დღიანი დაბრუნების უფლება</h3>
-<p>დისტანციურად შეძენილი პროდუქტის უკან დაბრუნება შეგიძლიათ <strong>14 კალენდარული დღის</strong> განმავლობაში, მიღების დღიდან, მიზეზის განმარტების გარეშე.</p>
-<p>ამისთვის საჭიროა, რომ პროდუქტი იყოს:</p>
+<h3>1. დაბრუნების უფლება 14 დღის განმავლობაში</h3>
+<p>დისტანციურად შეძენილი პროდუქტის დაბრუნება შეგიძლიათ მიღებიდან <strong>14 კალენდარული დღის</strong> განმავლობაში, მიზეზის მითითების გარეშე.</p>
+<p>პროდუქტი უნდა იყოს:</p>
 <ul>
     <li>გამოუყენებელი და დაუზიანებელი;</li>
-    <li>სრული კომპლექტაციით, ორიგინალურ შეფუთვაში, ყველა აქსესუარითა და დოკუმენტით;</li>
-    <li>შენარჩუნებული სასაქონლო სახით.</li>
+    <li>სრული კომპლექტაციით, ორიგინალ შეფუთვაში, ყველა აქსესუარითა და დოკუმენტით;</li>
+    <li>ხელახლა გასაყიდად ვარგის მდგომარეობაში.</li>
 </ul>
-<p>თანხა დაგიბრუნდებათ პროდუქტის მიღებიდან <strong>არაუგვიანეს 14 დღეში</strong>, იმავე მეთოდით, რომლითაც გადაიხადეთ.</p>
+<p>თანხას დაგიბრუნებთ პროდუქტის მიღებიდან <strong>14 დღის</strong> განმავლობაში, იმავე მეთოდით, რომლითაც გადაიხადეთ; ნაღდი ანგარიშსწორების შემთხვევაში — თქვენს საბანკო ანგარიშზე.</p>
 
-<h3>2. როდის არ ვრცელდება 14-დღიანი უფლება</h3>
-<p>უფლება არ გამოიყენება, თუ პროდუქტი:</p>
+<h3>2. როდის არ მოქმედებს 14-დღიანი უფლება</h3>
+<p>უფლება არ ვრცელდება, თუ პროდუქტი:</p>
 <ul>
-    <li>დამონტაჟებულია ან/და ექსპლუატაციაშია შესული (კონდიციონერი და ქვაბი, რომელიც უკვე ჩაერთო სისტემაში);</li>
-    <li>დამზადებულია ან შეკვეთილია ინდივიდუალური მახასიათებლებით;</li>
-    <li>დაზიანებულია მომხმარებლის ბრალით.</li>
+    <li>დამონტაჟებულია და/ან ექსპლუატაციაში შევიდა (სისტემასთან უკვე მიერთებული კონდიციონერი ან ქვაბი);</li>
+    <li>დამზადდა ან შეიკვეთა თქვენი ინდივიდუალური მოთხოვნით;</li>
+    <li>დაზიანდა თქვენი ბრალით.</li>
 </ul>
-<p>ეს ბუნებრივი შეზღუდვაა კლიმატური ტექნიკისთვის: დამონტაჟებული და ფრეონით შევსებული აგრეგატი ახლად ითვლება.</p>
+<p>ეს კლიმატური ტექნიკის თავისებურებაა: დამონტაჟებული და ფრეონით შევსებული მოწყობილობა ახალი აღარ არის.</p>
 
-<h3>3. ხარვეზიანი ან აღწერილობისგან განსხვავებული პროდუქტი</h3>
-<p>თუ პროდუქტი ხარვეზიანია ან არსებითად განსხვავდება ვებგვერდზე მითითებული აღწერილობისგან, უფლება გაქვთ მოითხოვოთ — თანმიმდევრობით — <strong>უსასყიდლო შეკეთება ან შეცვლა</strong>; ხოლო თუ ეს შეუძლებელია ან არაპროპორციულია — <strong>ფასის შემცირება ან ხელშეკრულების გაუქმება</strong> და თანხის სრული დაბრუნება.</p>
-<p>ამ შემთხვევაში დაბრუნების ტრანსპორტირების ხარჯს ვფარავთ ჩვენ. კანონის მიხედვით, ხარვეზი, რომელიც გამოვლინდა მიღებიდან <strong>6 თვის</strong> განმავლობაში, მიჩნეულია თავიდანვე არსებულად, თუ საწინააღმდეგო არ დამტკიცდება.</p>
+<h3>3. წუნდებული ან აღწერისგან განსხვავებული პროდუქტი</h3>
+<p>თუ პროდუქტი წუნდებულია ან არსებითად განსხვავდება ვებგვერდზე მოცემული აღწერისგან, უფლება გაქვთ მოითხოვოთ — ამ თანმიმდევრობით — <strong>უფასო შეკეთება ან შეცვლა</strong>; ხოლო თუ ეს შეუძლებელია ან არაპროპორციულია — <strong>ფასის შემცირება ან ხელშეკრულების გაუქმება</strong> სრული თანხის დაბრუნებით.</p>
+<p>ასეთ შემთხვევაში დაბრუნების ტრანსპორტირების ხარჯს ჩვენ ვფარავთ. კანონის თანახმად, მიღებიდან <strong>6 თვის</strong> განმავლობაში გამოვლენილი ნაკლი თავიდანვე არსებულად მიიჩნევა, თუ საწინააღმდეგო არ დამტკიცდება.</p>
 
-<h3>4. გარანტია</h3>
-<p>ყველა პროდუქტს აქვს მწარმოებლის გარანტია. კონკრეტული ვადა მითითებულია საგარანტიო ფურცელში და პროდუქტის გვერდზე (როგორც წესი, კონდიციონერზე 1–5 წელი, კომპრესორზე უფრო ხანგრძლივი). ამასთან, კანონით გათვალისწინებული <strong>2-წლიანი</strong> შესაბამისობის გარანტია მოქმედებს დამოუკიდებლად.</p>
-<p>საგარანტიო მომსახურებისთვის აუცილებელია საგარანტიო ფურცელი და შეძენის დოკუმენტი (ჩეკი ან ანგარიშ-ფაქტურა).</p>
+<h3>4. პროდუქტის გარანტია</h3>
+<p>ყველა პროდუქტს თან ახლავს მწარმოებლის გარანტია, რომელსაც საქართველოში უზრუნველყოფს ოფიციალური დისტრიბუტორი. ზუსტი ვადა მითითებულია საგარანტიო ტალონსა და პროდუქტის გვერდზე (კონდიციონერზე, როგორც წესი, 1–5 წელი, კომპრესორზე — მეტი). ამისგან დამოუკიდებლად მოქმედებს კანონით გათვალისწინებული <strong>2-წლიანი</strong> შესაბამისობის გარანტია.</p>
+<p>საგარანტიო შეკეთებას ასრულებს დისტრიბუტორის ავტორიზებული სერვისცენტრი. მომსახურებისთვის საჭიროა საგარანტიო ტალონი და შეძენის დამადასტურებელი დოკუმენტი (ჩეკი ან ინვოისი). სერვისცენტრთან კომუნიკაციასა და პროდუქტის გადაცემაში დაგეხმარებით.</p>
+<p>პროდუქტის შეცვლა ხდება თქვენი თანხმობით, იმავე ან უფრო მაღალი ღირებულების (სხვაობის დაფარვით) პროდუქტით, რომელიც შეცვლის მომენტში გასაყიდად ხელმისაწვდომია.</p>
 
-<h3>5. როდის ვერ მოქმედებს გარანტია</h3>
+<h3>5. სამონტაჟო სამუშაოს გარანტია</h3>
+<p>ჩვენ მიერ შესრულებულ სამონტაჟო სამუშაოზე (კრონშტეინების დამაგრება, მილების გაყვანა, ვაკუუმირება, მიერთება) ვრცელდება <strong>${w}-თვიანი</strong> გარანტია სამუშაოს დასრულების დღიდან. ამ პერიოდში მონტაჟის ხარისხით გამოწვეულ ხარვეზს (მაგ. ფრეონის გაჟონვა შეერთებაზე, კონდენსატის წვეთვა) უფასოდ გამოვასწორებთ.</p>
+
+<h3>6. როდის არ მოქმედებს გარანტია</h3>
+<p>საგარანტიო მომსახურება არ ხორციელდება, თუ:</p>
 <ul>
-    <li>მონტაჟი შეასრულა არაავტორიზებულმა პირმა ან დარღვეულია მწარმოებლის ინსტრუქცია;</li>
-    <li>არ ჩატარდა სავალდებულო პერიოდული მომსახურება (ფილტრების წმენდა, პროფილაქტიკა);</li>
-    <li>დაზიანება გამოწვეულია ელექტროქსელის გაუმართაობით, სტიქიით, დატბორვით ან მექანიკური ზემოქმედებით;</li>
-    <li>პროდუქტი შეკეთდა ან გაიხსნა მესამე პირის მიერ;</li>
-    <li>წაშლილია ან დაზიანებულია სერიული ნომერი.</li>
+    <li>საგარანტიო ვადა გასულია;</li>
+    <li>ვერ წარადგენთ საგარანტიო ტალონს და პროდუქტის იდენტიფიცირება სხვაგვარად შეუძლებელია;</li>
+    <li>სერიული ნომერი წაშლილია, შეცვლილია ან არ იკითხება, ან ლუქი/პლომბი მოხსნილია;</li>
+    <li>დაზიანება გამოწვეულია მექანიკური ზემოქმედებით, არასწორი ექსპლუატაციით ან შენახვის პირობების დარღვევით;</li>
+    <li>დაზიანება გამოწვეულია სითხის ან უცხო სხეულის მოხვედრით, მეხის დაცემით ან სხვა სტიქიური მოვლენით;</li>
+    <li>დაზიანება გამოწვეულია ელექტროქსელის ძაბვის ცვალებადობით (გირჩევთ ძაბვის სტაბილიზატორის გამოყენებას);</li>
+    <li>მონტაჟი, დემონტაჟი ან შეკეთება შეასრულა არაუფლებამოსილმა პირმა;</li>
+    <li>არ ჩატარებულა მწარმოებლის მიერ გათვალისწინებული პერიოდული მომსახურება (ფილტრების წმენდა, პროფილაქტიკა);</li>
+    <li>საყოფაცხოვრებო დანიშნულების პროდუქტი გამოიყენებოდა კომერციული მიზნით.</li>
 </ul>
+<p>გარანტია არ ვრცელდება ხმარებად მასალებზე, რომლებიც ნორმალური ექსპლუატაციისას იცვლება (ფილტრები, ბატარეები პულტში და მსგავსი).</p>
 
-<h3>6. როგორ დავიწყოთ პროცესი</h3>
+<h3>7. როგორ წარვადგინო პრეტენზია</h3>
 <ol>
-    <li>დაგვიკავშირდით: <a href="mailto:${c.email}">${c.email}</a> ან <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>.</li>
-    <li>მიუთითეთ შეკვეთის ნომერი, პროდუქტი და მოკლედ აღწერეთ პრობლემა; სასურველია ფოტო ან ვიდეო.</li>
-    <li>განცხადებაზე პასუხს მიიღებთ <strong>2 სამუშაო დღეში</strong> და შევათანხმებთ შემდეგ ნაბიჯს — დიაგნოსტიკას, შეკეთებას, შეცვლას ან თანხის დაბრუნებას.</li>
+    <li>დაგვიკავშირდით: <a href="mailto:${c.email}">${c.email}</a> ან <a href="tel:${tel}">${c.phone}</a>.</li>
+    <li>მიუთითეთ შეკვეთის ნომერი და პროდუქტი, მოკლედ აღწერეთ პრობლემა და, თუ შესაძლებელია, დაურთეთ ფოტო ან ვიდეო.</li>
+    <li>გიპასუხებთ <strong>2 სამუშაო დღეში</strong> და შევათანხმებთ შემდეგ ნაბიჯს — დიაგნოსტიკა, შეკეთება, შეცვლა ან თანხის დაბრუნება.</li>
 </ol>`
         }
     };
@@ -1595,7 +1603,7 @@ function legalContent() {
     <li>Legal name: <strong>${c.legalNameEn}</strong></li>
     <li>Tax ID: <strong>${c.taxId}</strong></li>
     <li>Address: ${c.addressEn}</li>
-    <li>Phone: <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a></li>
+    <li>Phone: <a href="tel:${tel}">${c.phone}</a></li>
     <li>Email: <a href="mailto:${c.email}">${c.email}</a></li>
 </ul>
 
@@ -1608,18 +1616,23 @@ function legalContent() {
 <p>An order is accepted once you receive confirmation by email or phone. You must provide accurate details; we are not liable for delays or failed delivery caused by incorrect information.</p>
 
 <h3>4. Payment</h3>
-<p>You may pay by bank card or through a partner bank's instalment plan. Instalment terms, including interest and duration, are set by that bank under a separate agreement — ${c.legalNameEn} is not a party to it.</p>
-<p>The Website never stores full card details: payment is processed on the bank's own secure page.</p>
+<p>The Website offers the following payment methods:</p>
+<ul>
+    <li><strong>Card online</strong> — Visa / Mastercard, on the secure payment page of TBC Bank or Bank of Georgia. You enter card details only on the bank's page; the Website never receives or stores them.</li>
+    <li><strong>Instalments</strong> — online financing from TBC Bank or Bank of Georgia. Approval, interest, term and all other conditions are set by the bank under a separate agreement to which ${c.legalNameEn} is not a party. The monthly amount shown on the Website is indicative. A personal ID number is required for an instalment application.</li>
+    <li><strong>Cash on delivery</strong> — you pay the courier in Lari when the product is handed over and receive a receipt. A cash order becomes binding once we confirm it by phone.</li>
+</ul>
+<p>Installation is not included in the product price and is paid separately, on site, after the work is complete (see section 6).</p>
 
 <h3>5. Delivery</h3>
-<p>Delivery takes place within the period agreed after the order is confirmed. On delivery, check that the packaging is intact and inspect the product. Visible transport damage must be recorded at the moment of receipt; claims of this kind raised later cannot be accepted.</p>
+<p>Delivery takes place within the period agreed after the order is confirmed, normally 2–5 business days. On delivery, check that the packaging is intact and inspect the product. Visible transport damage must be recorded at the moment of receipt; claims of this kind raised later cannot be accepted.</p>
 
 <h3>6. Installation</h3>
 <p>Installation is a separate service and is not included in the product price unless expressly stated. Its cost depends on the site and is set after an on-site inspection; you pay once the work is complete.</p>
-<p>Please note: a manufacturer's warranty is generally void if installation was carried out by an unauthorised party. We recommend booking installation with us or with an authorised service centre.</p>
+<p>Please note: a manufacturer's warranty is generally void if installation was carried out by an unauthorised party. We recommend booking installation with us or with an authorised service centre. Installation work carried out by us is covered by a <strong>${w}-month</strong> warranty (see <a href="#returns">Returns & Warranty</a>).</p>
 
 <h3>7. Intellectual property</h3>
-<p>The Website's design, texts and materials are protected by copyright. Brand trademarks belong to their owners and are used to identify the products.</p>
+<p>The Website's design, texts and materials are protected by copyright. Brand trademarks belong to their owners and are used only to identify the products.</p>
 
 <h3>8. Limitation of liability</h3>
 <p>The Website is provided "as is". We are not liable for damage arising from technical faults or temporary unavailability. This clause does not limit the rights guaranteed to you by the Georgian Law on Consumer Rights Protection.</p>
@@ -1640,37 +1653,45 @@ function legalContent() {
 
 <h3>2. What we collect</h3>
 <ul>
-    <li><strong>Contact and identity:</strong> first and last name, phone, email, address.</li>
-    <li><strong>Personal ID number:</strong> only where required to arrange an instalment plan or issue an invoice.</li>
-    <li><strong>Order data:</strong> the product purchased, amount, payment method and order status.</li>
-    <li><strong>Technical data:</strong> IP address, browser type, usage statistics.</li>
+    <li><strong>Account:</strong> email and password (stored hashed), or — if you sign in with Google — the name and email of your Google account.</li>
+    <li><strong>Order:</strong> first and last name, phone, email, delivery address, the product ordered, amount, payment method and order status. You can order without an account; in that case we keep only the order data.</li>
+    <li><strong>Personal ID number:</strong> only for an instalment application, because the bank requires it. It is not required for card or cash orders.</li>
+    <li><strong>Service booking:</strong> name, phone, address, preferred date and any note you leave when booking installation, dismantling or maintenance.</li>
+    <li><strong>Technical data:</strong> we do not currently use any analytics tools. Our database provider (Supabase) keeps standard server logs (IP address, request time) for security purposes.</li>
 </ul>
-<p><strong>We do not collect or store full card details.</strong> Payment is processed by the bank; we may retain only the last 4 digits and the card type, for your convenience.</p>
+<p><strong>We do not collect or store card details.</strong> Card payment takes place entirely on the secure page of TBC Bank or Bank of Georgia. The Website records only which bank you chose.</p>
 
 <h3>3. Legal basis and purpose</h3>
 <ul>
     <li><strong>Performance of a contract</strong> — processing your order, delivery, installation, warranty service.</li>
     <li><strong>Legal obligation</strong> — accounting and tax records.</li>
-    <li><strong>Consent</strong> — marketing messages and non-essential cookies. Consent can be withdrawn at any time.</li>
+    <li><strong>Consent</strong> — analytics or marketing cookies, should we introduce them in future. Consent can be withdrawn at any time.</li>
     <li><strong>Legitimate interest</strong> — securing and improving the Website.</li>
 </ul>
 
 <h3>4. Who we share with</h3>
-<p>We do not sell data. We share only what is necessary: with our courier and installation partners (delivery address and phone), the bank (to process payment or an instalment plan), authorised service centres (for warranty work), our accounting and IT providers, and with authorised public bodies where the law requires it.</p>
-<p>The Website uses third-party services that may process data outside Georgia: <strong>Supabase</strong> (database and authentication), <strong>Google Analytics</strong> (statistics), <strong>Meta Pixel</strong> (advertising performance) and <strong>Google Sign-In</strong>. These providers maintain an adequate level of protection.</p>
+<p>We do not sell data. We share only what is necessary: with our courier and installation team (delivery address and phone), with TBC Bank or Bank of Georgia (to process a payment or an instalment application), with the official distributor's service centre (for warranty work), with our accounting and IT providers, and with authorised public bodies where the law requires it.</p>
+<p>The Website uses the following third-party services, which may process data outside Georgia:</p>
+<ul>
+    <li><strong>Supabase</strong> — database and authentication; servers located in the European Union (Frankfurt).</li>
+    <li><strong>Google</strong> — Google Sign-In, only if you choose that method yourself.</li>
+</ul>
 
 <h3>5. Retention</h3>
-<p>Order and accounting records are kept for the <strong>6 years</strong> required by law. Account data is kept while the account is active; on a deletion request we erase it, except where retention is legally required.</p>
+<p>Order and accounting records are kept for the <strong>6 years</strong> required by law. Service booking data is kept for 1 year after the work is completed (for warranty purposes). Account data is kept while the account is active; on a deletion request we erase it, except where retention is legally required.</p>
 
 <h3>6. Your rights</h3>
 <p>You have the right to be informed about the processing; to request a copy, correction, update, blocking, erasure or destruction of your data; to withdraw consent; and to data portability. We respond within the statutory period, free of charge.</p>
 <p>Write to <a href="mailto:${c.email}">${c.email}</a>. If our response does not satisfy you, you may contact the <a href="https://personaldata.ge" target="_blank" rel="noopener">Personal Data Protection Service</a> or the courts.</p>
 
-<h3>7. Cookies</h3>
-<p>Essential cookies make the cart, sign-in and language choice work — the Website cannot function without them. Analytics and marketing cookies are used only with your consent, which you can change in your browser settings.</p>
+<h3>7. Cookies and similar technologies</h3>
+<p><strong>Essential.</strong> The Website stores only two things in your browser: your chosen language and — if you signed in — your login session. The Website cannot work without them, so no consent is needed. These records are not visible to other websites.</p>
+<p><strong>Analytics and marketing.</strong> The Website currently uses no analytics or advertising cookies and does not count your visit. If we introduce such a tool in future, it will load only after you give consent on a banner shown on the Website, and this policy will be updated accordingly.</p>
+<p><strong>Third-party.</strong> If you use Google Sign-In, Google sets its own cookies under its own <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>. If you do not use Google Sign-In, these cookies are never created.</p>
+<p><strong>Deleting.</strong> Clearing the Website's data in your browser settings removes the language choice and the session; the Website simply continues to work as normal.</p>
 
 <h3>8. Security</h3>
-<p>Connections are encrypted (HTTPS), database access is restricted, and the admin panel is available only to authorised staff.</p>`
+<p>Connections are encrypted (HTTPS), database access is restricted to the data owner and authorised staff, and the admin panel is available only to authorised personnel.</p>`
         },
         returns: {
             title: "Returns & Warranty",
@@ -1685,7 +1706,7 @@ function legalContent() {
     <li>complete, in its original packaging, with all accessories and documents;</li>
     <li>in resalable condition.</li>
 </ul>
-<p>We refund you <strong>within 14 days</strong> of receiving the product back, using the same method you paid with.</p>
+<p>We refund you <strong>within 14 days</strong> of receiving the product back, using the same method you paid with; for cash orders, to your bank account.</p>
 
 <h3>2. When the 14-day right does not apply</h3>
 <p>It does not apply where the product:</p>
@@ -1700,22 +1721,32 @@ function legalContent() {
 <p>If a product is faulty or differs materially from the description on the Website, you may require — in this order — <strong>free repair or replacement</strong>; and where that is impossible or disproportionate, <strong>a price reduction or cancellation of the contract</strong> with a full refund.</p>
 <p>In that case we cover the cost of return shipping. Under the law, a fault that appears within <strong>6 months</strong> of receipt is presumed to have existed from the outset unless the contrary is proven.</p>
 
-<h3>4. Warranty</h3>
-<p>Every product carries the manufacturer's warranty. The exact term is stated on the warranty card and on the product page (typically 1–5 years for an air conditioner, longer for the compressor). Separately, the <strong>2-year</strong> statutory conformity guarantee applies in its own right.</p>
-<p>Warranty service requires the warranty card and proof of purchase (receipt or invoice).</p>
+<h3>4. Product warranty</h3>
+<p>Every product carries the manufacturer's warranty, provided in Georgia by the official distributor. The exact term is stated on the warranty card and on the product page (typically 1–5 years for an air conditioner, longer for the compressor). Separately, the <strong>2-year</strong> statutory conformity guarantee applies in its own right.</p>
+<p>Warranty repairs are carried out by the distributor's authorised service centre. Service requires the warranty card and proof of purchase (receipt or invoice). We will help you contact the service centre and hand over the product.</p>
+<p>A replacement is made with your consent, with a product of the same or higher value (you cover the difference) that is available for sale at the time of replacement.</p>
 
-<h3>5. When the warranty does not apply</h3>
+<h3>5. Installation work warranty</h3>
+<p>Installation work carried out by us (bracket mounting, piping, vacuuming, connection) is covered by a <strong>${w}-month</strong> warranty from the day the work is completed. During this period we fix free of charge any defect caused by the quality of the installation, such as a refrigerant leak at a joint or condensate dripping.</p>
+
+<h3>6. When the warranty does not apply</h3>
+<p>Warranty service is not provided where:</p>
 <ul>
-    <li>installation was carried out by an unauthorised party, or the manufacturer's instructions were not followed;</li>
-    <li>required periodic servicing (filter cleaning, maintenance) was not performed;</li>
-    <li>the damage was caused by a power-supply fault, a natural event, flooding or mechanical impact;</li>
-    <li>the product was repaired or opened by a third party;</li>
-    <li>the serial number has been removed or damaged.</li>
+    <li>the warranty period has expired;</li>
+    <li>you cannot present the warranty card and the product cannot otherwise be identified;</li>
+    <li>the serial number has been removed, altered or is unreadable, or a seal has been broken;</li>
+    <li>the damage was caused by mechanical impact, improper use, or a breach of the storage conditions;</li>
+    <li>the damage was caused by liquid or foreign-body ingress, lightning or another natural event;</li>
+    <li>the damage was caused by voltage fluctuations in the power supply (we recommend a voltage stabiliser);</li>
+    <li>installation, dismantling or repair was carried out by an unauthorised party;</li>
+    <li>the periodic maintenance required by the manufacturer (filter cleaning, servicing) was not performed;</li>
+    <li>a household-rated product was used for commercial purposes.</li>
 </ul>
+<p>The warranty does not cover consumables that are replaced in normal use (filters, remote-control batteries and the like).</p>
 
-<h3>6. How to start a claim</h3>
+<h3>7. How to start a claim</h3>
 <ol>
-    <li>Contact us at <a href="mailto:${c.email}">${c.email}</a> or <a href="tel:${c.phone.replace(/\s/g, "")}">${c.phone}</a>.</li>
+    <li>Contact us at <a href="mailto:${c.email}">${c.email}</a> or <a href="tel:${tel}">${c.phone}</a>.</li>
     <li>Give your order number and the product, describe the problem briefly, and attach a photo or video if you can.</li>
     <li>We reply within <strong>2 working days</strong> and agree the next step with you — diagnosis, repair, replacement or refund.</li>
 </ol>`
@@ -2219,8 +2250,9 @@ function renderCheckoutPage(p) {
                             <input type="tel" id="co-phone" class="form-input" placeholder="+995 5xx xx xx xx" required value="${profile.phone || ''}">
                         </div>
                         <div class="form-control-group">
-                            <label class="input-label" for="co-idnum">${t("co-idnum")} <span class="required">*</span></label>
-                            <input type="text" id="co-idnum" class="form-input" placeholder="01001234567" maxlength="11" inputmode="numeric" required value="${profile.idNumber || ''}">
+                            <label class="input-label" for="co-idnum">${t("co-idnum")}</label>
+                            <input type="text" id="co-idnum" class="form-input" placeholder="01001234567" maxlength="11" inputmode="numeric" value="${profile.idNumber || ''}">
+                            <small class="field-hint">${t("co-idnum-hint")}</small>
                         </div>
                         <div class="form-control-group co-field-full">
                             <label class="input-label" for="co-address">${t("co-address")} <span class="required">*</span></label>
@@ -2240,7 +2272,7 @@ function renderCheckoutPage(p) {
                     <p class="install-note"><i class="fa-solid fa-circle-info"></i> ${t("detail-install-note")}</p>
                 </div>
 
-                <!-- Payment method: TBC / BOG card payment -->
+                <!-- Payment method: TBC / BOG card payment (on the bank's page) or cash on delivery -->
                 <div class="detail-panel">
                     <h3><i class="fa-solid fa-credit-card"></i> ${t("co-payment-header")}</h3>
                     <div class="pay-bank-options">
@@ -2259,6 +2291,15 @@ function renderCheckoutPage(p) {
                             <span class="pay-bank-text">
                                 <strong>Bank of Georgia</strong>
                                 <small>${t("co-pay-card-desc")}</small>
+                            </span>
+                            <i class="fa-solid fa-circle-check pay-check"></i>
+                        </label>
+                        <label class="pay-bank-card">
+                            <input type="radio" name="co-bank" value="cash">
+                            <span class="bank-logo bank-cash"><i class="fa-solid fa-money-bill-wave"></i></span>
+                            <span class="pay-bank-text">
+                                <strong>${t("co-pay-cash")}</strong>
+                                <small>${t("co-pay-cash-desc")}</small>
                             </span>
                             <i class="fa-solid fa-circle-check pay-check"></i>
                         </label>
@@ -2321,6 +2362,19 @@ function renderCheckoutPage(p) {
         document.getElementById("co-install-row").classList.toggle("hidden", !e.target.checked);
     });
 
+    // Cash on delivery is an order, not a payment — the button and note say so
+    const coPayBtn = document.getElementById("co-pay-btn");
+    const coSecureNote = document.querySelector(".co-secure-note");
+    const priceLabel = `${p.price.toLocaleString()} ₾`;
+    function refreshPayButton() {
+        const isCash = document.querySelector('input[name="co-bank"]:checked').value === "cash";
+        coPayBtn.innerHTML = isCash
+            ? `<i class="fa-solid fa-truck-fast"></i> ${t("co-order-btn")} — ${priceLabel}`
+            : `<i class="fa-solid fa-lock"></i> ${t("co-pay-btn")} — ${priceLabel}`;
+        if (coSecureNote) coSecureNote.classList.toggle("hidden", isCash);
+    }
+    document.querySelectorAll('input[name="co-bank"]').forEach(r => r.addEventListener("change", refreshPayButton));
+
     // Submit → validate → mock payment → success modal
     document.getElementById("co-form").addEventListener("submit", (e) => {
         e.preventDefault();
@@ -2331,31 +2385,32 @@ function renderCheckoutPage(p) {
         const address = document.getElementById("co-address").value.trim();
         const idNumber = document.getElementById("co-idnum").value.trim();
 
-        if (!firstName || !lastName || !phone || !address || !idNumber) return;
+        if (!firstName || !lastName || !phone || !address) return;
         let guestEmail = "";
         if (isGuest) {
             guestEmail = document.getElementById("co-email").value.trim();
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) { alert(t("auth-err-email")); return; }
         }
-        if (!/^\d{11}$/.test(idNumber)) { alert(t("co-err-id")); return; }
+        if (idNumber && !/^\d{11}$/.test(idNumber)) { alert(t("co-err-id")); return; }
         if (phone.replace(/\D/g, "").length < 9) { alert(t("co-err-phone")); return; }
 
         // Remember the profile for the next purchase (accounts only — guests aren't stored)
         if (!isGuest) {
             saveProfile({
                 first_name: firstName, last_name: lastName,
-                phone: phone, address: address, personal_id: idNumber
+                phone: phone, address: address,
+                ...(idNumber ? { personal_id: idNumber } : {})   // never wipe a stored ID with an empty field
             });
         }
 
         const withInstall = document.getElementById("co-install-toggle").checked;
         const bankVal = document.querySelector('input[name="co-bank"]:checked').value;
-        const bankName = bankVal === "tbc" ? "TBC Bank" : "Bank of Georgia";
+        const bankName = bankVal === "tbc" ? "TBC Bank" : bankVal === "bog" ? "Bank of Georgia" : t("co-pay-cash");
 
         // Analytics is optional — never let a missing/blocked script break checkout
         const track = (fn, ...args) => { if (typeof window[fn] === "function") window[fn](...args); };
 
-        // Mock card processing (no real gateway on a static site)
+        // Mock card processing (no real gateway on a static site); cash orders just get recorded
         const payBtn = document.getElementById("co-pay-btn");
         payBtn.disabled = true;
         payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-processing")}`;
@@ -2373,7 +2428,7 @@ function renderCheckoutPage(p) {
                 customer_name: `${firstName} ${lastName}`,
                 phone: phone,
                 address: address,
-                personal_id: idNumber,
+                personal_id: idNumber || null,
                 product_id: typeof p.id === "string" ? p.id : null, // demo products have no DB id
                 product_title: p.title.ka,
                 amount: p.price,
@@ -2487,7 +2542,6 @@ function renderAccountPage(tab) {
     const TABS = [
         { key: "orders", icon: "fa-box", label: t("acc-nav-orders") },
         { key: "details", icon: "fa-address-card", label: t("acc-nav-details") },
-        { key: "cards", icon: "fa-credit-card", label: t("acc-nav-cards") },
         { key: "security", icon: "fa-shield-halved", label: t("acc-nav-security") }
     ];
 
@@ -2596,45 +2650,6 @@ function buildAccountTab(acc, tab) {
             </form>`;
     }
 
-    if (tab === "cards") {
-        const cards = acc.cards || [];
-        const list = cards.length
-            ? cards.map((c, i) => `
-                <div class="card-item">
-                    <span class="bank-logo brand-${c.brand.toLowerCase()}">${c.brand}</span>
-                    <div class="card-item-text">
-                        <strong>•••• ${c.last4}</strong>
-                        <small>${c.holder} · ${c.expiry}</small>
-                    </div>
-                    <button type="button" class="card-remove-btn" data-idx="${i}" title="${t("acc-remove")}"><i class="fa-solid fa-trash-can"></i></button>
-                </div>`).join('')
-            : `<p class="acc-muted">${t("acc-no-cards")}</p>`;
-
-        return `
-            <h3>${t("acc-nav-cards")}</h3>
-            <div class="cards-list">${list}</div>
-            <form id="acc-card-form" novalidate>
-                <div class="co-field-grid">
-                    <div class="form-control-group co-field-full">
-                        <label class="input-label" for="acc-card-number">${t("acc-card-number")}</label>
-                        <input type="text" id="acc-card-number" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
-                    </div>
-                    <div class="form-control-group">
-                        <label class="input-label" for="acc-card-expiry">${t("acc-card-expiry")}</label>
-                        <input type="text" id="acc-card-expiry" class="form-input" placeholder="12/28" maxlength="5">
-                    </div>
-                    <div class="form-control-group">
-                        <label class="input-label" for="acc-card-holder">${t("acc-card-holder")}</label>
-                        <input type="text" id="acc-card-holder" class="form-input" placeholder="GIORGI BERIDZE">
-                    </div>
-                </div>
-                <div class="acc-form-footer">
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> ${t("acc-add-card")}</button>
-                </div>
-            </form>
-            <p class="install-note"><i class="fa-solid fa-circle-info"></i> ${t("acc-card-note")}</p>`;
-    }
-
     // Security tab
     if (acc.provider === "google") {
         return `
@@ -2700,38 +2715,6 @@ function bindAccountTabEvents() {
             });
             if (error) { alert(error.message); return; }
             flashSaved("acc-details-saved");
-        });
-    }
-
-    // Saved cards
-    const cardForm = document.getElementById("acc-card-form");
-    if (cardForm) {
-        cardForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const num = document.getElementById("acc-card-number").value.replace(/\D/g, "");
-            const expiry = document.getElementById("acc-card-expiry").value.trim();
-            const holder = document.getElementById("acc-card-holder").value.trim();
-            if (num.length < 15 || num.length > 16 || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry) || !holder) {
-                alert(t("acc-err-card"));
-                return;
-            }
-            const brand = num[0] === '4' ? 'VISA' : (num[0] === '5' ? 'MC' : 'CARD');
-            const cards = (state.profile && Array.isArray(state.profile.cards)) ? [...state.profile.cards] : [];
-            // last4 only — the full number and CVV are never stored
-            cards.push({ last4: num.slice(-4), brand: brand, expiry: expiry, holder: holder });
-            const { error } = await saveProfile({ cards });
-            if (error) { alert(error.message); return; }
-            renderAccountPage("cards");
-        });
-
-        document.querySelectorAll(".card-remove-btn").forEach(btn => {
-            btn.addEventListener("click", async () => {
-                const cards = (state.profile && Array.isArray(state.profile.cards)) ? [...state.profile.cards] : [];
-                cards.splice(parseInt(btn.getAttribute("data-idx")), 1);
-                const { error } = await saveProfile({ cards });
-                if (error) { alert(error.message); return; }
-                renderAccountPage("cards");
-            });
         });
     }
 

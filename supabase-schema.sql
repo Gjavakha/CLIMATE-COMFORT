@@ -126,7 +126,7 @@ create table if not exists orders (
     needs_install   boolean not null default false,
     order_type      text not null default 'standard'         -- 'standard' | 'financing'
                     check (order_type in ('standard','financing')),
-    payment_method  text,                                    -- 'tbc' | 'bog' | null
+    payment_method  text,                                    -- 'tbc' | 'bog' | 'cash' | null
     payment_status  text not null default 'pending'
                     check (payment_status in ('pending','paid','failed','refunded')),
     status          text not null default 'new'

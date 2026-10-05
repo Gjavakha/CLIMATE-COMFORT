@@ -400,7 +400,7 @@ function renderOrders() {
                     <div class="detail-item"><p>Email</p><p>${esc(o.user_email) || "—"}</p></div>
                     <div class="detail-item"><p>Delivery address</p><p>${esc(o.address)}</p></div>
                     <div class="detail-item"><p>Personal ID</p><p>${esc(o.personal_id) || "—"}</p></div>
-                    <div class="detail-item"><p>Bank</p><p>${o.payment_method ? esc(o.payment_method).toUpperCase() : "—"}</p></div>
+                    <div class="detail-item"><p>Payment</p><p>${({ tbc: "TBC", bog: "BOG", cash: "Cash on delivery" })[o.payment_method] || "—"}</p></div>
                     <div class="detail-item"><p>Installation</p><p>${o.needs_install ? "Requested (paid on site)" : "No"}</p></div>
                 </div>
             </td>

@@ -1630,7 +1630,6 @@ img {
 
 .bog-logo-text { font-weight: 700; color: #ff5000; }
 .tbc-logo-text { font-weight: 700; color: #00aeef; }
-.liberty-logo-text { font-weight: 700; color: #00a294; }
 
 .bank-promo {
     font-size: 0.8rem;
@@ -3793,6 +3792,7 @@ body.checkout-view .booking-section {
 
 .bank-tbc { background-color: #00a3e0; }
 .bank-bog { background-color: #ff5b00; }
+.bank-cash { background-color: #2e7d32; }
 
 .pay-bank-text {
     display: flex;
@@ -4522,4 +4522,13 @@ body.legal-view .booking-section {
 .auth-forgot a:hover {
     color: var(--secondary);
     text-decoration: underline;
+}
+
+/* Inline helper text under a checkout field (e.g. optional personal ID) */
+.field-hint {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: #6b7280;
 }

@@ -1,5 +1,6 @@
 // ============================================================================
 // analytics.js — Google Analytics 4 + Meta Pixel, behind cookie consent.
+// Currently DORMANT: both IDs are blank, so no banner is shown and nothing loads.
 //
 // Nothing here loads until the visitor accepts analytics cookies, because the
 // privacy policy promises exactly that: essential cookies always, analytics
@@ -209,6 +210,17 @@ function openCookieSettings() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // No tracker configured → nothing to consent to. The banner and the footer
+    // "Cookie settings" link stay hidden so the privacy policy ("we currently
+    // use no analytics or marketing cookies") remains true. Fill in an ID in
+    // ANALYTICS_CONFIG and both reappear automatically — then update the policy.
+    const configured = !!(ANALYTICS_CONFIG.ga4MeasurementId || ANALYTICS_CONFIG.metaPixelId);
+    if (!configured) {
+        const li = document.getElementById("cookie-settings-link");
+        if (li && li.parentElement) li.parentElement.style.display = "none";
+        return;
+    }
+
     const consent = getConsent();
     if (consent === "granted") {
         loadTrackers();
