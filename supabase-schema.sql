@@ -67,6 +67,9 @@ create table if not exists products (
 alter table products add column if not exists images jsonb not null default '[]'::jsonb;
 alter table products add column if not exists specs  jsonb not null default '[]'::jsonb;
 alter table products add column if not exists stock_status text; -- 'in' | 'low' | null, set by the importer
+-- Manual "pull from the shop" switch. The importer recomputes is_published for
+-- every product on every upload; it leaves hidden products unpublished.
+alter table products add column if not exists hidden boolean not null default false;
 
 -- ----------------------------------------------------------------------------
 -- Supplier offers: one row per supplier per product. Holds ALL price levels

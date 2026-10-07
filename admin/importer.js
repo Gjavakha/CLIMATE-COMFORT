@@ -406,7 +406,10 @@ async function applyImport() {
             const next = { ...prod };
             next.display_price = best ? best.displayPrice : null;
             next.display_old_price = best && best.displayOldPrice ? best.displayOldPrice : null;
-            next.is_published = !!best;
+            // `hidden` is a manual override (e.g. a brand pulled from the shop for
+            // a while). Every import recomputes is_published for ALL products, so
+            // without this check the next upload of any file would re-publish them.
+            next.is_published = !!best && !prod.hidden;
             next.stock_status = best
                 ? (candidates.some(o => offerStockLevel(o) === "in") ? "in" : "low")
                 : null;

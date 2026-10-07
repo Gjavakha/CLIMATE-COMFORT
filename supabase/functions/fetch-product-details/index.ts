@@ -89,12 +89,80 @@ function parseKontakt(html: string) {
     };
 }
 
+// midea.ge — the official distributor's product page (linked from column L of
+// their dealer price list). Server-rendered HTML:
+//   - main photo in <meta property="og:image">, the rest of the gallery as
+//     <a href=".../uploads/products/X.jpg"> inside .product-inner-images; the
+//     same page also lists OTHER models' photos under .product-inner-models,
+//     so the gallery is cut off at that point;
+//   - specs in <table class='specs-table'>: each row is a long run of mostly
+//     empty <td>s — the non-empty ones are [label..., unit?, value]. A row with
+//     a single cell ('ფუნქციები') starts a new group.
+function parseMidea(html: string) {
+    const abs = (u: string) => {
+        let s = u.replace(/(https?:\/\/[^/]+)\/\/+/, "$1/");
+        if (s.startsWith("//")) s = "https:" + s;
+        else if (s.startsWith("/")) s = "https://www.midea.ge" + s;
+        else if (!/^https?:/i.test(s)) s = "https://www.midea.ge/" + s;
+        return s;
+    };
+
+    const images: string[] = [];
+    const og = /<meta\s+property="og:image"\s+content="([^"]+)"/i.exec(html);
+    if (og) images.push(abs(og[1]));
+
+    const start = html.indexOf('class="product-inner-images"');
+    if (start > -1) {
+        const stop = html.indexOf("product-inner-models", start);
+        const gallery = html.slice(start, stop > -1 ? stop : start + 20000);
+        for (const m of gallery.matchAll(/href="([^"]*uploads\/products\/[^"]+\.(?:jpe?g|png|webp))"/gi)) {
+            const u = abs(m[1]);
+            if (!images.includes(u)) images.push(u);
+        }
+    }
+
+    const strip = (s: string) =>
+        s.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+    const UNIT_RE = /^[A-Za-z0-9/()²³℃°%.\-\s]{1,12}$/;
+
+    const groups: { group: string; items: { name: string; value: string }[] }[] = [];
+    let current = { group: "ტექნიკური მახასიათებლები", items: [] as { name: string; value: string }[] };
+
+    const t0 = html.search(/class=['"]specs-table['"]/);
+    if (t0 > -1) {
+        const t1 = html.indexOf("</table>", t0);
+        const table = html.slice(t0, t1 > -1 ? t1 : undefined);
+        for (const tr of table.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)) {
+            const cells = [...tr[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((c) => strip(c[1])).filter(Boolean);
+            if (!cells.length) continue;
+            if (cells.length === 1) {
+                if (current.items.length) groups.push(current);
+                current = { group: cells[0], items: [] };
+                continue;
+            }
+            if (/^model$/i.test(cells[0])) continue; // the model code, already on the product
+
+            let value = cells[cells.length - 1];
+            let labelParts = cells.slice(0, -1);
+            if (labelParts.length >= 2 && UNIT_RE.test(labelParts[labelParts.length - 1])) {
+                value = `${value} ${labelParts[labelParts.length - 1]}`;
+                labelParts = labelParts.slice(0, -1);
+            }
+            current.items.push({ name: labelParts.join(" · "), value });
+        }
+        if (current.items.length) groups.push(current);
+    }
+
+    return { images, specs: groups, description: null as string | null };
+}
+
 // ee.ge blocks requests from cloud/datacenter IPs (Cloudflare bot protection
 // returns 403 — or a full JS challenge via a reader proxy — for Supabase
 // Edge Functions specifically, while working fine from a residential IP).
 // Routed through Jina AI Reader (r.jina.ai) on the chance it isn't blocked
-// for a given request; Kontakt has no such block and is fetched directly.
-async function fetchDirect(url: string, supplier: "elit" | "kontakt") {
+// for a given request; Kontakt and midea.ge have no such block and are
+// fetched directly.
+async function fetchDirect(url: string, supplier: "elit" | "kontakt" | "midea") {
     const viaJina = supplier === "elit";
     const fetchUrl = viaJina ? "https://r.jina.ai/" + url : url;
     const headers: Record<string, string> = { ...BROWSER_HEADERS };
@@ -107,7 +175,9 @@ async function fetchDirect(url: string, supplier: "elit" | "kontakt") {
     // Force UTF-8 decoding: some supplier sites omit/mis-declare the charset
     // in Content-Type, which makes a plain res.text() mangle Georgian text.
     const html = new TextDecoder("utf-8").decode(await res.arrayBuffer());
-    return supplier === "elit" ? parseElit(html) : parseKontakt(html);
+    if (supplier === "elit") return parseElit(html);
+    if (supplier === "midea") return parseMidea(html);
+    return parseKontakt(html);
 }
 
 // --------------------------------------------------------------------------
@@ -231,7 +301,7 @@ Deno.serve(async (req) => {
         // (some carry sourceUrl, some an error) and they all normalize below.
         // deno-lint-ignore no-explicit-any
         let result: any = empty();
-        if (url && (supplier === "elit" || supplier === "kontakt")) {
+        if (url && (supplier === "elit" || supplier === "kontakt" || supplier === "midea")) {
             result = await fetchDirect(url, supplier);
         }
 

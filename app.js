@@ -260,6 +260,10 @@ const translations = {
         "footer-returns": "დაბრუნება და გარანტია",
         "footer-cookies": "Cookie პარამეტრები",
         "footer-follow-title": "გამოგვყევი",
+        "whatsapp-cta": "მოგვწერეთ",
+        "whatsapp-aria": "მოგვწერეთ WhatsApp-ზე",
+        "whatsapp-msg-general": "გამარჯობა! მაინტერესებს თქვენი პროდუქცია.",
+        "whatsapp-msg-product": "გამარჯობა! მაინტერესებს ეს პროდუქტი:",
         "footer-contact-title": "დაგვიკავშირდი",
         "footer-workhours": "ორშ - შაბ: 09:00 - 20:00",
         "footer-copyright": "საავტორო უფლება © 2026 Climate Comfort. ყველა უფლება დაცულია",
@@ -577,6 +581,10 @@ const translations = {
         "footer-returns": "Returns & Warranty",
         "footer-cookies": "Cookie settings",
         "footer-follow-title": "Follow us",
+        "whatsapp-cta": "Chat with us",
+        "whatsapp-aria": "Message us on WhatsApp",
+        "whatsapp-msg-general": "Hello! I'm interested in your products.",
+        "whatsapp-msg-product": "Hello! I'm interested in this product:",
         "footer-contact-title": "Get in touch",
         "footer-workhours": "Mon - Sat: 09:00 - 20:00",
         "footer-copyright": "Copyright © 2026 Climate Comfort. All rights reserved.",
@@ -1116,13 +1124,40 @@ async function loadDbProducts() {
     }
 }
 
-// Fire-and-forget order persistence: the shopper's flow never blocks on it,
-// but every order lands in the database for the admin page.
+// Order persistence + confirmation email. The shopper's flow never blocks on
+// either: the success modal is shown regardless, and a mail failure must not
+// look like a failed order — the order is already safely in the database.
 function saveOrderToDb(order) {
     if (!sbClient) return;
-    sbClient.from("orders").insert(order).then(({ error }) => {
-        if (error) console.warn("Order was not saved to the database:", error.message);
+    // The id is generated here rather than read back after the insert: RLS lets
+    // anyone create an order but only its owner select it, so a guest checkout
+    // would get nothing back from .select(). Supplying the uuid ourselves keeps
+    // guests and signed-in buyers on the same path.
+    const id = (crypto.randomUUID && crypto.randomUUID()) || null;
+    const row = id ? { id, ...order } : order;
+
+    sbClient.from("orders").insert(row).then(({ error }) => {
+        if (error) { console.warn("Order was not saved to the database:", error.message); return; }
+        if (id) sendOrderEmail(id);
     });
+}
+
+// Mails the confirmation to the buyer and a copy to the shop. The function is
+// given only the order id — it reads the recipient from the database itself,
+// so this call cannot be abused to send mail to an arbitrary address.
+// The dashboard deployed the function under an auto-generated slug; the code
+// lives in supabase/functions/send-order-email/. If it is ever redeployed
+// under its proper name, change this one constant.
+const ORDER_EMAIL_FUNCTION = "rapid-action";
+
+function sendOrderEmail(orderId) {
+    if (!sbClient) return;
+    sbClient.functions.invoke(ORDER_EMAIL_FUNCTION, { body: { orderId } })
+        .then(({ data, error }) => {
+            if (error) console.warn("Confirmation email was not sent:", error.message);
+            else if (data && data.results) console.info("Order email:", data.results);
+        })
+        .catch(err => console.warn("Confirmation email failed:", err));
 }
 
 // Same for service bookings (admin page → Bookings tab)
@@ -1229,6 +1264,39 @@ function applyLanguage() {
         el.setAttribute("content", t(el.getAttribute("data-i18n-meta")));
     });
     document.documentElement.setAttribute("lang", state.currentLang);
+
+    updateWhatsAppLinks(whatsAppProduct);
+}
+
+// ==========================================================================
+// WhatsApp (business number) — footer link + floating button.
+// On a product page the message is pre-filled with that product's name and
+// link, so the shop knows what the customer is asking about before replying.
+// ==========================================================================
+const WHATSAPP_NUMBER = "995571989669"; // +995 571 98 96 69, digits only for wa.me
+let whatsAppProduct = null;
+
+function updateWhatsAppLinks(product) {
+    whatsAppProduct = product || null;
+
+    let text = t("whatsapp-msg-general");
+    if (whatsAppProduct) {
+        const title = whatsAppProduct.title
+            ? (whatsAppProduct.title[state.currentLang] || whatsAppProduct.title.ka)
+            : `${whatsAppProduct.brand} ${whatsAppProduct.model || ""}`.trim();
+        // Product links only mean something on the public site, not on localhost
+        const onPublicSite = !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+        text = `${t("whatsapp-msg-product")} ${title}` + (onPublicSite ? `\n${location.href}` : "");
+    }
+
+    const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    document.querySelectorAll(".js-whatsapp-link").forEach(a => a.setAttribute("href", href));
+
+    const floatBtn = document.getElementById("whatsapp-float");
+    if (floatBtn) {
+        floatBtn.setAttribute("aria-label", t("whatsapp-aria"));
+        floatBtn.setAttribute("title", t("whatsapp-aria"));
+    }
 }
 
 // Faceted Counter Generator
@@ -1791,6 +1859,9 @@ function handleRouting() {
     const isAccount = location.hash === "#account";
     const legalSlug = LEGAL_SLUGS.includes(location.hash.slice(1)) ? location.hash.slice(1) : null;
     const wasOnSubPage = SUBPAGE_CLASSES.some(c => document.body.classList.contains(c));
+
+    // WhatsApp message follows the page: product name on a product/checkout page
+    updateWhatsAppLinks(detailProduct || checkoutProduct);
 
     // Checkout requires an account (or explicit guest mode) — bounce to the product page and ask to sign in
     if (checkoutProduct && !state.user && !state.guestCheckout) {

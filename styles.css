@@ -2805,8 +2805,28 @@ img {
 
 /* Up to 768px (Mobile & Tablets) */
 @media (max-width: 768px) {
+    /* The logo keeps its desktop size on phones, which pushed the header past
+       the viewport (logo 258px + actions 151px + 48px padding = 457px on a
+       375px screen). Scale the logo down and tighten the gutters instead. */
     .header-container {
         height: 70px;
+        gap: 10px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .logo {
+        font-size: 1.15rem;
+        gap: 7px;
+    }
+
+    .logo-img {
+        width: 34px;
+        height: 34px;
+    }
+
+    .domain-tld {
+        font-size: 0.9rem;
     }
 
     .header-search {
@@ -2818,9 +2838,10 @@ img {
     }
 
     .header-actions {
-        gap: 12px;
+        gap: 10px;
+        flex-shrink: 0;
     }
-    
+
     .hero-title {
         font-size: 2.25rem;
     }
@@ -4532,3 +4553,188 @@ body.legal-view .booking-section {
     line-height: 1.35;
     color: #6b7280;
 }
+
+/* --------------------------------------------------------------------------
+   Very narrow phones (360-400px: iPhone SE/13 mini, most Android)
+   Last resort before the header would overflow: drop ".ge" and tighten the
+   language switch. Nothing functional is lost — every control stays tappable.
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+    .header-container {
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 8px;
+    }
+
+    .logo {
+        font-size: 1.02rem;
+        gap: 6px;
+    }
+
+    .logo-img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .domain-tld {
+        display: none;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .lang-selector {
+        gap: 2px;
+    }
+
+    .cart-trigger {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Catalogue control bar on phones.
+   The bar is a single non-wrapping flex row (count on the left, "Sort by" +
+   dropdown on the right). At 375px the sorting group alone is 332px wide, so
+   the row pushed the whole page 72px past the viewport. Let it wrap and let
+   the dropdown shrink.
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .catalog-control-bar {
+        flex-wrap: wrap;
+        gap: 10px 14px;
+        padding: 14px 16px;
+    }
+
+    .catalog-sorting {
+        flex: 1 1 100%;
+        min-width: 0;
+        justify-content: space-between;
+    }
+
+    .catalog-sorting label {
+        flex-shrink: 0;
+    }
+
+    .sort-dropdown {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Booking cards on small phones.
+   40px of padding on each side plus the form's own minimum width held the
+   card at 348px, so screens narrower than ~372px scrolled sideways.
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .booking-card {
+        padding: 24px 18px;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .booking-card {
+        padding: 20px 14px;
+    }
+
+    /* Service/extras grids inside the booking form collapse to one column */
+    .booking-card .co-field-grid,
+    .booking-card .service-options,
+    .booking-card .extras-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   Floating WhatsApp button
+   Above page content and the sticky header, below the cart drawer (1001),
+   the mobile filter panel (1050) and modals (2000) — those cover it when open.
+   ========================================================================== */
+.whatsapp-float {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 22px 0 18px;
+    border-radius: var(--radius-full);
+    background: #25d366;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35), 0 2px 6px rgba(15, 23, 42, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.whatsapp-float i {
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.whatsapp-float:hover {
+    background: #1ebe5b;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45), 0 3px 8px rgba(15, 23, 42, 0.14);
+}
+
+.whatsapp-float:focus-visible {
+    outline: 3px solid rgba(37, 211, 102, 0.45);
+    outline-offset: 3px;
+}
+
+/* A soft ring every few seconds draws the eye without being noisy */
+.whatsapp-float::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+    animation: whatsapp-ring 3.2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes whatsapp-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.45); }
+    60%  { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .whatsapp-float::after { animation: none; }
+}
+
+/* Phones: icon-only circle, so it never covers product cards or buttons */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        right: 16px;
+        bottom: 16px;
+        width: 56px;
+        height: 56px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .whatsapp-float-label {
+        display: none;
+    }
+
+    .whatsapp-float i {
+        font-size: 1.9rem;
+    }
+}
+
+/* Leave room so the button never sits on top of the last line of the footer */
+.footer-bottom {
+    padding-bottom: 84px;
+}
+

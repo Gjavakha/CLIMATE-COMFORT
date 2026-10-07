@@ -81,7 +81,10 @@
                     "closes": "20:00"
                 }],
                 "areaServed": { "@type": "Country", "name": "Georgia" },
-                "sameAs": []
+                "sameAs": [
+                    "https://www.facebook.com/climatecomfort1",
+                    "https://www.instagram.com/climatecomfort1"
+                ]
             },
             {
                 "@type": "WebSite",
@@ -921,10 +924,9 @@
             <div class="footer-links-col">
                 <h4 data-i18n="footer-follow-title">გამოგვყევი</h4>
                 <ul class="footer-social-list">
-                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-facebook-f"></i></span>Facebook</a></li>
-                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-instagram"></i></span>Instagram</a></li>
-                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-tiktok"></i></span>TikTok</a></li>
-                    <li><a href="#" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-youtube"></i></span>YouTube</a></li>
+                    <li><a href="https://www.facebook.com/climatecomfort1" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-facebook-f"></i></span>Facebook</a></li>
+                    <li><a href="https://www.instagram.com/climatecomfort1" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-instagram"></i></span>Instagram</a></li>
+                    <li><a href="https://wa.me/995571989669" class="js-whatsapp-link" target="_blank" rel="noopener"><span class="footer-icon"><i class="fa-brands fa-whatsapp"></i></span>WhatsApp</a></li>
                 </ul>
             </div>
 
@@ -965,6 +967,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- Floating WhatsApp button — reachable from every page. On a product page
+         app.js pre-fills the message with that product's name and link. -->
+    <a href="https://wa.me/995571989669" class="whatsapp-float js-whatsapp-link" id="whatsapp-float"
+       target="_blank" rel="noopener" aria-label="WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-float-label" data-i18n="whatsapp-cta">მოგვწერეთ</span>
+    </a>
 
     <!-- JS script -->
     <!-- Supabase client (database: products, orders) — must load before app.js -->

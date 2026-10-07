@@ -358,6 +358,126 @@ const SUPPLIER_PROFILES = {
             };
         },
     },
+
+    // ------------------------------------------------------------------------
+    // Midea Georgia (official distributor, midea.ge) — "სადილერო პრაისი" workbook.
+    // Nine sheets; the one to import is 'სრული პრაისი' (the October-promo sheet
+    // is a subset of it with identical prices). It covers the whole Midea range,
+    // so only climate categories are kept.
+    //
+    // Quirks handled here:
+    //  - headers contain line breaks ('საცალო\n აქცია'), so columns are looked
+    //    up by whitespace-collapsed name rather than by exact key;
+    //  - model names carry suffixes the other suppliers don't use
+    //    ('MSAB-36HRFN8 INV', 'L1PB24-C28WM მილით'); they are stripped so the
+    //    row merges with the same model from Elit/Kontakt instead of creating
+    //    a duplicate. Colour suffixes (Black/Silver/Gold) are real separate
+    //    SKUs and are kept;
+    //  - column L ('www.midea.ge') carries a hyperlink to the product page on
+    //    midea.ge — the source for photos and the spec table;
+    //  - a flue-pipe accessory is filed under 'გათბობის ქვაბი'; boilers with
+    //    no kW in the description are skipped;
+    //  - BTU is sometimes written in Georgian ('60000ბტუ').
+    // ------------------------------------------------------------------------
+    midea: {
+        slug: "midea",
+        name: "Midea Georgia",
+        headerRow: 0,
+        linkColumns: ["www.midea.ge"],
+
+        detect(sheetNames) {
+            return sheetNames.includes("სრული პრაისი");
+        },
+
+        pickSheet() {
+            return "სრული პრაისი";
+        },
+
+        categoryMap: {
+            "კონდიციონერი":          "ac",
+            "კოლონური კონდიციონერი": "ac",
+            "გათბობის ქვაბი":        "boiler",
+        },
+
+        // row["საცალო\n  ფასი"] → col(row, "საცალო ფასი")
+        col(row, label) {
+            const want = label.replace(/\s+/g, " ").trim();
+            for (const key of Object.keys(row)) {
+                if (key.replace(/\s+/g, " ").trim() === want) return row[key];
+            }
+            return null;
+        },
+
+        normalizeModel(raw) {
+            return cleanText(raw)
+                .replace(/\s+(INV|INVERTER|ON\/OFF)$/i, "")
+                .replace(/\s+მილით$/, "")
+                .replace(/\s+/g, " ")
+                .trim()
+                .toUpperCase();
+        },
+
+        parseRow(row) {
+            const category = this.categoryMap[cleanText(this.col(row, "კატეგორია"))];
+            if (!category) return null; // fridges, washers, small appliances — not sold here
+
+            const rawModel = cleanText(this.col(row, "მოდელის დასახელება"));
+            if (!rawModel) return null;
+
+            const desc = cleanText(this.col(row, "აღწერა"));
+
+            let btu;
+            if (category === "boiler") {
+                btu = extractKw(desc);
+                if (!btu) return null; // accessory filed under boilers, not a boiler
+            } else {
+                btu = extractBtu(desc);
+                if (!btu) {
+                    const m = /(\d{4,6})\s*ბტუ/i.exec(desc);
+                    btu = m ? parseInt(m[1], 10) : null;
+                }
+                // Some series (EF1/EZ1/EZ2, portables) give no BTU in the text at
+                // all. Midea encodes it in the model code: 'EF1-09HRFN8' = 9000,
+                // 'MPPD-12CRN7' = 12000 — two digits right after a hyphen.
+                if (!btu) {
+                    const m = /-(\d{2})(?=[A-Z])/i.exec(rawModel);
+                    const n = m ? parseInt(m[1], 10) : 0;
+                    if (n >= 5 && n <= 60) btu = n * 1000;
+                }
+            }
+
+            const subtype = category !== "ac" ? null
+                : (/\bINV\b/i.test(rawModel) || /invert|ინვერტ/i.test(desc)) ? "inverter"
+                : /on\s*\/?\s*off/i.test(desc) ? "on_off" : null;
+
+            const retail = cleanPrice(this.col(row, "საცალო ფასი"));
+            let action   = cleanPrice(this.col(row, "საცალო აქცია"), { zeroMeansNull: true });
+            if (action && retail && action >= retail) action = null; // not actually a discount
+
+            const stock = cleanText(this.col(row, "ნაშთი"));
+
+            return {
+                // Uppercase Latin only: JS toUpperCase() turns Georgian into
+                // Mtavruli capitals ('მილით' → 'ᲛᲘᲚᲘᲗ'), which is not what the file says.
+                supplierItemCode: rawModel.replace(/[a-z]+/g, s => s.toUpperCase()),
+                brand: "MIDEA",
+                model: this.normalizeModel(rawModel),
+                category,
+                subtype,
+                btu,
+                areaSqm: extractAreaSqm(desc),
+                retailPrice:      retail,
+                actionPrice:      action,
+                dealerPrice:      cleanPrice(this.col(row, "სადილერო ფასი")),
+                dealerPromoPrice: cleanPrice(this.col(row, "სადილერო აქცია"), { zeroMeansNull: true }),
+                stockHint: stock,
+                inStock: !!stock && stock !== "0",
+                descriptionKa: desc,
+                referenceUrl: row["__link:www.midea.ge"] || null,
+                sourceRow: row,
+            };
+        },
+    },
 };
 
 // ---- pricing rule ----------------------------------------------------------
