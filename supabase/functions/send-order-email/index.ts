@@ -13,7 +13,7 @@
 //   2. Supabase → Edge Functions → Secrets:
 //        RESEND_API_KEY = re_xxxxxxxx
 //        ORDER_NOTIFY_TO = climatecomfortgroup@gmail.com   (optional)
-//        MAIL_FROM = "Climate Comfort <orders@climatecomfort.ge>"
+//        MAIL_FROM = "Climate Comfort <orders@climate-comfort.ge>"
 //      Until the domain is verified at Resend, use their sandbox sender:
 //        MAIL_FROM = "Climate Comfort <onboarding@resend.dev>"
 //
@@ -58,7 +58,7 @@ const SHOP = {
     name: "Climate Comfort",
     phone: "+995 32 2 111 848",
     email: "climatecomfortgroup@gmail.com",
-    site: "https://climatecomfort.ge",
+    site: "https://climate-comfort.ge",
 };
 
 const PAYMENT_LABEL: Record<string, string> = {

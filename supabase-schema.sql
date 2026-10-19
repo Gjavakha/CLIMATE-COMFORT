@@ -334,3 +334,60 @@ insert into suppliers (slug, name) values
     ('elit',    'Elit Electronics'),
     ('kontakt', 'Kontakt')
 on conflict (slug) do nothing;
+
+-- ----------------------------------------------------------------------------
+-- Bank of Georgia online payments (added 2026-10-16)
+--
+-- The storefront never talks to the bank. The Edge Functions in
+-- supabase/functions/bog-* create the bank order, receive the signed callback
+-- and sync the status; they write these columns with the service role key.
+-- Safe to re-run.
+-- ----------------------------------------------------------------------------
+alter table orders add column if not exists payment_provider     text;          -- 'bog' once a bank order exists
+alter table orders add column if not exists bog_order_id         text;          -- BOG order id (uuid from the bank)
+alter table orders add column if not exists bog_redirect_url     text;          -- hosted payment page for this order
+alter table orders add column if not exists bog_transaction_id   text;          -- payment_detail.transaction_id
+alter table orders add column if not exists bog_payer_identifier text;          -- masked card, e.g. 548888xxxxxx9893
+alter table orders add column if not exists bog_card_type        text;          -- visa | mc | amex
+alter table orders add column if not exists bog_order_status     text;          -- last raw order_status.key from the bank
+alter table orders add column if not exists payment_reason       text;          -- reject reason / response code text
+alter table orders add column if not exists paid_at              timestamptz;
+alter table orders add column if not exists payment_updated_at   timestamptz;
+
+create unique index if not exists idx_orders_bog_order on orders (bog_order_id) where bog_order_id is not null;
+
+-- Every callback the bank sends (and every manual status sync) is kept verbatim.
+create table if not exists payment_events (
+    id              uuid primary key default gen_random_uuid(),
+    order_id        uuid references orders (id),
+    provider        text not null default 'bog',
+    bog_order_id    text,
+    source          text not null,              -- 'callback' | 'status_sync' | 'create'
+    event           text,                       -- e.g. 'order_payment'
+    order_status    text,                       -- order_status.key at that moment
+    signature_valid boolean,                    -- null when no signature header was sent
+    payload         jsonb,
+    received_at     timestamptz not null default now()
+);
+
+create index if not exists idx_payment_events_order on payment_events (order_id, received_at desc);
+
+alter table payment_events enable row level security;
+
+-- Only admins may read the event log; nothing but the service role writes it.
+drop policy if exists payment_events_admin_select on payment_events;
+create policy payment_events_admin_select on payment_events
+    for select using (is_admin());
+
+-- A shopper may create an order, but never one that is already marked paid or
+-- already tied to a bank order — those fields are written only by the
+-- payment functions (service role, which bypasses RLS).
+drop policy if exists orders_insert_any on orders;
+create policy orders_insert_any on orders
+    for insert with check (
+        payment_status = 'pending'
+        and status = 'new'
+        and bog_order_id is null
+        and bog_transaction_id is null
+        and paid_at is null
+    );

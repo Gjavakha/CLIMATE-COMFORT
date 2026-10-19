@@ -1,0 +1,14 @@
+# Supabase CLI configuration (optional — the project is usually deployed from
+# the dashboard). The one setting that matters: the bank's callback carries no
+# Supabase JWT, so JWT verification must be OFF for bog-callback. When
+# deploying from the dashboard, switch "Verify JWT" off on that function.
+project_id = "qgujhxxezplvnbheaeqs"
+
+[functions.bog-callback]
+verify_jwt = false
+
+[functions.bog-create-payment]
+verify_jwt = true
+
+[functions.bog-payment-status]
+verify_jwt = true

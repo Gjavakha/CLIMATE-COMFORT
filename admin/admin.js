@@ -400,7 +400,12 @@ function renderOrders() {
                     <div class="detail-item"><p>Email</p><p>${esc(o.user_email) || "—"}</p></div>
                     <div class="detail-item"><p>Delivery address</p><p>${esc(o.address)}</p></div>
                     <div class="detail-item"><p>Personal ID</p><p>${esc(o.personal_id) || "—"}</p></div>
-                    <div class="detail-item"><p>Payment</p><p>${({ tbc: "TBC", bog: "BOG", cash: "Cash on delivery" })[o.payment_method] || "—"}</p></div>
+                    <div class="detail-item"><p>Payment</p><p>${({ card: "Card (Bank of Georgia)", bog: "Card (Bank of Georgia)", tbc: "TBC", cash: "Cash on delivery" })[o.payment_method] || "—"}</p></div>
+                    ${o.bog_order_id ? `
+                    <div class="detail-item"><p>Bank order</p><p>${esc(o.bog_order_status) || "—"}${o.payment_reason ? ` · ${esc(o.payment_reason)}` : ""}</p></div>
+                    <div class="detail-item"><p>Transaction</p><p>${esc(o.bog_transaction_id) || "—"}</p></div>
+                    <div class="detail-item"><p>Card</p><p>${esc(o.bog_payer_identifier) || "—"}${o.bog_card_type ? ` (${esc(o.bog_card_type).toUpperCase()})` : ""}</p></div>
+                    <div class="detail-item"><p>Paid at</p><p>${o.paid_at ? fmtDate(o.paid_at) : "—"}</p></div>` : ""}
                     <div class="detail-item"><p>Installation</p><p>${o.needs_install ? "Requested (paid on site)" : "No"}</p></div>
                 </div>
             </td>

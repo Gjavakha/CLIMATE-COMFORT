@@ -19,3 +19,6 @@ desktop.ini
 # Local tooling
 node_modules/
 .DS_Store
+
+# Supabase CLI link state
+supabase/.temp/

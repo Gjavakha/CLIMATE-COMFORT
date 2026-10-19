@@ -2,7 +2,7 @@
 
 კონდიციონერებისა და ცენტრალური გათბობის ქვაბების ონლაინ მაღაზია — storefront + ადმინ პანელი.
 
-შპს კლიმატ კომფორტი+ · `climatecomfort.ge`
+შპს კლიმატ კომფორტი+ · `climate-comfort.ge`
 
 Static HTML/CSS/JavaScript, framework-ის გარეშე. Backend — [Supabase](https://supabase.com) (PostgreSQL, Auth, Edge Functions). ცალკე backend სერვერი არ არსებობს.
 
@@ -49,6 +49,10 @@ npx serve .
 | `admin/` | ადმინ პანელი — შეკვეთები, ჯავშნები, ფასების იმპორტი Excel-იდან |
 | `supabase/functions/fetch-product-details/` | Edge Function — პროდუქტის ფოტოებისა და მახასიათებლების ავტომატური მოძიება |
 | `supabase/functions/send-order-email/` | Edge Function — შეკვეთის დადასტურების მეილი (Resend) |
+| `supabase/functions/bog-create-payment/` | Edge Function — საქართველოს ბანკში გადახდის შექმნა, აბრუნებს გადახდის გვერდის ბმულს |
+| `supabase/functions/bog-callback/` | Edge Function — ბანკის callback (ხელმოწერის შემოწმება, სტატუსის ჩაწერა, მეილი) |
+| `supabase/functions/bog-payment-status/` | Edge Function — შეკვეთის გადახდის სტატუსი შედეგის გვერდისთვის; აკეთებს sync-ს ბანკიდან |
+| `supabase/config.toml` | Supabase CLI კონფიგი — `bog-callback`-ზე JWT შემოწმება გამორთულია |
 | `robots.txt`, `sitemap.xml` | SEO |
 | `server.ps1` | ლოკალური სტატიკური სერვერი დეველოპმენტისთვის |
 
@@ -78,6 +82,7 @@ npx serve .
 | `orders` | შეკვეთები (სტუმრისაც) | ჩაწერა — ყველა; კითხვა — მფლობელი თავისას, ადმინი ყველას |
 | `profiles` | მომხმარებლის მიწოდების მონაცემები; რეგისტრაციისას ტრიგერით იქმნება | მფლობელი; ადმინი |
 | `service_bookings` | სამონტაჟო სერვისის ჯავშნები | ჩაწერა — ყველა; კითხვა — ადმინი |
+| `payment_events` | ბანკის ყველა callback და სტატუსის sync, სრული payload-ით | კითხვა — ადმინი; ჩაწერა — მხოლოდ Edge Function-ები |
 | `admin_emails` | ვისაც აქვს ადმინის უფლება | მხოლოდ ადმინი |
 
 ### ავტორიზაცია
@@ -150,16 +155,66 @@ Secrets (Supabase → Edge Functions → Secrets):
 | სახელი | მნიშვნელობა |
 | --- | --- |
 | `RESEND_API_KEY` | Resend-ის გასაღები (ანგარიში `climatecomfortgroup@gmail.com`-ზე) |
-| `MAIL_FROM` | ახლა `Climate Comfort <onboarding@resend.dev>`; დომენის შემდეგ `orders@climatecomfort.ge` |
+| `MAIL_FROM` | ახლა `Climate Comfort <onboarding@resend.dev>`; დომენის შემდეგ `orders@climate-comfort.ge` |
 | `ORDER_NOTIFY_TO` | `climatecomfortgroup@gmail.com` |
 
-> ⚠️ სანამ `climatecomfort.ge` Resend-ში დადასტურებული არ არის, წერილი **მხოლოდ ანგარიშის მფლობელს** მიდის — მაღაზიის შეტყობინება მუშაობს, კლიენტის დადასტურება კი უარყოფილია.
+> ⚠️ სანამ `climate-comfort.ge` Resend-ში დადასტურებული არ არის, წერილი **მხოლოდ ანგარიშის მფლობელს** მიდის — მაღაზიის შეტყობინება მუშაობს, კლიენტის დადასტურება კი უარყოფილია.
+
+### `bog-*` — ბარათით გადახდა (საქართველოს ბანკი)
+
+ბარათით გადახდა მუშაობს საქართველოს ბანკის [Payments API](https://api.bog.ge/docs/payments/introduction)-ით
+(მერჩანტი `CLIMATE-COMFORT.GE`, OPAY). საიტი ბანკს **არასდროს** ელაპარაკება — მხოლოდ სამი Edge Function:
+
+| ფუნქცია | ვინ იძახებს | რას აკეთებს |
+| --- | --- | --- |
+| `bog-create-payment` | საიტი, შეკვეთის ჩაწერის შემდეგ | კითხულობს შეკვეთას ბაზიდან, **თანხას ამოწმებს პროდუქტის მიმდინარე ფასთან**, ბანკში ქმნის order-ს და აბრუნებს `redirect_url`-ს (ბანკის გადახდის გვერდი). თუ ღია ბანკის order უკვე არსებობს, იმავეს აბრუნებს. |
+| `bog-callback` | ბანკი (server → server) | ამოწმებს `Callback-Signature`-ს (SHA256withRSA, ბანკის საჯარო გასაღები), შემდეგ **ბანკის receipt-იდან** კითხულობს რეალურ სტატუსს და წერს `orders`-ში. `paid`-ზე გადასვლისას აგზავნის დადასტურების მეილს. **ერთადერთი გზა, რითაც შეკვეთა `paid` ხდება.** |
+| `bog-payment-status` | საიტი, `#payment-result/<orderId>` გვერდი | აბრუნებს გადახდის სტატუსს; თუ ჯერ `pending`-ია, ბანკის receipt-იდან აკეთებს sync-ს (callback რომც დაიკარგოს). |
+
+ნაკადი: checkout → `orders` ჩანაწერი (`payment_method = 'card'`, `pending`) → `bog-create-payment` → გადამისამართება `payment.bog.ge`-ზე →
+ბანკი აბრუნებს `#payment-result/<orderId>`-ზე → გვერდი კითხულობს სტატუსს (5-ჯერ, 2 წმ ინტერვალით) → `paid` / `failed` (თავიდან ცდის ღილაკით) / `pending` (განახლება).
+
+ბაზის სვეტები `orders`-ზე: `payment_provider`, `bog_order_id`, `bog_redirect_url`, `bog_order_status`, `bog_transaction_id`,
+`bog_payer_identifier` (დაფარული ბარათი), `bog_card_type`, `payment_reason`, `paid_at`, `payment_updated_at`.
+ბანკის სტატუსების შესაბამისობა: `completed` → `paid`, `rejected`/`blocked` → `failed`, `refunded`/`refunded_partially` → `refunded`; დანარჩენი `pending`-ს არ ცვლის.
+
+Secrets (Supabase → Edge Functions → Secrets):
+
+| სახელი | მნიშვნელობა |
+| --- | --- |
+| `BOG_CLIENT_ID` | OPAY CLIENT ID — [manager.bog.ge](https://manager.bog.ge/login) → გადახდების მენეჯერი → გადახდის მეთოდების მართვა → ობიექტი (ხედავს მხოლოდ დირექტორი) |
+| `BOG_CLIENT_SECRET` | OPAY SECRET KEY — იქვე. **არასდროს** ჩაწერო კოდში ან რეპოზიტორიაში |
+| `SITE_URL` | `https://climate-comfort.ge` — სადაც ბანკი მყიდველს აბრუნებს (ლოკალურად: `http://localhost:8000`) |
+| `ORDER_EMAIL_FUNCTION` | არასავალდებულო; მეილის ფუნქციის სახელი, ახლა `rapid-action` |
+| `BOG_CALLBACK_URL` | არასავალდებულო; ნაგულისხმევი `<SUPABASE_URL>/functions/v1/bog-callback` |
+
+დეპლოი:
+
+1. SQL Editor-ში ხელახლა გაუშვი `supabase-schema.sql` (ამატებს სვეტებს და `payment_events`-ს).
+2. დააყენე სამივე ფუნქცია **ზუსტად ამ სახელებით** (`app.js`-ში `BOG_CREATE_FUNCTION` / `BOG_STATUS_FUNCTION` კონსტანტებია, სხვა სახელით დადეპლოიებისას ისინი შეცვალე).
+3. **`bog-callback`-ზე გამორთე "Verify JWT"** — ბანკი Supabase-ის ტოკენს არ აგზავნის. დანარჩენ ორზე ჩართული დარჩეს.
+4. ჩაწერე Secrets.
+5. ტესტი: ბანკს sandbox არ აქვს დოკუმენტირებული — რეალური ბარათით გადაიხადე იაფი პროდუქტი (ან დროებით 1 ₾-იანი ტესტ-პროდუქტი), შეამოწმე ადმინში `paid` + ტრანზაქციის ID, შემდეგ `manager.bog.ge`-დან დააბრუნე თანხა და დარწმუნდი, რომ შეკვეთა `refunded` გახდა.
+
+> Edge Function-ების ლოგები: Supabase → Edge Functions → ფუნქცია → Logs. ყველა callback `payment_events` ცხრილშიც ინახება.
+
+CLI-თ (ერთხელ `npx -y supabase@latest login` ჩვეულებრივ ტერმინალში; პროექტი `qgujhxxezplvnbheaeqs`, იხ. `supabase/config.toml`):
+
+```
+npx -y supabase@latest secrets set --project-ref qgujhxxezplvnbheaeqs BOG_CLIENT_ID=... BOG_CLIENT_SECRET=... SITE_URL=https://climate-comfort.ge
+npx -y supabase@latest functions deploy bog-callback --no-verify-jwt --project-ref qgujhxxezplvnbheaeqs
+npx -y supabase@latest functions deploy bog-create-payment --project-ref qgujhxxezplvnbheaeqs
+npx -y supabase@latest functions deploy bog-payment-status --project-ref qgujhxxezplvnbheaeqs
+```
+
+✅ 2026-10-19: სამივე ფუნქცია დადეპლოიებულია, Secrets ჩაწერილია, სქემა გაშვებულია; ბანკის ტოკენი რეალური კრედენციალებით მიიღება. რეალური გადახდის ტესტი ჯერ არ ჩატარებულა.
 
 ---
 
 ## Storefront — მნიშვნელოვანი დეტალები
 
-- **გადახდის მეთოდები:** TBC, BOG (ბარათი/განვადება) და **ადგილზე გადახდა**. პირადი ნომერი მხოლოდ განვადებისთვისაა საჭირო.
+- **გადახდის მეთოდები:** **ბარათით** (Visa / Mastercard, საქართველოს ბანკის გადახდის გვერდზე — იხ. `bog-*` ფუნქციები) და **ადგილზე გადახდა**. განვადების ფორმა ჯერ კიდევ განაცხადია, არა რეალური ონლაინ განვადება. პირადი ნომერი მხოლოდ განვადებისთვისაა საჭირო.
+- **გადახდის შედეგის გვერდი:** `#payment-result/<orderId>` — ბანკი აქ აბრუნებს; ანგარიშის გვერდზე გადაუხდელ ბარათის შეკვეთას აქვს „გადახდა" ბმული იმავე გვერდზე.
 - **WhatsApp** (+995 571 98 96 69): ფუტერში და მცურავი ღილაკი ყველა გვერდზე. პროდუქტის გვერდზე შეტყობინება წინასწარ ივსება პროდუქტის სახელით (`updateWhatsAppLinks` — `app.js`). ნომერი: `WHATSAPP_NUMBER`.
 - **სოციალური ქსელები:** Facebook / Instagram `climatecomfort1` — ფუტერში და JSON-LD `sameAs`-ში.
 - **კომპანიის მონაცემები** იურიდიული გვერდებისთვის — `COMPANY` ობიექტი `app.js`-ში.
@@ -169,8 +224,9 @@ Secrets (Supabase → Edge Functions → Secrets):
 
 ## ცნობილი დავალიანება
 
-- **ბარათით გადახდა იმიტირებულია** (`app.js`, „Mock card processing") — რეალური PSP ინტეგრაცია არ არის; საჭიროა TBC/BOG e-Commerce. ადგილზე გადახდა მუშაობს, ამიტომ მხოლოდ მისით გაშვება შესაძლებელია.
-- **დომენი და hosting** — `climatecomfort.ge` ჯერ არ არის გაშვებული.
+- **ბარათით გადახდა** — კოდი მზადაა (2026-10-16), მაგრამ ჯერ **არ არის დატესტილი რეალური გადახდით**: საჭიროა Secrets-ის ჩაწერა, ფუნქციების დეპლოი და ერთი რეალური გადახდა + დაბრუნება (იხ. `bog-*` სექცია). **ონლაინ განვადება** (`bog_loan` / `bnpl`) ჯერ არ არის ჩართული — განვადების ფორმა განაცხადად რჩება.
+- **Refund ადმინიდან** — ჯერ არ არის; თანხის დაბრუნება `manager.bog.ge`-დან ხდება, სტატუსი callback-ით თავისით განახლდება.
+- **დომენი და hosting** — `climate-comfort.ge` ჯერ არ არის გაშვებული.
 - **მეილები** — Resend-ში დომენის დადასტურება; Supabase Auth → Custom SMTP (ჩაშენებული გამგზავნი საათში ~2-4 წერილითაა შეზღუდული, რაც რეგისტრაციის დადასტურებას შეაფერხებს).
 - **ანალიტიკა** — `ANALYTICS_CONFIG` (`analytics.js`) ID-ები ცარიელია.
 - **SPA და SEO** — პროდუქტების გვერდები hash route-ებზეა, ამიტომ ცალკე არ ინდექსირდება; საჭიროა History API + ჰოსტინგის rewrite.

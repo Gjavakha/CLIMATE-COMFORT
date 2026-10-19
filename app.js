@@ -231,7 +231,8 @@ const translations = {
         "co-idnum": "პირადი ნომერი",
         "co-install-toggle": "მჭირდება მონტაჟის სერვისი",
         "co-payment-header": "გადახდის მეთოდი",
-        "co-pay-card-desc": "ბარათით გადახდა",
+        "co-pay-card": "ბარათით გადახდა",
+        "co-pay-card-desc": "Visa / Mastercard — საქართველოს ბანკის დაცულ გვერდზე",
         "co-pay-cash": "ნაღდი ანგარიშსწორება",
         "co-pay-cash-desc": "გადაიხადეთ კურიერთან ჩაბარებისას",
         "co-idnum-hint": "საჭიროა მხოლოდ განვადებისთვის — ბარათით ან ნაღდით გადახდისას შეგიძლიათ გამოტოვოთ",
@@ -281,6 +282,28 @@ const translations = {
         "co-success-title": "გადახდა წარმატებულია!",
         "co-success-msg": "თქვენი შეკვეთა მიღებულია. დეტალებს მიიღებთ ელ. ფოსტაზე.",
         "co-success-install": "მონტაჟის მოთხოვნა მიღებულია — ღირებულებას გადაიხდით ადგილზე, მონტაჟის დასრულების შემდეგ.",
+        "co-order-success-title": "შეკვეთა მიღებულია!",
+        "co-order-success-msg": "კურიერი დაგიკავშირდებათ მიწოდების შესათანხმებლად. დეტალებს მიიღებთ ელ. ფოსტაზე.",
+        "co-redirecting": "გადამისამართება ბანკის გვერდზე...",
+        "co-pay-error": "გადახდის დაწყება ვერ მოხერხდა. სცადეთ თავიდან ან აირჩიეთ ადგილზე გადახდა.",
+
+        // Payment result page (the bank sends the shopper back here)
+        "pr-checking": "ვამოწმებთ გადახდას...",
+        "pr-pending-title": "გადახდა მუშავდება",
+        "pr-pending-msg": "ბანკმა ჯერ არ დაადასტურა გადახდა. ეს ჩვეულებრივ რამდენიმე წამს იღებს — დააჭირეთ განახლებას. თუ გადახდა არ დაგისრულებიათ, შეგიძლიათ თავიდან სცადოთ.",
+        "pr-failed-title": "გადახდა ვერ შესრულდა",
+        "pr-failed-msg": "თანხა არ ჩამოჭრილა. შეგიძლიათ სცადოთ თავიდან ან შეუკვეთოთ ადგილზე გადახდით.",
+        "pr-paid-msg": "გადახდა დადასტურებულია. შეკვეთის დეტალები გამოგზავნილია ელ. ფოსტაზე, კურიერი დაგიკავშირდებათ.",
+        "pr-retry": "თავიდან ცდა",
+        "pr-refresh": "განახლება",
+        "pr-back-shop": "მაღაზიაში დაბრუნება",
+        "pr-order-label": "შეკვეთა",
+        "pr-card-label": "ბარათი",
+        "pr-reason-label": "მიზეზი",
+        "pr-not-found": "შეკვეთა ვერ მოიძებნა.",
+        "acc-paid": "გადახდილია",
+        "acc-unpaid": "გადაუხდელია",
+        "acc-pay-now": "გადახდა",
 
         // Account page
         "acc-title": "ჩემი ანგარიში",
@@ -552,7 +575,8 @@ const translations = {
         "co-idnum": "Personal ID Number",
         "co-install-toggle": "I need installation service",
         "co-payment-header": "Payment Method",
-        "co-pay-card-desc": "Card payment",
+        "co-pay-card": "Pay by card",
+        "co-pay-card-desc": "Visa / Mastercard on Bank of Georgia's secure page",
         "co-pay-cash": "Cash on delivery",
         "co-pay-cash-desc": "Pay the courier when the product arrives",
         "co-idnum-hint": "Only needed for instalments — you can skip it for card or cash orders",
@@ -602,6 +626,28 @@ const translations = {
         "co-success-title": "Payment Successful!",
         "co-success-msg": "Your order has been received. Details have been sent to your email.",
         "co-success-install": "Installation request received — you pay for it on site, after the work is completed.",
+        "co-order-success-title": "Order received!",
+        "co-order-success-msg": "Our courier will contact you to arrange delivery. Details have been sent to your email.",
+        "co-redirecting": "Redirecting to the bank...",
+        "co-pay-error": "Could not start the payment. Please try again or choose cash on delivery.",
+
+        // Payment result page (the bank sends the shopper back here)
+        "pr-checking": "Checking your payment...",
+        "pr-pending-title": "Payment is being processed",
+        "pr-pending-msg": "The bank has not confirmed the payment yet. This usually takes a few seconds — press refresh. If you did not finish paying, you can try again.",
+        "pr-failed-title": "Payment failed",
+        "pr-failed-msg": "No money was taken. You can try again or order with cash on delivery.",
+        "pr-paid-msg": "Your payment is confirmed. The order details have been emailed to you and our courier will be in touch.",
+        "pr-retry": "Try again",
+        "pr-refresh": "Refresh",
+        "pr-back-shop": "Back to the shop",
+        "pr-order-label": "Order",
+        "pr-card-label": "Card",
+        "pr-reason-label": "Reason",
+        "pr-not-found": "Order not found.",
+        "acc-paid": "Paid",
+        "acc-unpaid": "Unpaid",
+        "acc-pay-now": "Pay now",
 
         // Account page
         "acc-title": "My Account",
@@ -1127,8 +1173,11 @@ async function loadDbProducts() {
 // Order persistence + confirmation email. The shopper's flow never blocks on
 // either: the success modal is shown regardless, and a mail failure must not
 // look like a failed order — the order is already safely in the database.
-function saveOrderToDb(order) {
-    if (!sbClient) return;
+// Resolves to the new order id (or null if it could not be saved). Card
+// payments pass { email: false }: their confirmation is sent by the bank
+// callback once the money has actually arrived.
+function saveOrderToDb(order, { email = true } = {}) {
+    if (!sbClient) return Promise.resolve(null);
     // The id is generated here rather than read back after the insert: RLS lets
     // anyone create an order but only its owner select it, so a guest checkout
     // would get nothing back from .select(). Supplying the uuid ourselves keeps
@@ -1136,10 +1185,44 @@ function saveOrderToDb(order) {
     const id = (crypto.randomUUID && crypto.randomUUID()) || null;
     const row = id ? { id, ...order } : order;
 
-    sbClient.from("orders").insert(row).then(({ error }) => {
-        if (error) { console.warn("Order was not saved to the database:", error.message); return; }
-        if (id) sendOrderEmail(id);
+    return sbClient.from("orders").insert(row).then(({ error }) => {
+        if (error) { console.warn("Order was not saved to the database:", error.message); return null; }
+        if (id && email) sendOrderEmail(id);
+        return id;
     });
+}
+
+// ==========================================================================
+// Bank of Georgia card payments
+//
+// The site never talks to the bank. Two Edge Functions do (see
+// supabase/functions/bog-*): one creates the bank order and hands back the
+// hosted payment page URL, the other reports the order's payment status when
+// the bank sends the shopper back to #payment-result/<orderId>. If either is
+// deployed under a different name, change the constant.
+// ==========================================================================
+const BOG_CREATE_FUNCTION = "bog-create-payment";
+const BOG_STATUS_FUNCTION = "bog-payment-status";
+
+async function startCardPayment(orderId) {
+    const { data, error } = await sbClient.functions.invoke(BOG_CREATE_FUNCTION, {
+        body: { orderId, lang: state.currentLang }
+    });
+    if (error) {
+        // supabase-js wraps non-2xx responses; surface the function's message
+        let detail = error.message;
+        try { const body = await error.context?.json(); if (body?.error) detail = body.error; } catch { /* ignore */ }
+        throw new Error(detail);
+    }
+    if (data?.already_paid) return { alreadyPaid: true };
+    if (!data?.redirect_url) throw new Error("no redirect url");
+    return { redirectUrl: data.redirect_url };
+}
+
+async function fetchPaymentStatus(orderId) {
+    const { data, error } = await sbClient.functions.invoke(BOG_STATUS_FUNCTION, { body: { orderId } });
+    if (error) throw new Error(error.message);
+    return data;
 }
 
 // Mails the confirmation to the buyer and a copy to the shop. The function is
@@ -1485,7 +1568,7 @@ const COMPANY = {
     addressEn: "M. Gelovani Str. N4, Tbilisi, Georgia",
     phone: "+995 32 2 111 848",
     email: "climatecomfortgroup@gmail.com",
-    site: "https://climatecomfort.ge",
+    site: "https://climate-comfort.ge",
     updated: "2026-10-05",                   // ← ბოლო რედაქტირების თარიღი
     installWarrantyMonths: 12                // ← გარანტია ჩვენს სამონტაჟო სამუშაოზე (თვე)
 };
@@ -1854,6 +1937,7 @@ const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view", "legal
 function handleRouting() {
     const productMatch = location.hash.match(/^#product\/([\w-]+)$/);
     const checkoutMatch = location.hash.match(/^#checkout\/([\w-]+)$/);
+    const paymentResultMatch = location.hash.match(/^#payment-result\/([0-9a-f-]{36})$/i);
     const detailProduct = productMatch ? findProduct(productMatch[1]) : null;
     const checkoutProduct = checkoutMatch ? findProduct(checkoutMatch[1]) : null;
     const isAccount = location.hash === "#account";
@@ -1892,6 +1976,8 @@ function handleRouting() {
         showSubPage("legal-view", () => renderLegalPage(legalSlug));
     } else if (isAccount) {
         showSubPage("account-view", () => renderAccountPage());
+    } else if (paymentResultMatch) {
+        showSubPage("checkout-view", () => renderPaymentResultPage(paymentResultMatch[1]));
     } else if (checkoutProduct) {
         showSubPage("checkout-view", () => renderCheckoutPage(checkoutProduct));
     } else if (detailProduct) {
@@ -2082,7 +2168,7 @@ async function loadMyOrders() {
     if (!sbClient || !state.user) { state.orders = []; return []; }
     const { data, error } = await sbClient
         .from("orders")
-        .select("order_no, product_title, amount, needs_install, payment_method, status, created_at")
+        .select("id, order_no, product_title, amount, needs_install, payment_method, payment_status, status, created_at")
         .eq("user_id", state.user.id)
         .order("created_at", { ascending: false });
     if (error) console.warn("Orders could not be loaded:", error.message);
@@ -2348,19 +2434,10 @@ function renderCheckoutPage(p) {
                     <h3><i class="fa-solid fa-credit-card"></i> ${t("co-payment-header")}</h3>
                     <div class="pay-bank-options">
                         <label class="pay-bank-card">
-                            <input type="radio" name="co-bank" value="tbc" checked>
-                            <span class="bank-logo bank-tbc">TBC</span>
+                            <input type="radio" name="co-bank" value="card" checked>
+                            <span class="bank-logo bank-card"><i class="fa-regular fa-credit-card"></i></span>
                             <span class="pay-bank-text">
-                                <strong>TBC Bank</strong>
-                                <small>${t("co-pay-card-desc")}</small>
-                            </span>
-                            <i class="fa-solid fa-circle-check pay-check"></i>
-                        </label>
-                        <label class="pay-bank-card">
-                            <input type="radio" name="co-bank" value="bog">
-                            <span class="bank-logo bank-bog">BOG</span>
-                            <span class="pay-bank-text">
-                                <strong>Bank of Georgia</strong>
+                                <strong>${t("co-pay-card")}</strong>
                                 <small>${t("co-pay-card-desc")}</small>
                             </span>
                             <i class="fa-solid fa-circle-check pay-check"></i>
@@ -2476,57 +2553,184 @@ function renderCheckoutPage(p) {
 
         const withInstall = document.getElementById("co-install-toggle").checked;
         const bankVal = document.querySelector('input[name="co-bank"]:checked').value;
-        const bankName = bankVal === "tbc" ? "TBC Bank" : bankVal === "bog" ? "Bank of Georgia" : t("co-pay-cash");
+        const isCard = bankVal === "card";
 
         // Analytics is optional — never let a missing/blocked script break checkout
         const track = (fn, ...args) => { if (typeof window[fn] === "function") window[fn](...args); };
 
-        // Mock card processing (no real gateway on a static site); cash orders just get recorded
         const payBtn = document.getElementById("co-pay-btn");
         payBtn.disabled = true;
         payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-processing")}`;
 
-        setTimeout(() => {
-            const refNum = "ORD-" + Math.floor(100000 + Math.random() * 900000);
-            track("trackPurchase", p, refNum);
+        // Persist to the database — this is the ONLY copy of the order.
+        // user_id ties it to the account, which is what lets the shopper see
+        // it on the account page from any device (RLS: orders_select_own).
+        const orderRow = {
+            user_id: isGuest ? null : state.user.id,
+            user_email: isGuest ? guestEmail : state.user.email,
+            customer_name: `${firstName} ${lastName}`,
+            phone: phone,
+            address: address,
+            personal_id: idNumber || null,
+            product_id: typeof p.id === "string" ? p.id : null, // demo products have no DB id
+            product_title: p.title.ka,
+            amount: p.price,
+            needs_install: withInstall,
+            order_type: "standard",
+            payment_method: bankVal,
+            payment_status: "pending",
+            status: "new"
+        };
 
-            // Persist to the database — this is now the ONLY copy of the order.
-            // user_id ties it to the account, which is what lets the shopper see
-            // it on the account page from any device (RLS: orders_select_own).
-            saveOrderToDb({
-                user_id: isGuest ? null : state.user.id,
-                user_email: isGuest ? guestEmail : state.user.email,
-                customer_name: `${firstName} ${lastName}`,
-                phone: phone,
-                address: address,
-                personal_id: idNumber || null,
-                product_id: typeof p.id === "string" ? p.id : null, // demo products have no DB id
-                product_title: p.title.ka,
-                amount: p.price,
-                needs_install: withInstall,
-                order_type: "standard",
-                payment_method: bankVal,
-                payment_status: "pending",
-                status: "new"
-            });
+        (async () => {
+            const orderId = await saveOrderToDb(orderRow, { email: !isCard });
             state.ordersLoaded = false; // account page refetches on next visit
 
-            document.getElementById("success-title").innerText = t("co-success-title");
-            document.getElementById("success-message").innerText =
-                t("co-success-msg") + (withInstall ? " " + t("co-success-install") : "");
-            document.getElementById("success-details").innerHTML = `
-                <div class="detail-line"><span>№</span><span>${refNum}</span></div>
-                <div class="detail-line"><span>${p.title[state.currentLang]}</span><span>${p.price.toLocaleString()} ₾</span></div>
-                <div class="detail-line"><span>${t("co-payment-header")}</span><span>${bankName}</span></div>
-                ${withInstall ? `<div class="detail-line"><span>${t("co-install-line")}</span><span>${t("co-install-onsite")}</span></div>` : ''}
-            `;
-            document.getElementById("success-modal").classList.add("open");
+            if (isCard) {
+                // Real card payment: create the bank order, then leave for the
+                // bank's page. The bank brings the shopper back to
+                // #payment-result/<orderId>, which shows the outcome.
+                if (!orderId) throw new Error("order not saved");
+                const result = await startCardPayment(orderId);
+                if (result.alreadyPaid) { location.hash = `payment-result/${orderId}`; return; }
+                payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-redirecting")}`;
+                state.afterAuthHash = null;
+                state.guestCheckout = false;
+                window.location.assign(result.redirectUrl);
+                return;
+            }
 
+            // Cash on delivery: the order itself is the outcome
+            const refNum = orderId ? null : "ORD-" + Math.floor(100000 + Math.random() * 900000);
+            track("trackPurchase", p, orderId || refNum);
+            showOrderSuccessModal({
+                title: t("co-order-success-title"),
+                message: t("co-order-success-msg") + (withInstall ? " " + t("co-success-install") : ""),
+                lines: [
+                    [t("pr-order-label"), orderId ? orderId.slice(0, 8).toUpperCase() : refNum],
+                    [p.title[state.currentLang], `${p.price.toLocaleString()} ₾`],
+                    [t("co-payment-header"), t("co-pay-cash")],
+                    ...(withInstall ? [[t("co-install-line"), t("co-install-onsite")]] : [])
+                ]
+            });
             state.afterAuthHash = null;
             state.guestCheckout = false;
             location.hash = "catalog"; // home behind the success modal
-        }, 1200);
+        })().catch(err => {
+            console.warn("checkout failed:", err);
+            alert(t("co-pay-error"));
+            payBtn.disabled = false;
+            refreshPayButton();
+        });
     });
+}
+
+function showOrderSuccessModal({ title, message, lines }) {
+    document.getElementById("success-title").innerText = title;
+    document.getElementById("success-message").innerText = message;
+    document.getElementById("success-details").innerHTML = lines
+        .map(([k, v]) => `<div class="detail-line"><span>${k}</span><span>${v}</span></div>`)
+        .join("");
+    document.getElementById("success-modal").classList.add("open");
+}
+
+// ==========================================================================
+// Payment result page (hash route: #payment-result/<orderId>)
+//
+// The bank redirects here after the shopper pays, cancels or fails. The
+// redirect alone proves nothing, so the page asks our status function, which
+// reads the bank's receipt. The callback usually lands first; if not, the
+// page polls a few times before offering a manual refresh.
+// ==========================================================================
+const PAYMENT_RESULT_POLLS = 5;
+const PAYMENT_RESULT_INTERVAL_MS = 2000;
+
+function renderPaymentResultPage(orderId) {
+    const container = document.getElementById("checkout-content");
+    if (!container) return;
+    document.title = `${t("co-title")} | Climate Comfort`;
+
+    const panel = (iconClass, tone, title, msg, detailsHtml, buttonsHtml) => `
+        <div class="payment-result payment-result-${tone}">
+            <div class="payment-result-icon"><i class="${iconClass}"></i></div>
+            <h1>${title}</h1>
+            <p class="payment-result-msg">${msg}</p>
+            ${detailsHtml ? `<div class="success-details-card">${detailsHtml}</div>` : ""}
+            <div class="payment-result-actions">${buttonsHtml}</div>
+        </div>`;
+
+    const line = (k, v) => `<div class="detail-line"><span>${k}</span><span>${v}</span></div>`;
+
+    container.innerHTML = panel("fa-solid fa-spinner fa-spin", "pending", t("pr-checking"), "", "", "");
+
+    let attempts = 0;
+    let order = null;
+
+    const detailsFor = (o) => o.placeholder ? "" : [
+        line(t("pr-order-label"), `ORD-${o.order_no}`),
+        line(o.product_title, `${Number(o.amount).toLocaleString()} ₾`),
+        ...(o.payment_status === "failed" && o.payment_reason ? [line(t("pr-reason-label"), o.payment_reason)] : []),
+        ...(o.needs_install ? [line(t("co-install-line"), t("co-install-onsite"))] : [])
+    ].join("");
+
+    const backBtn = `<a href="#catalog" class="btn btn-outline btn-md">${t("pr-back-shop")}</a>`;
+    const retryBtn = `<button class="btn btn-accent btn-md" id="pr-retry-btn"><i class="fa-solid fa-rotate-right"></i> ${t("pr-retry")}</button>`;
+    const refreshBtn = `<button class="btn btn-primary btn-md" id="pr-refresh-btn"><i class="fa-solid fa-arrows-rotate"></i> ${t("pr-refresh")}</button>`;
+
+    function wireButtons() {
+        const retry = document.getElementById("pr-retry-btn");
+        if (retry) retry.addEventListener("click", async () => {
+            retry.disabled = true;
+            retry.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-redirecting")}`;
+            try {
+                const result = await startCardPayment(orderId);
+                if (result.alreadyPaid) { attempts = 0; poll(); return; }
+                window.location.assign(result.redirectUrl);
+            } catch (err) {
+                console.warn("retry failed:", err);
+                alert(t("co-pay-error"));
+                retry.disabled = false;
+                retry.innerHTML = `<i class="fa-solid fa-rotate-right"></i> ${t("pr-retry")}`;
+            }
+        });
+        const refresh = document.getElementById("pr-refresh-btn");
+        if (refresh) refresh.addEventListener("click", () => { attempts = 0; poll(); });
+    }
+
+    function show(o) {
+        order = o;
+        if (o.payment_status === "paid") {
+            container.innerHTML = panel("fa-solid fa-check", "paid", t("co-success-title"), t("pr-paid-msg"), detailsFor(o), backBtn);
+            if (typeof trackPurchase === "function") trackPurchase({ title: { ka: o.product_title, en: o.product_title }, price: Number(o.amount) }, `ORD-${o.order_no}`);
+        } else if (o.payment_status === "failed") {
+            container.innerHTML = panel("fa-solid fa-xmark", "failed", t("pr-failed-title"), t("pr-failed-msg"), detailsFor(o), retryBtn + backBtn);
+        } else {
+            container.innerHTML = panel("fa-regular fa-clock", "pending", t("pr-pending-title"), t("pr-pending-msg"), detailsFor(o), refreshBtn + retryBtn + backBtn);
+        }
+        wireButtons();
+        state.ordersLoaded = false;
+    }
+
+    async function poll() {
+        if (!sbClient) { container.innerHTML = panel("fa-solid fa-xmark", "failed", t("pr-not-found"), "", "", backBtn); return; }
+        try {
+            const o = await fetchPaymentStatus(orderId);
+            if (!o || o.error) { container.innerHTML = panel("fa-solid fa-xmark", "failed", t("pr-not-found"), "", "", backBtn); return; }
+            if (o.payment_status === "pending" && attempts < PAYMENT_RESULT_POLLS && location.hash === `#payment-result/${orderId}`) {
+                attempts++;
+                setTimeout(poll, PAYMENT_RESULT_INTERVAL_MS);
+                return;
+            }
+            show(o);
+        } catch (err) {
+            console.warn("payment status check failed:", err);
+            if (attempts < PAYMENT_RESULT_POLLS) { attempts++; setTimeout(poll, PAYMENT_RESULT_INTERVAL_MS); return; }
+            // Status service unreachable: show the pending panel without details
+            show(order || { placeholder: true, payment_status: "pending" });
+        }
+    }
+
+    poll();
 }
 
 // ==========================================================================
@@ -2670,14 +2874,24 @@ function buildAccountTab(acc, tab) {
         };
         return `<h3>${t("acc-nav-orders")}</h3>` + orders.map(o => {
             const dateStr = new Date(o.created_at).toLocaleDateString(lang === 'ka' ? 'ka-GE' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
-            const bank = o.payment_method === "tbc" ? "TBC Bank" : (o.payment_method === "bog" ? "Bank of Georgia" : "");
+            const bank = (o.payment_method === "card" || o.payment_method === "bog" || o.payment_method === "tbc")
+                ? (lang === 'ka' ? 'ბარათით' : 'Card')
+                : (o.payment_method === "cash" ? t("co-pay-cash") : "");
+            const isCardOrder = o.payment_method === "card"; // financing applications also carry a bank but are not card payments
+            const payTag = isCardOrder
+                ? (o.payment_status === "paid"
+                    ? ` · <span class="order-paid">${t("acc-paid")}</span>`
+                    : (o.status !== "cancelled" && o.payment_status !== "refunded"
+                        ? ` · <span class="order-unpaid">${t("acc-unpaid")}</span> <a href="#payment-result/${o.id}" class="order-pay-link">${t("acc-pay-now")}</a>`
+                        : ""))
+                : "";
             const installTag = o.needs_install ? ` · ${t("co-install-line").replace(':', '')} (${t("co-install-onsite")})` : '';
             return `
                 <div class="order-item">
                     <div class="order-main">
                         <span class="order-ref">ORD-${o.order_no}</span>
                         <p class="order-title-line">${o.product_title}</p>
-                        <span class="order-meta">${dateStr}${bank ? ' · ' + bank : ''}${installTag}</span>
+                        <span class="order-meta">${dateStr}${bank ? ' · ' + bank : ''}${payTag}${installTag}</span>
                     </div>
                     <div class="order-side">
                         <strong>${Number(o.amount).toLocaleString()} ₾</strong>
