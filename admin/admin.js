@@ -148,7 +148,9 @@ function bindDashboardUI() {
 
     // Row interactions (expand, status changes) via delegation
     $("orders-body").addEventListener("click", (e) => {
-        if (e.target.closest(".pill-select")) return; // let the selects be selects
+        const actionBtn = e.target.closest("[data-action]");
+        if (actionBtn) { handleBankAction(actionBtn); return; }
+        if (e.target.closest(".pill-select, input, button")) return; // let the controls be controls
         const row = e.target.closest("tr.order-row");
         if (!row) return;
         const detail = row.nextElementSibling;
@@ -378,7 +380,7 @@ function renderOrders() {
         : "Nothing matches this filter.";
 
     body.innerHTML = visible.map(o => `
-        <tr class="order-row">
+        <tr class="order-row" data-id="${o.id}">
             <td class="order-no">#${o.order_no}</td>
             <td class="order-date">${fmtDate(o.created_at)}</td>
             <td>
@@ -407,8 +409,84 @@ function renderOrders() {
                     <div class="detail-item"><p>Card</p><p>${esc(o.bog_payer_identifier) || "—"}${o.bog_card_type ? ` (${esc(o.bog_card_type).toUpperCase()})` : ""}</p></div>
                     <div class="detail-item"><p>Paid at</p><p>${o.paid_at ? fmtDate(o.paid_at) : "—"}</p></div>` : ""}
                     <div class="detail-item"><p>Installation</p><p>${o.needs_install ? "Requested (paid on site)" : "No"}</p></div>
+                    ${o.bog_order_id ? `
+                    <div class="detail-item detail-actions"><p>Bank actions</p><p>
+                        ${o.payment_status === "paid" && o.bog_order_status !== "refund_requested" ? `
+                        <input class="refund-amount" type="number" min="0.01" step="0.01" max="${Number(o.amount)}" value="${Number(o.amount)}" data-order="${o.id}" aria-label="Refund amount, GEL">
+                        <button type="button" class="btn-mini danger" data-action="refund" data-order="${o.id}">Refund</button>` : ""}
+                        ${o.bog_order_status === "refund_requested" ? `<span class="refund-wait">Refund requested — waiting for the bank</span>` : ""}
+                        <button type="button" class="btn-mini" data-action="sync" data-order="${o.id}">Sync from bank</button>
+                        <span class="detail-msg" data-msg="${o.id}"></span>
+                    </p></div>` : ""}
                 </div>
             </td>
         </tr>
     `).join("");
+}
+
+// ---------------------------------------------------------------------------
+// Bank actions (refund / sync) — go through the admin-only bog-refund function.
+// The refund button needs a second click within 8 s to confirm.
+// ---------------------------------------------------------------------------
+async function handleBankAction(btn) {
+    const orderId = btn.getAttribute("data-order");
+    const action = btn.getAttribute("data-action");
+    const order = allOrders.find(o => o.id === orderId);
+    if (!order) return;
+    const showMsg = (text, isError) => {
+        const el = document.querySelector(`[data-msg="${orderId}"]`);
+        if (!el) return;
+        el.textContent = text;
+        el.classList.toggle("is-error", !!isError);
+    };
+
+    const body = { orderId, action };
+    if (action === "refund") {
+        const input = document.querySelector(`.refund-amount[data-order="${orderId}"]`);
+        const amount = Math.round(Number(input ? input.value : 0) * 100) / 100;
+        const total = Math.round(Number(order.amount) * 100) / 100;
+        if (!(amount > 0) || amount > total) {
+            showMsg(`Enter an amount between 0.01 and ${total} ₾.`, true);
+            return;
+        }
+        if (btn.getAttribute("data-armed") !== "1") {
+            btn.setAttribute("data-armed", "1");
+            btn.textContent = amount === total ? `Confirm full refund ${total} ₾` : `Confirm refund ${amount} ₾`;
+            showMsg("Click again to send the refund to the bank.", false);
+            setTimeout(() => {
+                if (!btn.isConnected) return;
+                btn.removeAttribute("data-armed");
+                btn.textContent = "Refund";
+            }, 8000);
+            return;
+        }
+        body.amount = amount;
+    }
+
+    btn.disabled = true;
+    showMsg(action === "refund" ? "Sending the refund to the bank…" : "Checking with the bank…", false);
+
+    const { data, error } = await sbClient.functions.invoke("bog-refund", { body });
+    let errText = null;
+    if (error) {
+        errText = error.message || "request failed";
+        try {
+            const details = await error.context.json();
+            if (details && details.error) errText = details.error;
+        } catch (_) { /* no JSON body */ }
+    } else if (data && data.error) {
+        errText = data.error;
+    }
+    btn.disabled = false;
+    if (errText) {
+        showMsg("Failed: " + errText, true);
+        return;
+    }
+
+    Object.assign(order, data.order || {});
+    renderStats();
+    renderOrders();
+    const row = document.querySelector(`tr.order-row[data-id="${orderId}"]`);
+    if (row && row.nextElementSibling) row.nextElementSibling.classList.remove("hidden");
+    showMsg(data.message || "Done.", false);
 }

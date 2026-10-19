@@ -52,6 +52,7 @@ npx serve .
 | `supabase/functions/bog-create-payment/` | Edge Function — საქართველოს ბანკში გადახდის შექმნა, აბრუნებს გადახდის გვერდის ბმულს |
 | `supabase/functions/bog-callback/` | Edge Function — ბანკის callback (ხელმოწერის შემოწმება, სტატუსის ჩაწერა, მეილი) |
 | `supabase/functions/bog-payment-status/` | Edge Function — შეკვეთის გადახდის სტატუსი შედეგის გვერდისთვის; აკეთებს sync-ს ბანკიდან |
+| `supabase/functions/bog-refund/` | Edge Function — ადმინის Refund / „Sync from bank" ღილაკები (მხოლოდ `admin_emails`-ში მყოფი მომხმარებლისთვის) |
 | `supabase/config.toml` | Supabase CLI კონფიგი — `bog-callback`-ზე JWT შემოწმება გამორთულია |
 | `robots.txt`, `sitemap.xml` | SEO |
 | `server.ps1` | ლოკალური სტატიკური სერვერი დეველოპმენტისთვის |
@@ -170,6 +171,7 @@ Secrets (Supabase → Edge Functions → Secrets):
 | `bog-create-payment` | საიტი, შეკვეთის ჩაწერის შემდეგ | კითხულობს შეკვეთას ბაზიდან, **თანხას ამოწმებს პროდუქტის მიმდინარე ფასთან**, ბანკში ქმნის order-ს და აბრუნებს `redirect_url`-ს (ბანკის გადახდის გვერდი). თუ ღია ბანკის order უკვე არსებობს, იმავეს აბრუნებს. |
 | `bog-callback` | ბანკი (server → server) | ამოწმებს `Callback-Signature`-ს (SHA256withRSA, ბანკის საჯარო გასაღები), შემდეგ **ბანკის receipt-იდან** კითხულობს რეალურ სტატუსს და წერს `orders`-ში. `paid`-ზე გადასვლისას აგზავნის დადასტურების მეილს. **ერთადერთი გზა, რითაც შეკვეთა `paid` ხდება.** |
 | `bog-payment-status` | საიტი, `#payment-result/<orderId>` გვერდი | აბრუნებს გადახდის სტატუსს; თუ ჯერ `pending`-ია, ბანკის receipt-იდან აკეთებს sync-ს (callback რომც დაიკარგოს). |
+| `bog-refund` | ადმინ-პანელი, გაშლილი შეკვეთის „Bank actions" | **Refund** — ბანკს სთხოვს თანხის დაბრუნებას (სრულს ან ნაწილობრივს, თანხა ველიდან; ღილაკზე ორჯერ დაჭერაა საჭირო), შეკვეთას `refund_requested`-ს უწერს, ბანკის პასუხი `payment_events`-ში ინახება ადმინის მეილით; საბოლოო `refunded` callback-ით ან **Sync from bank** ღილაკით მოდის. JWT + `is_admin()` შემოწმება. |
 
 ნაკადი: checkout → `orders` ჩანაწერი (`payment_method = 'card'`, `pending`) → `bog-create-payment` → გადამისამართება `payment.bog.ge`-ზე →
 ბანკი აბრუნებს `#payment-result/<orderId>`-ზე → გვერდი კითხულობს სტატუსს (5-ჯერ, 2 წმ ინტერვალით) → `paid` / `failed` (თავიდან ცდის ღილაკით) / `pending` (განახლება).
@@ -205,6 +207,7 @@ npx -y supabase@latest secrets set --project-ref qgujhxxezplvnbheaeqs BOG_CLIENT
 npx -y supabase@latest functions deploy bog-callback --no-verify-jwt --project-ref qgujhxxezplvnbheaeqs
 npx -y supabase@latest functions deploy bog-create-payment --project-ref qgujhxxezplvnbheaeqs
 npx -y supabase@latest functions deploy bog-payment-status --project-ref qgujhxxezplvnbheaeqs
+npx -y supabase@latest functions deploy bog-refund --project-ref qgujhxxezplvnbheaeqs
 ```
 
 ✅ 2026-10-19: სამივე ფუნქცია დადეპლოიებულია, Secrets ჩაწერილია, სქემა გაშვებულია; ბანკის ტოკენი რეალური კრედენციალებით მიიღება. რეალური გადახდის ტესტი ჯერ არ ჩატარებულა.
@@ -225,7 +228,7 @@ npx -y supabase@latest functions deploy bog-payment-status --project-ref qgujhxx
 ## ცნობილი დავალიანება
 
 - **ბარათით გადახდა** — დადეპლოიებულია (2026-10-19), მაგრამ ჯერ **არ არის დატესტილი რეალური გადახდით**: საჭიროა ერთი რეალური გადახდა + დაბრუნება დომენის გაშვების შემდეგ (იხ. `bog-*` სექცია). **ონლაინ განვადება** (`bog_loan` / `bnpl`) ჯერ არ არის ჩართული — განვადების ფორმა განაცხადად რჩება.
-- **Refund ადმინიდან** — ჯერ არ არის; თანხის დაბრუნება `manager.bog.ge`-დან ხდება, სტატუსი callback-ით თავისით განახლდება.
+- **Refund ადმინიდან** — ღილაკი არის (`bog-refund`, 2026-10-19), მაგრამ რეალურ გადახდაზე ჯერ არ არის გასინჯული; ბანკის refund პასუხის ზუსტი ფორმა დოკუმენტაციაში არ არის, ამიტომ პირველი refund-ის შემდეგ `payment_events`-ში ჩანაწერი შეამოწმე.
 - **დომენი და hosting** — `climate-comfort.ge` ჯერ არ არის გაშვებული.
 - **მეილები** — Resend-ში დომენის დადასტურება; Supabase Auth → Custom SMTP (ჩაშენებული გამგზავნი საათში ~2-4 წერილითაა შეზღუდული, რაც რეგისტრაციის დადასტურებას შეაფერხებს).
 - **ანალიტიკა** — `ANALYTICS_CONFIG` (`analytics.js`) ID-ები ცარიელია.

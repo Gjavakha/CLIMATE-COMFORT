@@ -12,3 +12,6 @@ verify_jwt = true
 
 [functions.bog-payment-status]
 verify_jwt = true
+
+[functions.bog-refund]
+verify_jwt = true

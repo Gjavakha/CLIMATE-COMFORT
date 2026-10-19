@@ -647,3 +647,34 @@ tr.detail-row td {
     .topbar-link { display: none; }
     .search-wrap { width: 100%; }
 }
+
+/* bank actions inside the expanded order row (refund / sync) */
+.detail-actions p:last-child { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.refund-amount {
+    width: 120px;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.85rem;
+    background: #fff;
+}
+.btn-mini {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink, #0f172a);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-mini:hover { border-color: #94a3b8; }
+.btn-mini.danger { background: var(--red-dim); color: #b91c1c; border-color: transparent; }
+.btn-mini.danger[data-armed="1"] { background: #b91c1c; color: #fff; }
+.btn-mini:disabled { opacity: 0.5; cursor: wait; }
+.refund-wait { font-size: 0.8rem; font-weight: 600; color: #b45309; }
+.detail-msg { font-size: 0.8rem; color: var(--ink-muted); }
+.detail-msg.is-error { color: #b91c1c; }
