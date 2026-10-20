@@ -22,3 +22,6 @@ node_modules/
 
 # Supabase CLI link state
 supabase/.temp/
+
+# build output (build.sh)
+dist/
