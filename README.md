@@ -56,6 +56,8 @@ npx serve .
 | `supabase/functions/bog-payment-status/` | Edge Function — შეკვეთის გადახდის სტატუსი შედეგის გვერდისთვის; აკეთებს sync-ს ბანკიდან |
 | `supabase/functions/bog-refund/` | Edge Function — ადმინის Refund / „Sync from bank" ღილაკები (მხოლოდ `admin_emails`-ში მყოფი მომხმარებლისთვის) |
 | `supabase/functions/publish-site/` | Edge Function — ადმინის „Publish site" ღილაკი: Cloudflare Pages-ის deploy hook-ს უშვებს, რომ პროდუქტის გვერდები ახალი ფასებით გადაიწყოს (მხოლოდ ადმინისთვის) |
+| `supabase/functions/mirror-product-images/` | Edge Function — მომწოდებლების საიტებიდან აღებულ ფოტოებს ჩვენს Storage-ში (`product-images` bucket) აკოპირებს და პროდუქტს ჩვენს ბმულებზე გადაწერს. იმპორტი ახალ პროდუქტებზე ავტომატურად იძახებს; ადმინის „Copy photos (N)" ღილაკი — დანარჩენზე |
+| `guides.js` | სასარგებლო სტატიები (`/guide/<slug>`, 4 ცალი, ქართულად) — მთავარ გვერდზე ბარათებად, თითოეული ცალკე გვერდად. ⚠ ტექსტი საიტის ფაქტებიდანაა შედგენილი — მაღაზიამ გაშვებამდე ერთხელ უნდა წაიკითხოს |
 | `supabase/config.toml` | Supabase CLI კონფიგი — `bog-callback`-ზე JWT შემოწმება გამორთულია |
 | `robots.txt` | SEO (`sitemap.xml`-ს `build.mjs` აგენერირებს) |
 | `server.ps1` | ლოკალური სტატიკური სერვერი დეველოპმენტისთვის |
@@ -237,7 +239,8 @@ npx -y supabase@latest secrets set PAGES_DEPLOY_HOOK=https://api.cloudflare.com/
 2. Supabase-დან საჯარო anon key-ით იღებს გამოქვეყნებულ პროდუქტებს (იგივე წაკითხვა, რასაც საიტი აკეთებს).
 3. კატალოგს JSON-ად ჩააშენებს `index.html`-ში (`#catalog-data`), რომ პირველი ჩატვირთვა და საძიებო სისტემის crawl-ი რეალურ პროდუქტებს ხედავდეს და არა demo-ს.
 4. თითოეული პროდუქტისთვის წერს `dist/product/<slug>.html`-ს — თავისი `<title>`, meta description, canonical, Open Graph სურათი, `Product` + `BreadcrumbList` schema და უკვე ჩასმული კონტენტი (სათაური, ფასი, მახასიათებლები). `app.js` ჩატვირთვის შემდეგ იგივე გვერდს „აცოცხლებს". Slug = ბრენდი + მოდელი (`midea-msag-24hrn8`), ზუსტად იგივე წესით, რაც `productSlug()`-ს აქვს `app.js`-ში — ორივე ერთად უნდა შეიცვალოს.
-5. წერს `/catalog/ac`, `/catalog/boiler`, `/terms`, `/privacy`, `/returns` გვერდებს თავიანთი `<head>`-ით და `sitemap.xml`-ს (155 URL).
+5. წერს `/catalog/ac`, `/catalog/boiler`, `/brand/<brand>` (13 ბრენდი), `/guide/<slug>` (4 სტატია), `/terms`, `/privacy`, `/returns` გვერდებს თავიანთი `<head>`-ით, `404.html`-ს (noindex; Cloudflare-ი არარსებულ მისამართზე მას აბრუნებს 404 სტატუსით, `_redirects`-ში მხოლოდ აპლიკაციის მარშრუტებია გადაწერილი) და `sitemap.xml`-ს (172 URL).
+6. პროდუქტის გვერდზე: ხილული breadcrumb (მთავარი › კატეგორია › ბრენდი › პროდუქტი), მახასიათებლებიდან გენერირებული ქართული აბზაცი (უნიკალური ტექსტი ყველა გვერდზე, როცა მომწოდებლის აღწერა არ არის ან მოკლეა) და „მსგავსი პროდუქტები" (6 ბმული იმავე კატეგორიიდან, ჯერ იგივე ბრენდი). იგივე მარკაპს `app.js` აწარმოებს (`renderProductDetailPage`, `generatedDescription`, `relatedProducts`).
 
 > თუ ბაზა ვერ წაიკითხა, build **განზრახ ეცემა** — Cloudflare მაშინ წინა ვერსიას ტოვებს ცოცხლად, პროდუქტების გვერდების გარეშე საიტი არ ქვეყნდება. ლოკალურად უბაზოდ ასაწყობად: `ALLOW_EMPTY_CATALOG=1 node build.mjs`.
 
@@ -290,6 +293,7 @@ AI ასისტენტები საიტს თავიანთი cr
 - **ანალიტიკა** — `ANALYTICS_CONFIG` (`analytics.js`) ID-ები ცარიელია.
 - **SEO** — ✅ 2026-10-22: რეალური მისამართები + წინასწარ არენდერებული პროდუქტის გვერდები (იხ. „ჰოსტინგი და SEO"). რჩება: Search Console, Business Profile, ანალიტიკის ID-ები, `PAGES_DEPLOY_HOOK` secret-ი Pages პროექტის შექმნის შემდეგ.
 - **ფოტოს გარეშე პროდუქტები** — HAIER ×6 (Elit-ის ფაილიდან; ვერცერთ ქართულ საიტზე ვერ მოიძებნა), MIDEA MSAG-24HRN8 და MFM-48FN8D0-Q (Midea-ს ფაილში ბმული არასწორია/აკლია). ფოტოები მომწოდებლებს უნდა ვთხოვოთ.
+- **ფოტოები მომწოდებლების სერვერებზე** — 149 პროდუქტის ფოტო ჯერ კიდევ მომწოდებლების (isurve.ge, kontakt.ge …) ბმულებზეა. ადმინ-პანელში **„Copy photos (N)"** ღილაკი ერთხელ უნდა დაიჭიროს (ბაზიდან ჩვენს Storage-ში გადაწერს, ~10 პროდუქტი თითო წრეზე, თავისით მეორდება ბოლომდე), შემდეგ „Publish site". ახალ იმპორტებზე ეს ავტომატურია.
 
 ---
 

@@ -1,5 +1,9 @@
 # Cloudflare Pages routing (copied into dist by build.mjs).
-# Every path that is not a real file is the app shell: app.js reads the path
-# (/product/<slug>, /catalog/ac, /terms …) and shows the right view. Static
-# files, including the pre-rendered product pages, always win over this rule.
-/*  /index.html  200
+# Static files — including the pre-rendered product, category, brand and guide
+# pages — are served as themselves. The app-only routes below are rewritten to
+# the app shell with a 200. Anything else that is not a file gets 404.html
+# (also the app shell, marked noindex), so a mistyped or removed product URL
+# is a real 404 for search engines instead of a "soft 404" home page.
+/checkout/*        /index.html  200
+/account           /index.html  200
+/payment-result/*  /index.html  200

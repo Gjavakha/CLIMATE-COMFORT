@@ -259,6 +259,13 @@ const translations = {
         "seo-desc-ac": "ინვერტორული და ON/OFF კონდიციონერები 9000-დან 24000 BTU-მდე: Midea, LG, Samsung, Haier, Daikin და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება, უფასო მიწოდება თბილისში.",
         "seo-title-boiler": "გათბობის ქვაბები — ცენტრალური გათბობა, მონტაჟი | Climate Comfort",
         "seo-desc-boiler": "კონდენსაციური და სტანდარტული გაზის ქვაბები ცენტრალური გათბობისთვის: Bosch, Gorenje და სხვა. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+        "bc-home": "მთავარი",
+        "detail-related": "მსგავსი პროდუქტები",
+        "guides-header": "სასარგებლო სტატიები",
+        "guides-subheader": "როგორ ავირჩიოთ, რა ღირს მონტაჟი, როგორ მოვუაროთ — ჩვენი ტექნიკოსების რჩევები",
+        "guides-read": "წაკითხვა",
+        "nf-title": "გვერდი ვერ მოიძებნა",
+        "nf-text": "ეს პროდუქტი ან გვერდი აღარ არსებობს, ან მისამართი არასწორადაა აკრეფილი. კატალოგში იპოვით ყველა აქტუალურ მოდელს.",
         "faq-header": "ხშირად დასმული კითხვები",
         "faq-subheader": "მიწოდება, მონტაჟი, განვადება და გარანტია — მოკლე პასუხები",
         "faq-q1": "რა ღირს მიწოდება?",
@@ -625,6 +632,13 @@ const translations = {
         "seo-desc-ac": "Inverter and on/off air conditioners from 9000 to 24000 BTU: Midea, LG, Samsung, Haier, Daikin and more. Official warranty, professional installation, 0% instalments, free delivery in Tbilisi.",
         "seo-title-boiler": "Heating Boilers — Central Heating, Installation | Climate Comfort",
         "seo-desc-boiler": "Condensing and standard gas boilers for central heating: Bosch, Gorenje and more. Official warranty, installation, 0% instalments and free delivery in Tbilisi.",
+        "bc-home": "Home",
+        "detail-related": "Similar products",
+        "guides-header": "Buyer's guides",
+        "guides-subheader": "How to choose, what installation costs, how to maintain — advice from our technicians",
+        "guides-read": "Read",
+        "nf-title": "Page not found",
+        "nf-text": "This product or page no longer exists, or the address was mistyped. The catalog lists every current model.",
         "faq-header": "Frequently Asked Questions",
         "faq-subheader": "Delivery, installation, instalments and warranty — short answers",
         "faq-q1": "How much is delivery?",
@@ -1380,9 +1394,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadEmbeddedCatalog();
     generateFiltersUI();
 
-    // 4. Initial Render of Catalog + homepage rails
+    // 4. Initial Render of Catalog + homepage rails + guide cards
     renderCatalog();
     renderHomeRails();
+    renderGuidesSection();
 
     // 5. Bind Event Listeners
     bindUIEventListeners();
@@ -2042,7 +2057,10 @@ function renderLegalPage(slug) {
 // A "route" below is the path without its leading slash; "" is home.
 // ==========================================================================
 const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view", "legal-view"];
-const HOME_ANCHORS = ["catalog", "booking-section", "about-us", "home-rails", "faq"];
+const HOME_ANCHORS = ["catalog", "booking-section", "about-us", "home-rails", "faq", "guides"];
+
+// /brand/<slug> — same rule in build.mjs
+const brandSlug = (b) => String(b || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const SITE_ORIGIN = "https://climate-comfort.ge";
 
 function currentRoute() {
@@ -2116,15 +2134,29 @@ function handleRouting() {
     const checkoutMatch = route.match(/^checkout\/([\w-]+)$/);
     const paymentResultMatch = route.match(/^payment-result\/([0-9a-f-]{36})$/i);
     const categoryMatch = route.match(/^catalog\/(ac|boiler)$/);
+    const brandMatch = route.match(/^brand\/([a-z0-9-]+)$/);
+    const guideMatch = route.match(/^guide\/([a-z0-9-]+)$/);
     const detailProduct = productMatch ? findProductBySlug(productMatch[1]) : null;
     const checkoutProduct = checkoutMatch ? findProduct(checkoutMatch[1]) : null;
+    const brandName = brandMatch ? (products.find(p => brandSlug(p.brand) === brandMatch[1]) || {}).brand || null : null;
+    const guide = guideMatch && typeof GUIDES !== "undefined" ? GUIDES[guideMatch[1]] || null : null;
     const isAccount = route === "account";
     const legalSlug = LEGAL_SLUGS.includes(route) ? route : null;
     const wasOnSubPage = SUBPAGE_CLASSES.some(c => document.body.classList.contains(c));
 
-    // A product deep link before the live catalog has arrived: keep whatever
-    // the pre-rendered page shows rather than flashing the home page.
-    if (productMatch && !detailProduct && !state.catalogReady) return;
+    // A product/brand deep link before the live catalog has arrived: keep
+    // whatever the pre-rendered page shows rather than flashing the home page.
+    if (((productMatch && !detailProduct) || (brandMatch && !brandName)) && !state.catalogReady) return;
+
+    // Nothing matches a real path (removed product, typo): a proper
+    // "not found" page, never the home page pretending to be it.
+    const knownRoute = route === "" || HOME_ANCHORS.includes(route) || detailProduct || checkoutMatch || paymentResultMatch
+        || categoryMatch || brandName || guide || isAccount || legalSlug;
+    if (!knownRoute && location.pathname !== "/") {
+        showSubPageEarly("legal-view", renderNotFoundPage);
+        updateSeoTags({ title: `${t("nf-title")} | Climate Comfort`, path: route, noindex: true });
+        return;
+    }
 
     // WhatsApp message follows the page: product name on a product/checkout page
     updateWhatsAppLinks(detailProduct || checkoutProduct);
@@ -2147,15 +2179,16 @@ function handleRouting() {
         return;
     }
 
-    function showSubPage(className, renderFn) {
-        const entering = !document.body.classList.contains(className);
-        renderFn();
-        document.body.classList.remove(...SUBPAGE_CLASSES.filter(c => c !== className));
-        document.body.classList.add(className);
-        if (entering) window.scrollTo(0, 0);
-    }
+    const showSubPage = showSubPageEarly;
 
-    if (legalSlug) {
+    if (guide) {
+        showSubPage("legal-view", () => renderGuidePage(guideMatch[1]));
+        updateSeoTags({
+            title: `${state.currentLang === "ka" ? guide.title : guide.titleEn} | Climate Comfort`,
+            description: guide.description,
+            path: route
+        });
+    } else if (legalSlug) {
         showSubPage("legal-view", () => renderLegalPage(legalSlug));
         updateSeoTags({ path: legalSlug });
     } else if (isAccount) {
@@ -2181,6 +2214,15 @@ function handleRouting() {
             if (state.filters.category !== categoryMatch[1]) applyCategoryFilter(categoryMatch[1]);
             updateSeoTags({ title: t(`seo-title-${categoryMatch[1]}`), description: t(`seo-desc-${categoryMatch[1]}`), path: route });
             document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
+        } else if (brandName) {
+            if (state.filters.brands.length !== 1 || state.filters.brands[0] !== brandName || state.filters.category !== "all") {
+                applyCategoryFilter("all");
+                state.filters.brands = [brandName];
+                generateFiltersUI();
+                renderCatalog();
+            }
+            updateSeoTags({ title: brandPageTitle(brandName), description: brandPageDescription(brandName), path: route });
+            document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
         } else {
             updateSeoTags({ title: t("doc-title"), description: t("meta-description"), path: "" });
             // Re-scroll to the section anchor once the home sections are visible again
@@ -2193,6 +2235,112 @@ function handleRouting() {
 
     // Analytics (analytics.js) reports each route as a page view
     window.dispatchEvent(new CustomEvent("routechange", { detail: { path: location.pathname + location.hash } }));
+}
+
+// Swaps the home sections for one of the sub-page views (product, checkout,
+// account, legal/guide/not-found). Scrolls to the top only when entering.
+function showSubPageEarly(className, renderFn) {
+    const entering = !document.body.classList.contains(className);
+    renderFn();
+    document.body.classList.remove(...SUBPAGE_CLASSES.filter(c => c !== className));
+    document.body.classList.add(className);
+    if (entering) window.scrollTo(0, 0);
+}
+
+function renderNotFoundPage() {
+    const container = document.getElementById("legal-content");
+    if (!container) return;
+    container.innerHTML = `
+        <h1 class="legal-title">${t("nf-title")}</h1>
+        <div class="legal-body"><p class="legal-lead">${t("nf-text")}</p></div>
+        <nav class="legal-other">
+            <a href="/#catalog">${t("detail-back")}</a>
+            <a href="/">${t("bc-home")}</a>
+        </nav>
+    `;
+}
+
+// Buyer's guides (guides.js): one route each, shown on the legal page layout
+function renderGuidePage(slug) {
+    const container = document.getElementById("legal-content");
+    const g = typeof GUIDES !== "undefined" ? GUIDES[slug] : null;
+    if (!container || !g) return;
+    const lang = state.currentLang;
+    const title = lang === "ka" ? g.title : g.titleEn;
+    const others = Object.entries(GUIDES).filter(([s]) => s !== slug)
+        .map(([s, o]) => `<a href="/guide/${s}">${lang === "ka" ? o.title : o.titleEn}</a>`).join("");
+    container.innerHTML = `
+        <nav class="breadcrumb" aria-label="breadcrumb">
+            <a href="/">${t("bc-home")}</a><span class="bc-sep">›</span>
+            <a href="/#guides">${t("guides-header")}</a><span class="bc-sep">›</span>
+            <span>${title}</span>
+        </nav>
+        <h1 class="legal-title">${title}</h1>
+        <p class="legal-updated">${lang === "ka" ? "განახლებულია" : "Updated"}: ${g.updated}${lang === "en" ? " · This guide is written in Georgian." : ""}</p>
+        <div class="legal-body">${g.html}</div>
+        <nav class="legal-other">${others}</nav>
+    `;
+}
+
+// Home page "guides" cards (also pre-rendered by build.mjs with the same markup)
+function renderGuidesSection() {
+    const grid = document.getElementById("guides-grid");
+    if (!grid || typeof GUIDES === "undefined") return;
+    const lang = state.currentLang;
+    grid.innerHTML = Object.entries(GUIDES).map(([slug, g]) => `
+        <a class="guide-card" href="/guide/${slug}">
+            <h3>${lang === "ka" ? g.title : g.titleEn}</h3>
+            <p>${g.description}</p>
+            <span class="guide-more">${t("guides-read")} <i class="fa-solid fa-arrow-right"></i></span>
+        </a>`).join("");
+}
+
+function brandPageTitle(brand) {
+    return state.currentLang === "ka"
+        ? `${brand} — კონდიციონერები და გათბობის ქვაბები, ფასები | Climate Comfort`
+        : `${brand} — Air Conditioners and Boilers, Prices | Climate Comfort`;
+}
+
+function brandPageDescription(brand) {
+    const n = products.filter(p => p.brand === brand).length;
+    return state.currentLang === "ka"
+        ? `${brand}-ის ${n} მოდელი ფასებით: ინვერტორული და ON/OFF კონდიციონერები, გათბობის ქვაბები. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება, უფასო მიწოდება თბილისში.`
+        : `${n} ${brand} models with prices: inverter and on/off air conditioners, heating boilers. Official warranty, installation, 0% instalments, free delivery in Tbilisi.`;
+}
+
+// A paragraph of plain facts generated from the product's own data — unique
+// text for every product page even when the supplier gave no description.
+// build.mjs produces the same paragraph for the pre-rendered page.
+function generatedDescription(p) {
+    const lang = state.currentLang;
+    const items = (p.specs || []).flatMap(g => g.items || []);
+    const find = (re) => { const it = items.find(i => re.test(i.name)); return it ? String(it.value).trim() : null; };
+    const refrigerant = find(/ფრეონ|refrigerant/i);
+    const energy = find(/ენერგო.*კლას|energy class/i);
+    const noise = find(/ხმაურ|noise/i);
+    const title = p.title[lang];
+    const boiler = p.category === "boiler";
+    if (lang === "ka") {
+        const kind = boiler ? (p.inverter ? "კონდენსაციური გაზის ქვაბი" : "გაზის ქვაბი") : (p.inverter ? "ინვერტორული კონდიციონერი" : "ON/OFF კონდიციონერი");
+        const cap = p.btu ? (boiler ? ` ${p.btu} სიმძლავრით` : ` ${p.btu} სიმძლავრით`) : "";
+        const area = p.area ? `, რეკომენდებული ${p.area.replace("m²", "მ²")} ფართობისთვის` : "";
+        const extra = [refrigerant ? `ფრეონი ${refrigerant}` : null, energy ? `ენერგოკლასი ${energy}` : null, noise ? `ხმაური ${noise}` : null].filter(Boolean).join(", ");
+        return `${title} — ${p.brand}-ის ${kind}${cap}${area}.${extra ? ` ${extra}.` : ""} მოყვება მწარმოებლის ოფიციალური გარანტია; მონტაჟს ჩვენი სერტიფიცირებული ტექნიკოსები ასრულებენ (${boiler ? "ფასი შეთანხმებით" : "150 ₾-დან"}, სამუშაოზე 12-თვიანი გარანტია). თბილისში მიწოდება უფასოა, შესაძლებელია 0%-იანი განვადება 6 თვემდე.`;
+    }
+    const kind = boiler ? (p.inverter ? "condensing gas boiler" : "gas boiler") : (p.inverter ? "inverter air conditioner" : "on/off air conditioner");
+    const cap = p.btu ? ` rated ${p.btu}` : "";
+    const area = p.area ? `, recommended for ${p.area}` : "";
+    const extra = [refrigerant ? `refrigerant ${refrigerant}` : null, energy ? `energy class ${energy}` : null, noise ? `noise ${noise}` : null].filter(Boolean).join(", ");
+    return `${title} is a ${p.brand} ${kind}${cap}${area}.${extra ? ` ${extra[0].toUpperCase()}${extra.slice(1)}.` : ""} It comes with the manufacturer's official warranty; installation by our certified technicians (${boiler ? "quoted individually" : "from 150 ₾"}, 12-month warranty on the work). Free delivery in Tbilisi, 0% instalments for up to 6 months.`;
+}
+
+// Same category, same brand first — the cross-links that let a crawler (and a
+// shopper) move from one product page to the next.
+function relatedProducts(p, limit = 6) {
+    const same = products.filter(o => o.id !== p.id && o.category === p.category);
+    const sameBrand = same.filter(o => o.brand === p.brand);
+    const rest = same.filter(o => o.brand !== p.brand);
+    return [...sameBrand, ...rest].slice(0, limit);
 }
 
 // Title/description for a product page — the same wording build.mjs uses for
@@ -2237,7 +2385,16 @@ function renderProductDetailPage(p) {
 
     const inCart = state.cart.find(item => item.id === p.id);
 
+    const ownDescription = (p.description[lang] || "").trim();
+    const related = relatedProducts(p);
+
     container.innerHTML = `
+        <nav class="breadcrumb" aria-label="breadcrumb">
+            <a href="/">${t("bc-home")}</a><span class="bc-sep">›</span>
+            <a href="/catalog/${p.category === "boiler" ? "boiler" : "ac"}">${t(p.category === "boiler" ? "nav-boiler" : "nav-ac")}</a><span class="bc-sep">›</span>
+            <a href="/brand/${brandSlug(p.brand)}">${p.brand}</a><span class="bc-sep">›</span>
+            <span>${localizedTitle}</span>
+        </nav>
         <a href="/#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
 
         <div class="detail-layout">
@@ -2264,7 +2421,8 @@ function renderProductDetailPage(p) {
             <div class="detail-info">
                 <span class="product-brand">${p.brand}</span>
                 <h1 class="detail-title">${localizedTitle}</h1>
-                <p class="detail-description">${p.description[lang]}</p>
+                ${ownDescription ? `<p class="detail-description">${ownDescription}</p>` : ""}
+                ${ownDescription.length < 200 ? `<p class="detail-description detail-summary">${generatedDescription(p)}</p>` : ""}
 
                 <div class="detail-price-row">
                     <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
@@ -2312,6 +2470,12 @@ function renderProductDetailPage(p) {
                 </ul>
             </div>` : ""}
         </div>
+
+        ${related.length ? `
+        <div class="rail detail-related">
+            <div class="rail-head"><h2 class="rail-title"><i class="fa-solid fa-layer-group rail-ico"></i> <span>${t("detail-related")}</span></h2></div>
+            <div class="rail-track">${related.map(railCard).join("")}</div>
+        </div>` : ""}
     `;
 
     document.title = `${localizedTitle} | Climate Comfort`;
@@ -3323,9 +3487,9 @@ function renderBrandStrip() {
     const brands = [...new Set(products.map(p => p.brand))].sort();
     wrap.classList.toggle("hidden", brands.length < 2);
     strip.innerHTML = brands.map(b => `
-        <button class="brand-tile" data-brand="${b}" aria-label="${b}">
+        <a class="brand-tile" href="/brand/${brandSlug(b)}" data-brand="${b}" aria-label="${b}">
             <span class="brand-tile-name">${b}</span>
-        </button>
+        </a>
     `).join("");
 }
 
@@ -4021,6 +4185,7 @@ function bindUIEventListeners() {
                 generateFiltersUI();
                 renderCatalog();
                 renderHomeRails();
+                renderGuidesSection();
                 updateCartUI();
                 updateServiceEstimator();
 
@@ -4128,13 +4293,9 @@ function bindUIEventListeners() {
 
             const tile = e.target.closest(".brand-tile");
             if (tile) {
-                state.filters.brands = [tile.getAttribute("data-brand")];
-                generateFiltersUI();
-                renderCatalog();
-                const catalogTop = document.querySelector(".category-tabs-container");
-                if (catalogTop) {
-                    window.scrollTo({ top: catalogTop.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
-                }
+                // /brand/<slug> is a real page: the router applies the filter and scrolls
+                e.preventDefault();
+                navigate(`brand/${brandSlug(tile.getAttribute("data-brand"))}`);
             }
         });
     }

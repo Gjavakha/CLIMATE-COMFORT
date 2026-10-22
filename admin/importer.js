@@ -324,6 +324,15 @@ async function applyImport() {
                         await sbClient.from("products").update(update).eq("id", prod.id);
                         Object.assign(prod, update); // keep in sync for the price/publish step below
                         enriched++;
+                        // Copy the supplier's photos into our own storage so the
+                        // product never loses them when the supplier moves a file.
+                        if (update.images) {
+                            const { data: m } = await sbClient.functions.invoke("mirror-product-images", { body: { productId: prod.id } });
+                            if (m && m.processed) {
+                                const { data: fresh } = await sbClient.from("products").select("image_url, images").eq("id", prod.id).maybeSingle();
+                                if (fresh) Object.assign(prod, fresh);
+                            }
+                        }
                     }
                 } catch (err) {
                     failed++; // one product's fetch failing must not abort the import

@@ -391,3 +391,18 @@ create policy orders_insert_any on orders
         and bog_transaction_id is null
         and paid_at is null
     );
+
+-- ============================================================================
+-- Storage: product photos (added 2026-10-22)
+-- Photos found on suppliers' sites are copied into this public bucket by the
+-- mirror-product-images Edge Function, so the shop never depends on a
+-- supplier keeping a file online. Writes happen with the service role; the
+-- public only reads.
+-- ============================================================================
+insert into storage.buckets (id, name, public)
+values ('product-images', 'product-images', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists product_images_public_read on storage.objects;
+create policy product_images_public_read on storage.objects
+    for select using (bucket_id = 'product-images');

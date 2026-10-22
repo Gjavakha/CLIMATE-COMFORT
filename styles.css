@@ -3222,7 +3222,8 @@ body.product-view .why-us,
 body.product-view .store-catalog,
 body.product-view .home-rails,
 body.product-view .booking-section,
-body.product-view .faq-section {
+body.product-view .faq-section,
+body.product-view .guides-section {
     display: none;
 }
 
@@ -3668,7 +3669,8 @@ body.checkout-view .why-us,
 body.checkout-view .store-catalog,
 body.checkout-view .home-rails,
 body.checkout-view .booking-section,
-body.checkout-view .faq-section {
+body.checkout-view .faq-section,
+body.checkout-view .guides-section {
     display: none;
 }
 
@@ -4010,7 +4012,8 @@ body.account-view .why-us,
 body.account-view .store-catalog,
 body.account-view .home-rails,
 body.account-view .booking-section,
-body.account-view .faq-section {
+body.account-view .faq-section,
+body.account-view .guides-section {
     display: none;
 }
 
@@ -4289,7 +4292,8 @@ body.legal-view .why-us,
 body.legal-view .store-catalog,
 body.legal-view .home-rails,
 body.legal-view .booking-section,
-body.legal-view .faq-section {
+body.legal-view .faq-section,
+body.legal-view .guides-section {
     display: none;
 }
 
@@ -4873,3 +4877,61 @@ body.legal-view .faq-section {
     .faq-item summary { padding: 15px 16px; }
     .faq-item p { padding: 0 16px 16px; }
 }
+
+/* ==========================================================================
+   Breadcrumb (product + guide pages), related-products rail, guides, 404
+   ========================================================================== */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--secondary); }
+.breadcrumb .bc-sep { opacity: 0.5; }
+.breadcrumb > span:last-child { color: var(--text-main); font-weight: 500; }
+
+.detail-summary { color: var(--text-muted); font-size: 0.95rem; }
+
+.detail-related { margin-top: 48px; }
+.detail-related .rail-head { margin-bottom: 16px; }
+
+.guides-section {
+    padding: 80px 0;
+    background-color: var(--background);
+    border-top: 1px solid var(--border-color);
+}
+.guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+}
+.guide-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+.guide-card:hover { border-color: var(--secondary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.guide-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.35; color: var(--text-main); }
+.guide-card p { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; flex: 1; }
+.guide-more { color: var(--secondary); font-weight: 600; font-size: 0.9rem; }
+.guide-more i { font-size: 0.8em; margin-left: 4px; }
+
+@media (max-width: 640px) {
+    .guides-section { padding: 56px 0; }
+    .guide-card { padding: 18px; }
+}
+
+/* Brand tiles are links now (/brand/<slug>) — keep the button look */
+.brand-tile { display: block; text-decoration: none; color: inherit; }

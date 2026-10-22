@@ -81,6 +81,11 @@
                 <!-- The public site is pre-built: product pages are generated from the
                      database at build time, so price/product changes go live only
                      after a rebuild (publish-site Edge Function → Cloudflare deploy hook) -->
+                <!-- Copies product photos that still point at suppliers' servers into our
+                     own storage (mirror-product-images). Hidden once nothing is left. -->
+                <button class="topbar-link publish-btn hidden" id="mirror-photos-btn" title="Copy product photos from suppliers' servers into our own storage">
+                    <i class="fa-solid fa-images"></i> Copy photos
+                </button>
                 <button class="topbar-link publish-btn" id="publish-site-btn" title="Rebuild the public site with the current products and prices (takes 1–2 minutes)">
                     <i class="fa-solid fa-cloud-arrow-up"></i> Publish site
                 </button>

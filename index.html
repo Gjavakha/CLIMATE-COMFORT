@@ -916,6 +916,17 @@
         </div>
     </div>
 
+    <!-- Buyer's guides (guides.js) — cards rendered by app.js and pre-rendered by build.mjs -->
+    <section class="guides-section" id="guides">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="guides-header">სასარგებლო სტატიები</h2>
+                <p data-i18n="guides-subheader">როგორ ავირჩიოთ, რა ღირს მონტაჟი, როგორ მოვუაროთ — ჩვენი ტექნიკოსების რჩევები</p>
+            </div>
+            <div class="guides-grid" id="guides-grid"></div>
+        </div>
+    </section>
+
     <!-- FAQ — plain text answers to the questions customers (and AI assistants)
          ask most; mirrored by the FAQPage schema in <head> and by llms.txt.
          Keep the three in step when a price or policy changes. -->
@@ -1045,6 +1056,7 @@
     <!-- Supabase client (database: products, orders) — must load before app.js -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/supabase-config.js"></script>
+    <script src="/guides.js"></script>
     <!-- build.mjs inserts the published catalog as JSON right here (#catalog-data) -->
     <script src="/app.js"></script>
     <!-- Analytics (GA4 + Meta Pixel) — loads only after cookie consent -->

@@ -133,6 +133,8 @@ function bindDashboardUI() {
 
     $("refresh-btn").addEventListener("click", loadOrders);
     $("publish-site-btn").addEventListener("click", publishSite);
+    $("mirror-photos-btn").addEventListener("click", mirrorPhotos);
+    checkExternalPhotos();
 
     $("status-chips").addEventListener("click", (e) => {
         const chip = e.target.closest(".chip");
@@ -518,5 +520,50 @@ async function publishSite() {
         btn.title = String(err.message || err);
         alert(`Publish failed: ${err.message || err}`);
         setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 4000);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Product photos hosted by us. Photos found on suppliers' sites are copied
+// into our own storage (mirror-product-images). The importer does this for
+// new products; the button handles whatever is still external, in batches.
+// ---------------------------------------------------------------------------
+async function checkExternalPhotos() {
+    const btn = $("mirror-photos-btn");
+    if (!btn) return;
+    const prefix = `${SUPABASE_URL}/storage/v1/object/public/product-images/`;
+    const { data, error } = await sbClient.from("products").select("image_url, images");
+    if (error || !data) return;
+    const external = data.filter(p => [p.image_url, ...(p.images || [])].some(u => u && !u.startsWith(prefix))).length;
+    btn.classList.toggle("hidden", external === 0);
+    btn.innerHTML = `<i class="fa-solid fa-images"></i> Copy photos (${external})`;
+}
+
+async function mirrorPhotos() {
+    const btn = $("mirror-photos-btn");
+    btn.disabled = true;
+    let total = 0, errors = 0;
+    try {
+        // 10 products per call keeps each request well inside the function's time limit
+        for (let round = 0; round < 40; round++) {
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Copying… ${total} done`;
+            const { data, error } = await sbClient.functions.invoke("mirror-product-images", { body: { limit: 10 } });
+            if (error) {
+                let detail = error.message;
+                try { const body = await error.context?.json(); if (body?.error) detail = body.error; } catch { /* keep */ }
+                throw new Error(detail);
+            }
+            total += data.processed || 0;
+            errors += (data.errors || []).length;
+            if (data.errors && data.errors.length) console.warn("mirror-product-images:", data.errors);
+            if (!data.remaining || !data.processed) break;
+        }
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> ${total} copied${errors ? `, ${errors} failed (see console)` : ""}`;
+        setTimeout(checkExternalPhotos, 6000);
+    } catch (err) {
+        btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Failed`;
+        alert(`Copying photos failed: ${err.message || err}`);
+    } finally {
+        btn.disabled = false;
     }
 }
