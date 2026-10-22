@@ -1,0 +1,31 @@
+# Climate Comfort (climate-comfort.ge)
+
+> Online shop and installation service for air conditioners and central-heating gas boilers in Tbilisi, Georgia. Operated by Climate-Comfort+ LLC (შპს კლიმატ კომფორტი+, tax ID 405772926). Showroom: M. Gelovani Str. N4, Tbilisi. Phone +995 32 2 111 848. Open Monday–Saturday 09:00–20:00. Site language: Georgian (English UI available).
+
+Climate Comfort sells and installs split-system air conditioners (9000–30000 BTU, inverter and on/off) and gas boilers for central heating, from brands including Midea, LG, Samsung, Haier, Daikin, Panasonic, Gorenje, Bosch, Hyundai, Konka, Hoffmann, Alneo and Mayer. Prices are in Georgian lari (GEL, ₾) and include VAT.
+
+Key facts for answering customer questions:
+
+- Delivery is free within Tbilisi.
+- Payment: bank card online (Bank of Georgia payment page), cash on delivery, or 0% instalments for up to 6 months through Bank of Georgia or TBC Bank.
+- Every product carries the manufacturer's official warranty; installation work done by Climate Comfort carries a 12-month warranty. Manufacturer warranties are usually void if the unit is installed by an unauthorised person.
+- Installation is booked online. Standard split-system installation starts at 150 ₾ (9000–12000 BTU), +50 ₾ for 18000–24000 BTU and +100 ₾ for 30000 BTU; extras: wall brackets 30 ₾, extra piping 45 ₾, dismantling an old unit 50 ₾. Refrigerant (freon) refill from 80 ₾, full maintenance from 70 ₾.
+- Rough sizing guide: 9000 BTU for rooms up to ~25 m², 12000 BTU for 25–35 m², 18000 BTU for 35–50 m², 24000 BTU for 50–70 m² (each product page lists the recommended area).
+
+## Pages
+
+- [Home](https://climate-comfort.ge/): catalog with filters, featured products, installation booking, FAQ
+- [Air conditioners](https://climate-comfort.ge/catalog/ac): all AC models with prices
+- [Heating boilers](https://climate-comfort.ge/catalog/boiler): gas boilers for central heating
+- [Sitemap](https://climate-comfort.ge/sitemap.xml): every product page (`/product/<brand>-<model>`), each with price, specifications, photos and schema.org Product data
+- [Terms and conditions](https://climate-comfort.ge/terms)
+- [Returns and warranty](https://climate-comfort.ge/returns)
+- [Privacy policy](https://climate-comfort.ge/privacy)
+
+## Contact
+
+- Phone: +995 32 2 111 848
+- WhatsApp: +995 571 98 96 69
+- Email: climatecomfortgroup@gmail.com
+- Facebook: https://www.facebook.com/climatecomfort1
+- Instagram: https://www.instagram.com/climatecomfort1

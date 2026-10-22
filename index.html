@@ -105,6 +105,24 @@
         ]
     }
     </script>
+    <!-- FAQ rich result + the facts AI assistants quote. Same wording as the
+         FAQ section below (Georgian). -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            { "@type": "Question", "name": "რა ღირს მიწოდება?", "acceptedAnswer": { "@type": "Answer", "text": "თბილისის მასშტაბით მიწოდება უფასოა. რეგიონებში მიწოდების პირობებს შეკვეთისას ვაზუსტებთ." } },
+            { "@type": "Question", "name": "რა ღირს კონდიციონერის მონტაჟი?", "acceptedAnswer": { "@type": "Answer", "text": "სტანდარტული მონტაჟი 150 ₾-დან იწყება (9000–12000 BTU); 18000–24000 BTU-ზე +50 ₾, 30000 BTU-ზე +100 ₾. კრონშტეინები 30 ₾, დამატებითი მილი 45 ₾, ძველი კონდიციონერის დემონტაჟი 50 ₾. ფრეონის შევსება 80 ₾-დან, სრული პროფილაქტიკა 70 ₾-დან." } },
+            { "@type": "Question", "name": "არის თუ არა განვადება?", "acceptedAnswer": { "@type": "Answer", "text": "დიახ — 0%-იანი განვადება 6 თვემდე საქართველოს ბანკისა და თიბისის მეშვეობით. განაცხადი ივსება პროდუქტის გვერდზე, ბანკის ოპერატორი უკავშირდება მყიდველს ხელშეკრულების გასაფორმებლად." } },
+            { "@type": "Question", "name": "როგორ შემიძლია გადახდა?", "acceptedAnswer": { "@type": "Answer", "text": "ბარათით ონლაინ (საქართველოს ბანკის დაცული გადახდის გვერდით), ნაღდი ანგარიშსწორებით მიწოდებისას ან განვადებით." } },
+            { "@type": "Question", "name": "რა გარანტია აქვს პროდუქციას და მონტაჟს?", "acceptedAnswer": { "@type": "Answer", "text": "ყველა პროდუქტზე ვრცელდება მწარმოებლის ოფიციალური გარანტია. Climate Comfort-ის მიერ შესრულებულ სამონტაჟო სამუშაოზე 12-თვიანი გარანტიაა. მწარმოებლის გარანტია, როგორც წესი, უქმდება, თუ მონტაჟი არაუფლებამოსილმა პირმა შეასრულა." } },
+            { "@type": "Question", "name": "რომელი სიმძლავრის კონდიციონერი მჭირდება?", "acceptedAnswer": { "@type": "Answer", "text": "სავარაუდო წესი: 9000 BTU — 25 მ²-მდე, 12000 BTU — 25–35 მ², 18000 BTU — 35–50 მ², 24000 BTU — 50–70 მ². მზიანი, მაღალჭერიანი ან ბოლო სართულის ოთახებისთვის ერთი საფეხურით მეტი." } },
+            { "@type": "Question", "name": "სად ხართ და როდის მუშაობთ?", "acceptedAnswer": { "@type": "Answer", "text": "მ. გელოვანის ქ. N4, თბილისი. ორშაბათი–შაბათი, 09:00–20:00. ტელეფონი +995 32 2 111 848, WhatsApp +995 571 98 96 69." } },
+            { "@type": "Question", "name": "რომელი ბრენდები გაქვთ?", "acceptedAnswer": { "@type": "Answer", "text": "Midea, LG, Samsung, Haier, Daikin, Panasonic, Gorenje, Bosch, Hyundai, Konka, Hoffmann, Alneo და Mayer." } }
+        ]
+    }
+    </script>
 </head>
 <body>
 
@@ -897,6 +915,52 @@
             <button class="btn btn-accent btn-md w-full" id="success-close-btn" data-i18n="success-close">დასრულება</button>
         </div>
     </div>
+
+    <!-- FAQ — plain text answers to the questions customers (and AI assistants)
+         ask most; mirrored by the FAQPage schema in <head> and by llms.txt.
+         Keep the three in step when a price or policy changes. -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="faq-header">ხშირად დასმული კითხვები</h2>
+                <p data-i18n="faq-subheader">მიწოდება, მონტაჟი, განვადება და გარანტია — მოკლე პასუხები</p>
+            </div>
+            <div class="faq-list">
+                <details class="faq-item" open>
+                    <summary><h3 data-i18n="faq-q1">რა ღირს მიწოდება?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a1">თბილისის მასშტაბით მიწოდება უფასოა. რეგიონებში მიწოდების პირობებს შეკვეთისას ვაზუსტებთ — დაგვიკავშირდით ტელეფონზე ან WhatsApp-ით.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q2">რა ღირს კონდიციონერის მონტაჟი?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a2">სტანდარტული მონტაჟი 150 ₾-დან იწყება (9000–12000 BTU); 18000–24000 BTU-ზე +50 ₾, 30000 BTU-ზე +100 ₾. დამატებითი სამუშაოები: კრონშტეინები 30 ₾, დამატებითი მილი 45 ₾, ძველი კონდიციონერის დემონტაჟი 50 ₾. ფრეონის შევსება 80 ₾-დან, სრული პროფილაქტიკა 70 ₾-დან. ზუსტი ფასი საიტის კალკულატორში ჩანს სერვისის დაჯავშნისას.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q3">არის თუ არა განვადება?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a3">დიახ — 0%-იანი განვადება 6 თვემდე საქართველოს ბანკისა და თიბისის მეშვეობით. პროდუქტის გვერდზე აირჩიეთ „განვადება“, შეავსეთ განაცხადი და ბანკის ოპერატორი დაგიკავშირდებათ ხელშეკრულების გასაფორმებლად.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q4">როგორ შემიძლია გადახდა?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a4">ბარათით ონლაინ (საქართველოს ბანკის დაცული გადახდის გვერდით), ნაღდი ანგარიშსწორებით მიწოდებისას ან განვადებით.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q5">რა გარანტია აქვს პროდუქციას და მონტაჟს?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a5">ყველა პროდუქტზე ვრცელდება მწარმოებლის ოფიციალური გარანტია. ჩვენ მიერ შესრულებულ სამონტაჟო სამუშაოზე 12-თვიანი გარანტიაა. გაითვალისწინეთ: მწარმოებლის გარანტია, როგორც წესი, უქმდება, თუ მონტაჟი არაუფლებამოსილმა პირმა შეასრულა.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q6">რომელი სიმძლავრის კონდიციონერი მჭირდება?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a6">სავარაუდო წესი: 9000 BTU — 25 მ²-მდე, 12000 BTU — 25–35 მ², 18000 BTU — 35–50 მ², 24000 BTU — 50–70 მ². მზიანი, მაღალჭერიანი ან ბოლო სართულის ოთახებისთვის ერთი საფეხურით მეტი აიღეთ. თითოეული პროდუქტის გვერდზე რეკომენდებული ფართობი წერია.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q7">სად ხართ და როდის მუშაობთ?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a7">მისამართი: მ. გელოვანის ქ. N4, თბილისი. სამუშაო დღეები: ორშაბათი–შაბათი, 09:00–20:00. ტელეფონი: +995 32 2 111 848, WhatsApp: +995 571 98 96 69.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><h3 data-i18n="faq-q8">რომელი ბრენდები გაქვთ?</h3><i class="fa-solid fa-chevron-down"></i></summary>
+                    <p data-i18n="faq-a8">Midea, LG, Samsung, Haier, Daikin, Panasonic, Gorenje, Bosch, Hyundai, Konka, Hoffmann, Alneo და Mayer. ასორტიმენტი მომწოდებლების მარაგის მიხედვით იცვლება — აქტუალური სია კატალოგშია.</p>
+                </details>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">

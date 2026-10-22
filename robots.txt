@@ -1,12 +1,63 @@
 # Climate Comfort — https://climate-comfort.ge
 # The storefront is fully crawlable; the admin panel is not.
+# AI search crawlers (ChatGPT, Claude, Perplexity, Gemini, Bing Copilot) are
+# welcome: being cited in AI answers is part of how customers find the shop.
+# Cloudflare's "AI Crawl Control" for the zone must stay on "allow" for
+# search and agent bots, or these directives are overridden at the edge.
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /admin
+Disallow: /checkout/
+Disallow: /account
+Disallow: /payment-result/
 
 # Supabase Edge Functions and raw data files are not pages
 Disallow: /supabase/
+
+# AI search / assistant crawlers — explicitly allowed
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
 
 Sitemap: https://climate-comfort.ge/sitemap.xml

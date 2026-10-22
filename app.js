@@ -259,6 +259,24 @@ const translations = {
         "seo-desc-ac": "ინვერტორული და ON/OFF კონდიციონერები 9000-დან 24000 BTU-მდე: Midea, LG, Samsung, Haier, Daikin და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება, უფასო მიწოდება თბილისში.",
         "seo-title-boiler": "გათბობის ქვაბები — ცენტრალური გათბობა, მონტაჟი | Climate Comfort",
         "seo-desc-boiler": "კონდენსაციური და სტანდარტული გაზის ქვაბები ცენტრალური გათბობისთვის: Bosch, Gorenje და სხვა. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+        "faq-header": "ხშირად დასმული კითხვები",
+        "faq-subheader": "მიწოდება, მონტაჟი, განვადება და გარანტია — მოკლე პასუხები",
+        "faq-q1": "რა ღირს მიწოდება?",
+        "faq-a1": "თბილისის მასშტაბით მიწოდება უფასოა. რეგიონებში მიწოდების პირობებს შეკვეთისას ვაზუსტებთ — დაგვიკავშირდით ტელეფონზე ან WhatsApp-ით.",
+        "faq-q2": "რა ღირს კონდიციონერის მონტაჟი?",
+        "faq-a2": "სტანდარტული მონტაჟი 150 ₾-დან იწყება (9000–12000 BTU); 18000–24000 BTU-ზე +50 ₾, 30000 BTU-ზე +100 ₾. დამატებითი სამუშაოები: კრონშტეინები 30 ₾, დამატებითი მილი 45 ₾, ძველი კონდიციონერის დემონტაჟი 50 ₾. ფრეონის შევსება 80 ₾-დან, სრული პროფილაქტიკა 70 ₾-დან. ზუსტი ფასი საიტის კალკულატორში ჩანს სერვისის დაჯავშნისას.",
+        "faq-q3": "არის თუ არა განვადება?",
+        "faq-a3": "დიახ — 0%-იანი განვადება 6 თვემდე საქართველოს ბანკისა და თიბისის მეშვეობით. პროდუქტის გვერდზე აირჩიეთ „განვადება“, შეავსეთ განაცხადი და ბანკის ოპერატორი დაგიკავშირდებათ ხელშეკრულების გასაფორმებლად.",
+        "faq-q4": "როგორ შემიძლია გადახდა?",
+        "faq-a4": "ბარათით ონლაინ (საქართველოს ბანკის დაცული გადახდის გვერდით), ნაღდი ანგარიშსწორებით მიწოდებისას ან განვადებით.",
+        "faq-q5": "რა გარანტია აქვს პროდუქციას და მონტაჟს?",
+        "faq-a5": "ყველა პროდუქტზე ვრცელდება მწარმოებლის ოფიციალური გარანტია. ჩვენ მიერ შესრულებულ სამონტაჟო სამუშაოზე 12-თვიანი გარანტიაა. გაითვალისწინეთ: მწარმოებლის გარანტია, როგორც წესი, უქმდება, თუ მონტაჟი არაუფლებამოსილმა პირმა შეასრულა.",
+        "faq-q6": "რომელი სიმძლავრის კონდიციონერი მჭირდება?",
+        "faq-a6": "სავარაუდო წესი: 9000 BTU — 25 მ²-მდე, 12000 BTU — 25–35 მ², 18000 BTU — 35–50 მ², 24000 BTU — 50–70 მ². მზიანი, მაღალჭერიანი ან ბოლო სართულის ოთახებისთვის ერთი საფეხურით მეტი აიღეთ. თითოეული პროდუქტის გვერდზე რეკომენდებული ფართობი წერია.",
+        "faq-q7": "სად ხართ და როდის მუშაობთ?",
+        "faq-a7": "მისამართი: მ. გელოვანის ქ. N4, თბილისი. სამუშაო დღეები: ორშაბათი–შაბათი, 09:00–20:00. ტელეფონი: +995 32 2 111 848, WhatsApp: +995 571 98 96 69.",
+        "faq-q8": "რომელი ბრენდები გაქვთ?",
+        "faq-a8": "Midea, LG, Samsung, Haier, Daikin, Panasonic, Gorenje, Bosch, Hyundai, Konka, Hoffmann, Alneo და Mayer. ასორტიმენტი მომწოდებლების მარაგის მიხედვით იცვლება — აქტუალური სია კატალოგშია.",
         "footer-legal-title": "წესები და პირობები",
         "footer-terms": "წესები და პირობები",
         "footer-privacy": "კონფიდენციალურობის პოლიტიკა",
@@ -607,6 +625,24 @@ const translations = {
         "seo-desc-ac": "Inverter and on/off air conditioners from 9000 to 24000 BTU: Midea, LG, Samsung, Haier, Daikin and more. Official warranty, professional installation, 0% instalments, free delivery in Tbilisi.",
         "seo-title-boiler": "Heating Boilers — Central Heating, Installation | Climate Comfort",
         "seo-desc-boiler": "Condensing and standard gas boilers for central heating: Bosch, Gorenje and more. Official warranty, installation, 0% instalments and free delivery in Tbilisi.",
+        "faq-header": "Frequently Asked Questions",
+        "faq-subheader": "Delivery, installation, instalments and warranty — short answers",
+        "faq-q1": "How much is delivery?",
+        "faq-a1": "Delivery within Tbilisi is free. For the regions we confirm the terms when you order — call us or write on WhatsApp.",
+        "faq-q2": "How much does air conditioner installation cost?",
+        "faq-a2": "Standard installation starts at 150 ₾ (9000–12000 BTU); +50 ₾ for 18000–24000 BTU and +100 ₾ for 30000 BTU. Extras: wall brackets 30 ₾, extra piping 45 ₾, dismantling an old unit 50 ₾. Refrigerant refill from 80 ₾, full maintenance from 70 ₾. The exact price is shown by the calculator when you book a service.",
+        "faq-q3": "Do you offer instalments?",
+        "faq-a3": "Yes — 0% instalments for up to 6 months through Bank of Georgia and TBC Bank. Choose “Instalments” on the product page, fill in the application and the bank's operator will call you to sign the agreement.",
+        "faq-q4": "How can I pay?",
+        "faq-a4": "By card online (Bank of Georgia's secure payment page), in cash on delivery, or by instalments.",
+        "faq-q5": "What warranty do the products and the installation have?",
+        "faq-a5": "Every product carries the manufacturer's official warranty. Installation work done by us carries a 12-month warranty. Note that manufacturer warranties are usually void if the unit was installed by an unauthorised person.",
+        "faq-q6": "Which capacity do I need?",
+        "faq-a6": "Rule of thumb: 9000 BTU for rooms up to 25 m², 12000 BTU for 25–35 m², 18000 BTU for 35–50 m², 24000 BTU for 50–70 m². Go one step up for sunny, high-ceilinged or top-floor rooms. Each product page lists the recommended area.",
+        "faq-q7": "Where are you and when are you open?",
+        "faq-a7": "Address: M. Gelovani Str. N4, Tbilisi. Open Monday–Saturday, 09:00–20:00. Phone: +995 32 2 111 848, WhatsApp: +995 571 98 96 69.",
+        "faq-q8": "Which brands do you carry?",
+        "faq-a8": "Midea, LG, Samsung, Haier, Daikin, Panasonic, Gorenje, Bosch, Hyundai, Konka, Hoffmann, Alneo and Mayer. The range follows supplier stock — the catalog always shows the current list.",
         "footer-legal-title": "Terms & Policies",
         "footer-terms": "Terms & Conditions",
         "footer-privacy": "Privacy Policy",
@@ -2006,7 +2042,7 @@ function renderLegalPage(slug) {
 // A "route" below is the path without its leading slash; "" is home.
 // ==========================================================================
 const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view", "legal-view"];
-const HOME_ANCHORS = ["catalog", "booking-section", "about-us", "home-rails"];
+const HOME_ANCHORS = ["catalog", "booking-section", "about-us", "home-rails", "faq"];
 const SITE_ORIGIN = "https://climate-comfort.ge";
 
 function currentRoute() {

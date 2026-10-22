@@ -247,6 +247,20 @@ npx -y supabase@latest secrets set PAGES_DEPLOY_HOOK=https://api.cloudflare.com/
 
 Deploy hook-ის შექმნა (ერთხელ, Pages პროექტის გაკეთების შემდეგ): Cloudflare → Workers & Pages → პროექტი → Settings → Builds → Deploy hooks → Add; URL-ი `PAGES_DEPLOY_HOOK` secret-ად (იხ. CLI ბლოკი ზემოთ). URL კოდში არასდროს — ვისაც აქვს, build-ების გაშვება შეუძლია.
 
+### AI ძიება (ChatGPT, Claude, Perplexity, Gemini) — GEO
+
+AI ასისტენტები საიტს თავიანთი crawler-ებით კითხულობენ (ChatGPT — Bing-ის ინდექსი + `OAI-SearchBot`, Claude — Brave-ის ინდექსი + `Claude-SearchBot`, Perplexity — `PerplexityBot`). „სიაში დამატების" მექანიზმი არცერთ მათგანს არ აქვს — ციტირება დამოკიდებულია იმაზე, რამდენად ადვილად წასაკითხი და კონკრეტულია გვერდები. რაც გაკეთებულია:
+
+- პროდუქტის გვერდები წინასწარ არენდერებულია — AI crawler-ების უმეტესობა JavaScript-ს არ უშვებს, ამიტომ მხოლოდ HTML-ში ჩაწერილ ფასსა და მახასიათებლებს ხედავს.
+- `robots.txt` ყველა AI crawler-ს ცალსახად უშვებს (`/admin/`, `/checkout/`, `/account` — არა).
+- `llms.txt` — ბიზნესის ფაქტები ერთ ფაილში (მიწოდება, მონტაჟის ფასები, განვადება, გარანტია, საათები, ბრენდები); ახალი სტანდარტია, ზოგი ასისტენტი კითხულობს.
+- მთავარ გვერდზე FAQ სექცია + `FAQPage` schema — პირდაპირი პასუხები იმ კითხვებზე, რასაც მომხმარებლები ასისტენტებს უსვამენ.
+- Cloudflare → AI Crawl Control: დომენის აქტივაციისას არჩეული იყო „Allow" Search/Agent/Training სამივეზე. აქტივაციის შემდეგ გადაამოწმე, რომ არცერთი AI bot არ იბლოკება (Cloudflare ახალ ზონებზე AI crawler-ების ბლოკვას ნაგულისხმევად სთავაზობს).
+
+⚠ ფასები და პირობები სამ ადგილას მეორდება: FAQ სექცია (`index.html` + `translations` `app.js`-ში), `FAQPage` schema (`index.html` `<head>`) და `llms.txt`. მონტაჟის ფასის ან პოლიტიკის ცვლილებისას სამივე განაახლე.
+
+რჩება დომენის შემდეგ: Bing Webmaster Tools (ChatGPT-ს ინდექსი Bing-ია) — sitemap-ის გაგზავნა; Cloudflare → Caching → Configuration → **Crawler Hints** ჩართვა (IndexNow — Bing-ს ცვლილებებს მყისიერად ატყობინებს; Supplemental Terms-ზე თანხმობაა საჭირო); Google Business Profile და მიმოხილვები — ასისტენტები ლოკალურ ბიზნესს სწორედ აქედან „იცნობენ".
+
 ### რა რჩება დომენის გაშვების შემდეგ
 
 - Google Search Console — დომენის დადასტურება Cloudflare DNS-ში TXT ჩანაწერით, `sitemap.xml`-ის გაგზავნა.

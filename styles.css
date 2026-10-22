@@ -3221,7 +3221,8 @@ body.product-view .hero,
 body.product-view .why-us,
 body.product-view .store-catalog,
 body.product-view .home-rails,
-body.product-view .booking-section {
+body.product-view .booking-section,
+body.product-view .faq-section {
     display: none;
 }
 
@@ -3666,7 +3667,8 @@ body.checkout-view .hero,
 body.checkout-view .why-us,
 body.checkout-view .store-catalog,
 body.checkout-view .home-rails,
-body.checkout-view .booking-section {
+body.checkout-view .booking-section,
+body.checkout-view .faq-section {
     display: none;
 }
 
@@ -4007,7 +4009,8 @@ body.account-view .hero,
 body.account-view .why-us,
 body.account-view .store-catalog,
 body.account-view .home-rails,
-body.account-view .booking-section {
+body.account-view .booking-section,
+body.account-view .faq-section {
     display: none;
 }
 
@@ -4285,7 +4288,8 @@ body.legal-view .hero,
 body.legal-view .why-us,
 body.legal-view .store-catalog,
 body.legal-view .home-rails,
-body.legal-view .booking-section {
+body.legal-view .booking-section,
+body.legal-view .faq-section {
     display: none;
 }
 
@@ -4813,4 +4817,59 @@ body.legal-view .booking-section {
 @media (max-width: 480px) {
     .payment-result { margin: 16px auto; padding: 28px 18px; }
     .payment-result-actions .btn { flex: 1 1 100%; }
+}
+
+/* ==========================================================================
+   FAQ section (home) — plain-text answers, also used by AI assistants
+   ========================================================================== */
+.faq-section {
+    padding: 80px 0;
+    background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+}
+.faq-list {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    gap: 12px;
+}
+.faq-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    transition: var(--transition);
+}
+.faq-item[open] { box-shadow: var(--shadow-md); border-color: var(--secondary); }
+.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+.faq-item summary i {
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+.faq-item[open] summary i { transform: rotate(180deg); color: var(--secondary); }
+.faq-item p {
+    margin: 0;
+    padding: 0 22px 20px;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+@media (max-width: 640px) {
+    .faq-section { padding: 56px 0; }
+    .faq-item summary { padding: 15px 16px; }
+    .faq-item p { padding: 0 16px 16px; }
 }

@@ -40,7 +40,7 @@ mkdirSync(join(DIST, "assets"), { recursive: true });
 mkdirSync(join(DIST, "product"), { recursive: true });
 mkdirSync(join(DIST, "catalog"), { recursive: true });
 
-for (const f of ["app.js", "analytics.js", "styles.css", "supabase-config.js", "robots.txt", "_headers", "_redirects"]) {
+for (const f of ["app.js", "analytics.js", "styles.css", "supabase-config.js", "robots.txt", "llms.txt", "_headers", "_redirects"]) {
     cpSync(join(ROOT, f), join(DIST, f));
 }
 for (const f of ["index.html", "admin.css", "admin.js", "importer.js", "importer-profiles.js"]) {
@@ -97,8 +97,12 @@ const template = readFileSync(join(ROOT, "index.html"), "utf8");
 if (!template.includes('<script src="/app.js"></script>')) throw new Error("index.html: app.js script tag not found");
 if (!template.includes('id="product-detail-content"></div>')) throw new Error("index.html: product container not found");
 
-function setHead(html, { title, description, path, ogType = "website", image = null, ldJson = null, bodyClass = null }) {
+function setHead(html, { title, description, path, ogType = "website", image = null, ldJson = null, bodyClass = null, keepFaq = false }) {
     const url = SITE + path;
+    // The FAQ section is part of the home layout; pages that hide it (product,
+    // legal) must not carry its FAQPage schema — Google treats markup for
+    // content the visitor cannot see as spam.
+    if (!keepFaq) html = html.replace(/\s*<!-- FAQ rich result[\s\S]*?<script type="application\/ld\+json">\s*\{\s*"@context": "https:\/\/schema\.org",\s*"@type": "FAQPage"[\s\S]*?<\/script>/, "");
     html = html.replace(/<title[^>]*>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
     html = html.replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${esc(description)}">`);
     html = html.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${esc(url)}">`);
@@ -293,7 +297,7 @@ for (const [cat, meta] of Object.entries(CATEGORY_PAGES)) {
             "@type": "ListItem", "position": i + 1, "url": `${SITE}/product/${slugOf(r)}`
         }))
     };
-    writeFileSync(join(DIST, "catalog", `${cat}.html`), setHead(withCatalog, { ...meta, path, ldJson: ld }));
+    writeFileSync(join(DIST, "catalog", `${cat}.html`), setHead(withCatalog, { ...meta, path, ldJson: ld, keepFaq: true }));
 }
 
 const LEGAL_PAGES = {
