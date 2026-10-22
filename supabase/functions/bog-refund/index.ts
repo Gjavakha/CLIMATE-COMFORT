@@ -38,7 +38,9 @@ const STATUS_MAP: Record<string, string> = {
     rejected: "failed",
     blocked: "failed",
     refunded: "refunded",
-    refunded_partially: "refunded",
+    // A partial refund leaves the order paid (the rest can still be refunded);
+    // bog_order_status keeps "refunded_partially" so the admin can see it.
+    refunded_partially: "paid",
 };
 
 const ORDER_COLUMNS = "id,order_no,amount,payment_status,paid_at,payment_reason,payment_updated_at," +
@@ -167,6 +169,12 @@ async function applyBankOrder(order: any, bank: any): Promise<void> {
         bog_order_status: key || null,
         payment_updated_at: now,
     };
+    // A refund we asked for is still in flight when the receipt still says
+    // "completed": keep our own "refund_requested" marker (it hides the Refund
+    // button) until the bank reports the refund.
+    if (order.bog_order_status === "refund_requested" && (key === "completed" || key === "partial_completed")) {
+        patch.bog_order_status = "refund_requested";
+    }
     if (detail.transaction_id) patch.bog_transaction_id = detail.transaction_id;
     if (detail.payer_identifier) patch.bog_payer_identifier = detail.payer_identifier;
     if (detail.card_type) patch.bog_card_type = detail.card_type;

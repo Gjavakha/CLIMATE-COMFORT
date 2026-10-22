@@ -187,7 +187,14 @@ const withCatalog = embed(template, "catalog-data", slim).replace('id="guides-gr
 // ---------------------------------------------------------------------------
 // 4. Home
 // ---------------------------------------------------------------------------
-writeFileSync(join(DIST, "index.html"), withCatalog);
+// The source file carries the English <title> (app.js swaps it per language);
+// the served home page must open with the Georgian one crawlers index.
+writeFileSync(join(DIST, "index.html"), setHead(withCatalog, {
+    title: "Climate Comfort | პრემიუმ გათბობა & კონდიცირება",
+    description: "კონდიციონერები და ცენტრალური გათბობის ქვაბები საქართველოში — Samsung, LG, Midea, Bosch, Gree და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+    path: "/",
+    keepFaq: true
+}).replace(/<meta name="description" content=/, '<meta name="description" data-i18n-meta="meta-description" content='));
 
 // ---------------------------------------------------------------------------
 // 5. Product pages — /product/<slug>  (served from product/<slug>.html)

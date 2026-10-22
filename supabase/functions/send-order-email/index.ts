@@ -23,7 +23,47 @@
 // ============================================================================
 
 const ORDER_COLUMNS =
-    "order_no,user_email,customer_name,phone,address,personal_id,product_title,amount,needs_install,payment_method,created_at";
+    "id,order_no,user_email,customer_name,phone,address,personal_id,product_title,amount,needs_install,payment_method,payment_status,created_at,confirmation_sent_at";
+
+// Anyone can create an order row (guest checkout) and anyone can call this
+// function, so the row alone must not be enough to make us send mail:
+//   - one confirmation per order, ever (confirmation_sent_at is claimed
+//     atomically before sending);
+//   - only for orders younger than this (a stale id cannot be replayed);
+//   - at most RATE_LIMIT orders per hour per recipient address get a mail;
+//   - card orders only once the bank has confirmed payment.
+const MAX_ORDER_AGE_MS = 24 * 60 * 60 * 1000;
+const RATE_LIMIT_PER_HOUR = 5;
+
+async function db(path: string, init: RequestInit = {}) {
+    const url = Deno.env.get("SUPABASE_URL");
+    const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!url || !key) throw new Error("Supabase env vars missing");
+    const res = await fetch(`${url}/rest/v1/${path}`, {
+        ...init,
+        headers: { apikey: key, Authorization: `Bearer ${key}`, Accept: "application/json", "Content-Type": "application/json", ...(init.headers || {}) },
+    });
+    if (!res.ok) throw new Error(`database ${res.status}: ${await res.text()}`);
+    return res;
+}
+
+// Marks the order as mailed; false when another call already did.
+async function claimConfirmation(orderId: string): Promise<boolean> {
+    const res = await db(`orders?id=eq.${encodeURIComponent(orderId)}&confirmation_sent_at=is.null`, {
+        method: "PATCH",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify({ confirmation_sent_at: new Date().toISOString() }),
+    });
+    const rows = await res.json();
+    return Array.isArray(rows) && rows.length === 1;
+}
+
+async function recentOrdersFor(email: string): Promise<number> {
+    const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const res = await db(`orders?user_email=eq.${encodeURIComponent(email)}&created_at=gte.${encodeURIComponent(since)}&select=id&limit=${RATE_LIMIT_PER_HOUR + 1}`);
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows.length : 0;
+}
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -62,6 +102,7 @@ const SHOP = {
 };
 
 const PAYMENT_LABEL: Record<string, string> = {
+    card: "ბარათით ონლაინ — გადახდილია",
     tbc: "ბარათით / განვადება — TBC Bank",
     bog: "ბარათით / განვადება — საქართველოს ბანკი",
     cash: "ადგილზე გადახდა",
@@ -95,8 +136,8 @@ function customerHtml(o: any) {
     <div style="background:#fff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 14px 14px;padding:26px">
       <h1 style="margin:0 0 6px;font-size:20px">შეკვეთა მიღებულია</h1>
       <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6">
-        გმადლობთ, ${escapeHtml(o.customer_name)}! თქვენი შეკვეთა დარეგისტრირდა.
-        ოპერატორი უახლოეს საათებში დაგიკავშირდებათ დეტალების დასაზუსტებლად.
+        გმადლობთ, ${escapeHtml(o.customer_name)}! ${o.payment_method === "card" ? "თქვენი გადახდა მიღებულია და შეკვეთა დარეგისტრირდა." : "თქვენი შეკვეთა დარეგისტრირდა."}
+        ოპერატორი უახლოეს საათებში დაგიკავშირდებათ მიწოდების დეტალების დასაზუსტებლად.
       </p>
 
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px;margin-bottom:20px">
@@ -114,7 +155,7 @@ function customerHtml(o: any) {
       <p style="margin:0 0 18px;color:#475569;font-size:13px;line-height:1.6">
         შეკვეთის გაუქმება ან ცვლილება შესაძლებელია ოპერატორთან დაკავშირებით.
         დაბრუნებისა და გარანტიის პირობები:
-        <a href="${SHOP.site}/#returns" style="color:#0ec1f5">${SHOP.site}/#returns</a>
+        <a href="${SHOP.site}/returns" style="color:#0ec1f5">${SHOP.site}/returns</a>
       </p>
 
       <div style="border-top:1px solid #e2e8f0;padding-top:16px;color:#64748b;font-size:13px;line-height:1.7">
@@ -175,10 +216,24 @@ Deno.serve(async (req) => {
         if (!orderId || !UUID_RE.test(String(orderId))) return json({ error: "a valid orderId is required" }, 400);
 
         // Service role: the order row (and the recipient address) comes from the
-        // database, never from the request body.
+        // database, never from the request body. The row itself was written by
+        // the shopper, hence the guards below.
         const { order, error } = await fetchOrder(String(orderId));
         if (error) return json({ error }, 500);
         if (!order) return json({ error: "order not found" }, 404);
+
+        if (order.confirmation_sent_at) return json({ ok: true, orderNo: order.order_no, skipped: "already sent" });
+        if (Date.now() - new Date(order.created_at).getTime() > MAX_ORDER_AGE_MS) {
+            return json({ ok: true, orderNo: order.order_no, skipped: "order too old" });
+        }
+        if (order.payment_method === "card" && order.payment_status !== "paid") {
+            return json({ ok: true, orderNo: order.order_no, skipped: "card order not paid yet" });
+        }
+        if (order.user_email && (await recentOrdersFor(order.user_email)) > RATE_LIMIT_PER_HOUR) {
+            console.warn("order email rate limit hit for", order.user_email.replace(/^(.).*(@.*)$/, "$1***$2"));
+            return json({ ok: true, orderNo: order.order_no, skipped: "rate limited" });
+        }
+        if (!(await claimConfirmation(order.id))) return json({ ok: true, orderNo: order.order_no, skipped: "already sent" });
 
         const results: Record<string, unknown> = {};
 

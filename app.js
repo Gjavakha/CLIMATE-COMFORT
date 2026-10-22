@@ -259,6 +259,8 @@ const translations = {
         "seo-desc-ac": "ინვერტორული და ON/OFF კონდიციონერები 9000-დან 24000 BTU-მდე: Midea, LG, Samsung, Haier, Daikin და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება, უფასო მიწოდება თბილისში.",
         "seo-title-boiler": "გათბობის ქვაბები — ცენტრალური გათბობა, მონტაჟი | Climate Comfort",
         "seo-desc-boiler": "კონდენსაციური და სტანდარტული გაზის ქვაბები ცენტრალური გათბობისთვის: Bosch, Gorenje და სხვა. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+        "Added to Cart": "კალათაშია",
+        "acc-recovery-hint": "შეიყვანეთ ახალი პაროლი — აღდგენის ბმულით უკვე შესული ხართ, მიმდინარე პაროლი არ გჭირდებათ.",
         "bc-home": "მთავარი",
         "detail-related": "მსგავსი პროდუქტები",
         "guides-header": "სასარგებლო სტატიები",
@@ -632,6 +634,8 @@ const translations = {
         "seo-desc-ac": "Inverter and on/off air conditioners from 9000 to 24000 BTU: Midea, LG, Samsung, Haier, Daikin and more. Official warranty, professional installation, 0% instalments, free delivery in Tbilisi.",
         "seo-title-boiler": "Heating Boilers — Central Heating, Installation | Climate Comfort",
         "seo-desc-boiler": "Condensing and standard gas boilers for central heating: Bosch, Gorenje and more. Official warranty, installation, 0% instalments and free delivery in Tbilisi.",
+        "Added to Cart": "Added to cart",
+        "acc-recovery-hint": "Enter a new password — the recovery link signed you in, so the current password is not needed.",
         "bc-home": "Home",
         "detail-related": "Similar products",
         "guides-header": "Buyer's guides",
@@ -1142,6 +1146,7 @@ if (LANG_PARAM === "ka" || LANG_PARAM === "en") localStorage.setItem("lang", LAN
 let state = {
     currentLang: localStorage.getItem("lang") || "ka", // KA is main language
     catalogReady: false,      // true once the live catalog has been fetched (or the fetch failed)
+    passwordRecovery: false,  // arrived through a "forgot password" link: may set a password without the old one
     cart: [],
     filters: {
         category: "all",
@@ -1176,6 +1181,13 @@ function findProduct(id) {
     return products.find(p => String(p.id) === String(id));
 }
 
+// Product data is scraped from suppliers' websites at import time, so every
+// title, spec and image URL is third-party text. Anything that goes into
+// innerHTML or an attribute passes through here first.
+function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
 // URL slug for /product/<slug>: brand + model, lower-case, dashes. The build
 // script (build.mjs) derives the same slug from the same columns, so the
 // pre-rendered page and the in-app route always agree. A product with no
@@ -1204,7 +1216,7 @@ function dbRowToProduct(r) {
         oldPrice: r.display_old_price ? Number(r.display_old_price) : null,
         btu: r.btu ? (r.category === "boiler" ? `${r.btu} kW` : `${r.btu} BTU`) : "",
         area: r.area_sqm ? `${r.area_sqm} m²` : "",
-        type: "Split System",
+        type: r.category === "boiler" ? "" : "Split System", // boilers have no split type; the spec row is skipped
         inverter: r.subtype === "inverter",
         energyClass: "",
         color: "",
@@ -1366,17 +1378,24 @@ document.addEventListener("DOMContentLoaded", () => {
     //    itself, and also parses the tokens an OAuth / magic-link redirect puts
     //    in the URL — so this covers "already signed in" and "just came back
     //    from Google" alike. It is async, hence the re-render once it lands.
-    if (sbClient) {
-        sbClient.auth.getSession().then(({ data }) => {
-            if (!data.session) return;
-            applySession(data.session).then(() => handleRouting());
-        });
+    // The first routing decision waits for this: /checkout/<id> and /account
+    // need to know whether the visitor is signed in, otherwise a reload (or
+    // the return from Google) would open the login modal over the page.
+    const sessionReady = sbClient
+        ? sbClient.auth.getSession()
+            .then(({ data }) => data.session ? applySession(data.session) : null)
+            .catch(err => console.warn("session restore failed:", err))
+        : Promise.resolve();
 
+    if (sbClient) {
         sbClient.auth.onAuthStateChange((event, session) => {
-            // INITIAL_SESSION is already handled by getSession above
-            if (event === "INITIAL_SESSION") return;
+            // INITIAL_SESSION is handled above; a token refresh changes nothing
+            // the UI shows and must not re-render a half-filled checkout form.
+            if (event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") return;
+            if (event === "PASSWORD_RECOVERY") state.passwordRecovery = true;
             applySession(session).then(() => {
                 state.ordersLoaded = false;
+                if (event === "PASSWORD_RECOVERY") { navigate("account"); return; }
                 if (SUBPAGE_CLASSES.some(c => document.body.classList.contains(c))) handleRouting();
             });
         });
@@ -1406,10 +1425,13 @@ document.addEventListener("DOMContentLoaded", () => {
     upgradeLegacyHashUrl();
     window.addEventListener("popstate", handleRouting);
     document.addEventListener("click", interceptInternalLinks);
-    handleRouting();
 
-    // 7. Swap in the live catalog from Supabase (async; embedded/demo data until it lands)
-    loadDbProducts();
+    // 7. Route once the session is known, then swap in the live catalog from
+    //    Supabase (async; embedded/demo data until it lands)
+    sessionReady.then(() => {
+        handleRouting();
+        loadDbProducts();
+    });
 
     // Initialize date selector minimum date
     const dateInput = document.getElementById("booking-date");
@@ -1493,6 +1515,31 @@ function updateWhatsAppLinks(product) {
     }
 }
 
+// Upper bound of the price slider: the dearest product rounded up to 500,
+// never below the design default of 4000. A filter at the ceiling means
+// "no upper limit", so nothing in the catalog can ever be hidden by default.
+function priceCeiling() {
+    const max = products.reduce((m, p) => Math.max(m, Number(p.price) || 0), 0);
+    return Math.max(4000, Math.ceil(max / 500) * 500);
+}
+
+// Keeps the slider / max input in step with the catalog (the live catalog
+// arrives after the first paint and may be dearer than the demo set).
+function syncPriceBounds() {
+    const slider = document.getElementById("price-range-slider");
+    const maxInput = document.getElementById("price-max-input");
+    if (!slider || !maxInput) return;
+    const ceiling = priceCeiling();
+    const wasUncapped = state.filters.maxPrice >= Number(slider.max || 4000);
+    slider.max = ceiling;
+    maxInput.max = ceiling;
+    if (wasUncapped) {
+        state.filters.maxPrice = ceiling;
+        slider.value = ceiling;
+        maxInput.value = ceiling;
+    }
+}
+
 // Faceted Counter Generator
 function getFacetCounts() {
     const brands = {};
@@ -1554,13 +1601,15 @@ function generateFiltersUI() {
         }
     }
 
+    syncPriceBounds();
+
     // 1. Brands (restore checked state — brand tiles set the filter from outside)
     const brandContainer = document.getElementById("filter-brands");
     brandContainer.innerHTML = Object.keys(facets.brands).map(brand => `
         <label class="filter-checkbox-label">
-            <input type="checkbox" name="brand" value="${brand}" ${state.filters.brands.includes(brand) ? "checked" : ""}>
+            <input type="checkbox" name="brand" value="${esc(brand)}" ${state.filters.brands.includes(brand) ? "checked" : ""}>
             <span class="custom-checkbox"></span>
-            <span class="label-text">${brand}</span>
+            <span class="label-text">${esc(brand)}</span>
             <span class="count">(${facets.brands[brand]})</span>
         </label>
     `).join('');
@@ -1573,9 +1622,9 @@ function generateFiltersUI() {
         const areaLabel = area.replace("m²", t("sqm"));
         return `
             <label class="filter-checkbox-label">
-                <input type="checkbox" name="area" value="${area}">
+                <input type="checkbox" name="area" value="${esc(area)}" ${state.filters.areas.includes(area) ? "checked" : ""}>
                 <span class="custom-checkbox"></span>
-                <span class="label-text">${areaLabel}</span>
+                <span class="label-text">${esc(areaLabel)}</span>
                 <span class="count">(${facets.areas[area]})</span>
             </label>
         `;
@@ -1586,9 +1635,9 @@ function generateFiltersUI() {
     const sortedBtus = Object.keys(facets.btus).sort((a, b) => parseInt(a) - parseInt(b));
     btuContainer.innerHTML = sortedBtus.map(btu => `
         <label class="filter-checkbox-label">
-            <input type="checkbox" name="btu" value="${btu}">
+            <input type="checkbox" name="btu" value="${esc(btu)}" ${state.filters.btus.includes(btu) ? "checked" : ""}>
             <span class="custom-checkbox"></span>
-            <span class="label-text">${btu}</span>
+            <span class="label-text">${esc(btu)}</span>
             <span class="count">(${facets.btus[btu]})</span>
         </label>
     `).join('');
@@ -1597,7 +1646,7 @@ function generateFiltersUI() {
     const energyContainer = document.getElementById("filter-energy");
     energyContainer.innerHTML = Object.keys(facets.energy).sort().map(eClass => `
         <label class="filter-checkbox-label">
-            <input type="checkbox" name="energy" value="${eClass}">
+            <input type="checkbox" name="energy" value="${esc(eClass)}" ${state.filters.energyClass.includes(eClass) ? "checked" : ""}>
             <span class="custom-checkbox"></span>
             <span class="label-text">${state.currentLang === 'ka' ? 'კლასი' : 'Class'} ${eClass}</span>
             <span class="count">(${facets.energy[eClass]})</span>
@@ -1608,7 +1657,7 @@ function generateFiltersUI() {
     const colorContainer = document.getElementById("filter-colors");
     colorContainer.innerHTML = Object.keys(facets.colors).map(color => `
         <label class="filter-checkbox-label">
-            <input type="checkbox" name="color" value="${color}">
+            <input type="checkbox" name="color" value="${esc(color)}" ${state.filters.colors.includes(color) ? "checked" : ""}>
             <span class="custom-checkbox"></span>
             <span class="label-text">${t(color)}</span>
             <span class="count">(${facets.colors[color]})</span>
@@ -1642,7 +1691,7 @@ function stockBadge(p) {
 function buildProductMockup(p) {
     if (p.image) {
         const title = p.title ? (p.title[state.currentLang] || p.title.ka) : p.brand;
-        return `<img class="product-photo" src="${p.image}" alt="${title}" loading="lazy" decoding="async">`;
+        return `<img class="product-photo" src="${esc(p.image)}" alt="${esc(title)}" loading="lazy" decoding="async">`;
     }
     const soon = state.currentLang === 'ka' ? 'ფოტო მალე დაემატება' : 'Photo coming soon';
     return `
@@ -2028,12 +2077,12 @@ function renderLegalPage(slug) {
     const updatedLabel = isKa ? "ბოლო განახლება" : "Last updated";
     const backLabel = isKa ? "მთავარზე დაბრუნება" : "Back to home";
     const otherLinks = LEGAL_SLUGS.filter(s => s !== slug)
-        .map(s => `<a href="#${s}">${legalContent()[s].title}</a>`)
+        .map(s => `<a href="/${s}">${legalContent()[s].title}</a>`)
         .join("");
 
     document.title = `${page.title} | Climate Comfort`;
     container.innerHTML = `
-        <a href="#" class="legal-back"><i class="fa-solid fa-arrow-left"></i> ${backLabel}</a>
+        <a href="/" class="legal-back"><i class="fa-solid fa-arrow-left"></i> ${backLabel}</a>
         <h1 class="legal-title">${page.title}</h1>
         <p class="legal-updated">${updatedLabel}: ${COMPANY.updated}</p>
         <div class="legal-body">${page.html}</div>
@@ -2065,8 +2114,9 @@ const SITE_ORIGIN = "https://climate-comfort.ge";
 
 function currentRoute() {
     const path = location.pathname.replace(/\.html$/, "").replace(/\/+$/, "");
-    if (path === "") return location.hash ? decodeURIComponent(location.hash.slice(1)) : "";
-    return decodeURIComponent(path.slice(1));
+    const raw = path === "" ? (location.hash ? location.hash.slice(1) : "") : path.slice(1);
+    // A stray "%" in a pasted link must not throw and stop the app
+    try { return decodeURIComponent(raw); } catch { return raw; }
 }
 
 function routeToUrl(route) {
@@ -2128,8 +2178,12 @@ function updateSeoTags({ title, description, path, noindex = false, image = null
     setMeta('meta[name="robots"]', noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
 }
 
+let lastRoute = null; // routing runs more than once per load; scroll/analytics only on a change
+
 function handleRouting() {
     const route = currentRoute();
+    const routeChanged = route !== lastRoute;
+    lastRoute = route;
     const productMatch = route.match(/^product\/([^/]+)$/);
     const checkoutMatch = route.match(/^checkout\/([\w-]+)$/);
     const paymentResultMatch = route.match(/^payment-result\/([0-9a-f-]{36})$/i);
@@ -2213,7 +2267,7 @@ function handleRouting() {
         if (categoryMatch) {
             if (state.filters.category !== categoryMatch[1]) applyCategoryFilter(categoryMatch[1]);
             updateSeoTags({ title: t(`seo-title-${categoryMatch[1]}`), description: t(`seo-desc-${categoryMatch[1]}`), path: route });
-            document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
+            if (routeChanged) document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
         } else if (brandName) {
             if (state.filters.brands.length !== 1 || state.filters.brands[0] !== brandName || state.filters.category !== "all") {
                 applyCategoryFilter("all");
@@ -2222,19 +2276,19 @@ function handleRouting() {
                 renderCatalog();
             }
             updateSeoTags({ title: brandPageTitle(brandName), description: brandPageDescription(brandName), path: route });
-            document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
+            if (routeChanged) document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
         } else {
             updateSeoTags({ title: t("doc-title"), description: t("meta-description"), path: "" });
             // Re-scroll to the section anchor once the home sections are visible again
-            if (location.hash) {
+            if (location.hash && routeChanged) {
                 const target = document.getElementById(location.hash.slice(1));
                 if (target) target.scrollIntoView(wasOnSubPage ? undefined : { behavior: "smooth" });
             }
         }
     }
 
-    // Analytics (analytics.js) reports each route as a page view
-    window.dispatchEvent(new CustomEvent("routechange", { detail: { path: location.pathname + location.hash } }));
+    // Analytics (analytics.js) reports each route as a page view — once per route
+    if (routeChanged) window.dispatchEvent(new CustomEvent("routechange", { detail: { path: location.pathname + location.hash } }));
 }
 
 // Swaps the home sections for one of the sub-page views (product, checkout,
@@ -2322,16 +2376,16 @@ function generatedDescription(p) {
     const boiler = p.category === "boiler";
     if (lang === "ka") {
         const kind = boiler ? (p.inverter ? "კონდენსაციური გაზის ქვაბი" : "გაზის ქვაბი") : (p.inverter ? "ინვერტორული კონდიციონერი" : "ON/OFF კონდიციონერი");
-        const cap = p.btu ? (boiler ? ` ${p.btu} სიმძლავრით` : ` ${p.btu} სიმძლავრით`) : "";
+        const cap = p.btu ? (boiler ? ` ${esc(p.btu)} სიმძლავრით` : ` ${esc(p.btu)} სიმძლავრით`) : "";
         const area = p.area ? `, რეკომენდებული ${p.area.replace("m²", "მ²")} ფართობისთვის` : "";
         const extra = [refrigerant ? `ფრეონი ${refrigerant}` : null, energy ? `ენერგოკლასი ${energy}` : null, noise ? `ხმაური ${noise}` : null].filter(Boolean).join(", ");
-        return `${title} — ${p.brand}-ის ${kind}${cap}${area}.${extra ? ` ${extra}.` : ""} მოყვება მწარმოებლის ოფიციალური გარანტია; მონტაჟს ჩვენი სერტიფიცირებული ტექნიკოსები ასრულებენ (${boiler ? "ფასი შეთანხმებით" : "150 ₾-დან"}, სამუშაოზე 12-თვიანი გარანტია). თბილისში მიწოდება უფასოა, შესაძლებელია 0%-იანი განვადება 6 თვემდე.`;
+        return `${title} — ${esc(p.brand)}-ის ${kind}${cap}${area}.${extra ? ` ${extra}.` : ""} მოყვება მწარმოებლის ოფიციალური გარანტია; მონტაჟს ჩვენი სერტიფიცირებული ტექნიკოსები ასრულებენ (${boiler ? "ფასი შეთანხმებით" : "150 ₾-დან"}, სამუშაოზე 12-თვიანი გარანტია). თბილისში მიწოდება უფასოა, შესაძლებელია 0%-იანი განვადება 6 თვემდე.`;
     }
     const kind = boiler ? (p.inverter ? "condensing gas boiler" : "gas boiler") : (p.inverter ? "inverter air conditioner" : "on/off air conditioner");
-    const cap = p.btu ? ` rated ${p.btu}` : "";
+    const cap = p.btu ? ` rated ${esc(p.btu)}` : "";
     const area = p.area ? `, recommended for ${p.area}` : "";
     const extra = [refrigerant ? `refrigerant ${refrigerant}` : null, energy ? `energy class ${energy}` : null, noise ? `noise ${noise}` : null].filter(Boolean).join(", ");
-    return `${title} is a ${p.brand} ${kind}${cap}${area}.${extra ? ` ${extra[0].toUpperCase()}${extra.slice(1)}.` : ""} It comes with the manufacturer's official warranty; installation by our certified technicians (${boiler ? "quoted individually" : "from 150 ₾"}, 12-month warranty on the work). Free delivery in Tbilisi, 0% instalments for up to 6 months.`;
+    return `${title} is a ${esc(p.brand)} ${kind}${cap}${area}.${extra ? ` ${extra[0].toUpperCase()}${extra.slice(1)}.` : ""} It comes with the manufacturer's official warranty; installation by our certified technicians (${boiler ? "quoted individually" : "from 150 ₾"}, 12-month warranty on the work). Free delivery in Tbilisi, 0% instalments for up to 6 months.`;
 }
 
 // Same category, same brand first — the cross-links that let a crawler (and a
@@ -2350,7 +2404,7 @@ function productPageTitle(p) {
     const kind = p.category === "boiler"
         ? (lang === "ka" ? "გათბობის ქვაბი" : "Boiler")
         : (lang === "ka" ? "კონდიციონერი" : "Air Conditioner");
-    const cap = p.btu ? ` ${p.btu}` : "";
+    const cap = p.btu ? ` ${esc(p.btu)}` : "";
     return `${p.title[lang]} — ${kind}${cap} | Climate Comfort`;
 }
 
@@ -2358,7 +2412,7 @@ function productPageDescription(p) {
     const lang = state.currentLang;
     const own = (p.description[lang] || "").replace(/\s+/g, " ").trim();
     if (own.length > 60) return own.length > 160 ? own.slice(0, 157).trimEnd() + "…" : own;
-    const price = p.price ? `${p.price.toLocaleString()} ₾` : "";
+    const price = p.price ? `${p.price.toLocaleString("en-US")} ₾` : "";
     return lang === "ka"
         ? `${p.title.ka}${p.area ? ", " + p.area.replace("m²", "მ²") : ""}${price ? ", ფასი " + price : ""}. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.`
         : `${p.title.en}${p.area ? ", " + p.area : ""}${price ? ", price " + price : ""}. Official warranty, installation, 0% instalments and free delivery in Tbilisi.`;
@@ -2392,8 +2446,8 @@ function renderProductDetailPage(p) {
         <nav class="breadcrumb" aria-label="breadcrumb">
             <a href="/">${t("bc-home")}</a><span class="bc-sep">›</span>
             <a href="/catalog/${p.category === "boiler" ? "boiler" : "ac"}">${t(p.category === "boiler" ? "nav-boiler" : "nav-ac")}</a><span class="bc-sep">›</span>
-            <a href="/brand/${brandSlug(p.brand)}">${p.brand}</a><span class="bc-sep">›</span>
-            <span>${localizedTitle}</span>
+            <a href="/brand/${brandSlug(p.brand)}">${esc(p.brand)}</a><span class="bc-sep">›</span>
+            <span>${esc(localizedTitle)}</span>
         </nav>
         <a href="/#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
 
@@ -2408,24 +2462,24 @@ function renderProductDetailPage(p) {
                 <div class="detail-gallery">
                     <div class="detail-gallery-thumbs">
                         ${p.images.map((img, i) => `
-                        <button class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${img}" aria-label="${localizedTitle} ${i + 1}">
-                            <img src="${img}" alt="${localizedTitle} — ${i + 1}" loading="lazy" width="80" height="80">
+                        <button class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${esc(img)}" aria-label="${esc(localizedTitle)} ${i + 1}">
+                            <img src="${esc(img)}" alt="${esc(localizedTitle)} — ${i + 1}" loading="lazy" width="80" height="80">
                         </button>`).join('')}
                     </div>
                     <div class="detail-gallery-main">
-                        <img id="detail-main-image" src="${p.images[0]}" alt="${localizedTitle}" fetchpriority="high">
+                        <img id="detail-main-image" src="${esc(p.images[0])}" alt="${esc(localizedTitle)}" fetchpriority="high">
                     </div>
                 </div>` : buildProductMockup(p)}
             </div>
 
             <div class="detail-info">
-                <span class="product-brand">${p.brand}</span>
-                <h1 class="detail-title">${localizedTitle}</h1>
-                ${ownDescription ? `<p class="detail-description">${ownDescription}</p>` : ""}
-                ${ownDescription.length < 200 ? `<p class="detail-description detail-summary">${generatedDescription(p)}</p>` : ""}
+                <span class="product-brand">${esc(p.brand)}</span>
+                <h1 class="detail-title">${esc(localizedTitle)}</h1>
+                ${ownDescription ? `<p class="detail-description">${esc(ownDescription)}</p>` : ""}
+                ${ownDescription.length < 200 ? `<p class="detail-description detail-summary">${esc(generatedDescription(p))}</p>` : ""}
 
                 <div class="detail-price-row">
-                    <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
+                    <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString("en-US")} ₾</span>` : ""}${p.price.toLocaleString("en-US")}</div>
                     <div class="financing-mini-indicator">
                         ${t("card-monthly-est")}<br>
                         <strong>${monthlyEst} ₾ / ${t("month-unit")}</strong>
@@ -2449,13 +2503,13 @@ function renderProductDetailPage(p) {
                 <table class="spec-table">
                     ${lang === "ka" && p.specs && p.specs.length
                         ? p.specs.map(group => `
-                            ${p.specs.length > 1 ? `<tr class="spec-group-row"><td colspan="2">${group.group}</td></tr>` : ""}
-                            ${(group.items || []).map(item => `<tr><td>${item.name}</td><td>${item.value}</td></tr>`).join('')}
+                            ${p.specs.length > 1 ? `<tr class="spec-group-row"><td colspan="2">${esc(group.group)}</td></tr>` : ""}
+                            ${(group.items || []).map(item => `<tr><td>${esc(item.name)}</td><td>${esc(item.value)}</td></tr>`).join('')}
                         `).join('')
                         : `
-                    <tr><td>${t("spec-brand")}</td><td>${p.brand}</td></tr>
-                    ${p.btu ? `<tr><td>${capacityLabel}</td><td>${p.btu}</td></tr>` : ""}
-                    ${p.area ? `<tr><td>${t("spec-area")}</td><td>${areaLabel}</td></tr>` : ""}
+                    <tr><td>${t("spec-brand")}</td><td>${esc(p.brand)}</td></tr>
+                    ${p.btu ? `<tr><td>${capacityLabel}</td><td>${esc(p.btu)}</td></tr>` : ""}
+                    ${p.area ? `<tr><td>${t("spec-area")}</td><td>${esc(areaLabel)}</td></tr>` : ""}
                     ${p.type ? `<tr><td>${t("spec-type")}</td><td>${typeLabel}</td></tr>` : ""}
                     ${p.energyClass ? `<tr><td>${t("spec-energy")}</td><td>${p.energyClass}</td></tr>` : ""}
                     <tr><td>${t("spec-tech")}</td><td>${techLabel}</td></tr>
@@ -2478,7 +2532,6 @@ function renderProductDetailPage(p) {
         </div>` : ""}
     `;
 
-    document.title = `${localizedTitle} | Climate Comfort`;
 
     // Gallery thumbnails swap the big image; no reload of the rest of the page
     container.querySelectorAll(".gallery-thumb").forEach(btn => {
@@ -2766,7 +2819,7 @@ function renderCheckoutPage(p) {
                         </div>` : '';
 
     container.innerHTML = `
-        <a href="/product/${p.slug}" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${localizedTitle}</a>
+        <a href="/product/${p.slug}" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${esc(localizedTitle)}</a>
 
         <h1 class="checkout-title">${t("co-title")}</h1>
         <p class="signed-in-line">${identityLine}</p>
@@ -2845,14 +2898,14 @@ function renderCheckoutPage(p) {
                 <div class="co-product-row">
                     <div class="co-product-thumb">${buildProductMockup(p)}</div>
                     <div>
-                        <span class="product-brand">${p.brand}</span>
-                        <p class="co-product-title">${localizedTitle}</p>
+                        <span class="product-brand">${esc(p.brand)}</span>
+                        <p class="co-product-title">${esc(localizedTitle)}</p>
                     </div>
                 </div>
                 <div class="co-summary-rows">
                     <div class="co-summary-row">
-                        <span>${localizedTitle}</span>
-                        <strong>${p.price.toLocaleString()} ₾</strong>
+                        <span>${esc(localizedTitle)}</span>
+                        <strong>${p.price.toLocaleString("en-US")} ₾</strong>
                     </div>
                     <div class="co-summary-row co-install-row hidden" id="co-install-row">
                         <span>${t("co-install-line")}</span>
@@ -2860,12 +2913,12 @@ function renderCheckoutPage(p) {
                     </div>
                     <div class="co-summary-row co-total-row">
                         <span>${t("co-total")}</span>
-                        <strong>${p.price.toLocaleString()} ₾</strong>
+                        <strong>${p.price.toLocaleString("en-US")} ₾</strong>
                     </div>
                 </div>
                 <p class="co-delivery-note"><i class="fa-solid fa-truck-fast"></i> ${t("co-delivery-note")}</p>
                 <button type="submit" form="co-form" class="btn btn-accent btn-lg w-full" id="co-pay-btn">
-                    <i class="fa-solid fa-lock"></i> ${t("co-pay-btn")} — ${p.price.toLocaleString()} ₾
+                    <i class="fa-solid fa-lock"></i> ${t("co-pay-btn")} — ${p.price.toLocaleString("en-US")} ₾
                 </button>
                 <p class="co-secure-note"><i class="fa-solid fa-shield-halved"></i> ${lang === 'ka' ? 'დაცული გადახდა' : 'Secure payment'}</p>
             </aside>
@@ -2897,7 +2950,7 @@ function renderCheckoutPage(p) {
     // Cash on delivery is an order, not a payment — the button and note say so
     const coPayBtn = document.getElementById("co-pay-btn");
     const coSecureNote = document.querySelector(".co-secure-note");
-    const priceLabel = `${p.price.toLocaleString()} ₾`;
+    const priceLabel = `${p.price.toLocaleString("en-US")} ₾`;
     function refreshPayButton() {
         const isCash = document.querySelector('input[name="co-bank"]:checked').value === "cash";
         coPayBtn.innerHTML = isCash
@@ -2992,7 +3045,7 @@ function renderCheckoutPage(p) {
                 message: t("co-order-success-msg") + (withInstall ? " " + t("co-success-install") : ""),
                 lines: [
                     [t("pr-order-label"), orderId ? orderId.slice(0, 8).toUpperCase() : refNum],
-                    [p.title[state.currentLang], `${p.price.toLocaleString()} ₾`],
+                    [p.title[state.currentLang], `${p.price.toLocaleString("en-US")} ₾`],
                     [t("co-payment-header"), t("co-pay-cash")],
                     ...(withInstall ? [[t("co-install-line"), t("co-install-onsite")]] : [])
                 ]
@@ -3052,8 +3105,8 @@ function renderPaymentResultPage(orderId) {
 
     const detailsFor = (o) => o.placeholder ? "" : [
         line(t("pr-order-label"), `ORD-${o.order_no}`),
-        line(o.product_title, `${Number(o.amount).toLocaleString()} ₾`),
-        ...(o.payment_status === "failed" && o.payment_reason ? [line(t("pr-reason-label"), o.payment_reason)] : []),
+        line(esc(o.product_title), `${Number(o.amount).toLocaleString("en-US")} ₾`),
+        ...(o.payment_status === "failed" && o.payment_reason ? [line(t("pr-reason-label"), esc(o.payment_reason))] : []),
         ...(o.needs_install ? [line(t("co-install-line"), t("co-install-onsite"))] : [])
     ].join("");
 
@@ -3274,11 +3327,11 @@ function buildAccountTab(acc, tab) {
                 <div class="order-item">
                     <div class="order-main">
                         <span class="order-ref">ORD-${o.order_no}</span>
-                        <p class="order-title-line">${o.product_title}</p>
+                        <p class="order-title-line">${esc(o.product_title)}</p>
                         <span class="order-meta">${dateStr}${bank ? ' · ' + bank : ''}${payTag}${installTag}</span>
                     </div>
                     <div class="order-side">
-                        <strong>${Number(o.amount).toLocaleString()} ₾</strong>
+                        <strong>${Number(o.amount).toLocaleString("en-US")} ₾</strong>
                         <span class="order-status">${t(STATUS_KEY[o.status] || "acc-status-received")}</span>
                     </div>
                 </div>`;
@@ -3345,8 +3398,9 @@ function buildAccountTab(acc, tab) {
             <h4>${t("acc-change-password")}</h4>
             <div class="co-field-grid">
                 <div class="form-control-group">
-                    <label class="input-label" for="acc-pass-current">${t("acc-current-password")}</label>
-                    <input type="password" id="acc-pass-current" class="form-input" autocomplete="current-password">
+                    ${state.passwordRecovery ? `<p class="auth-notice">${t("acc-recovery-hint")}</p>` : ""}
+                    <label class="input-label" for="acc-pass-current" ${state.passwordRecovery ? 'hidden' : ''}>${t("acc-current-password")}</label>
+                    <input type="password" id="acc-pass-current" class="form-input" autocomplete="current-password" ${state.passwordRecovery ? 'hidden' : ''}>
                 </div>
                 <div class="form-control-group">
                     <label class="input-label" for="acc-pass-new">${t("acc-new-password")}</label>
@@ -3413,13 +3467,18 @@ function bindAccountTabEvents() {
             const next = document.getElementById("acc-pass-new").value;
             if (next.length < 6) { alert(t("auth-err-password")); return; }
 
-            const { error: checkErr } = await sbClient.auth.signInWithPassword({
-                email: state.user.email, password: current
-            });
-            if (checkErr) { alert(t("acc-err-current")); return; }
+            // After a "forgot password" link the user has no current password:
+            // the recovery link itself proved who they are.
+            if (!state.passwordRecovery) {
+                const { error: checkErr } = await sbClient.auth.signInWithPassword({
+                    email: state.user.email, password: current
+                });
+                if (checkErr) { alert(t("acc-err-current")); return; }
+            }
 
             const { error } = await sbClient.auth.updateUser({ password: next });
             if (error) { alert(error.message); return; }
+            state.passwordRecovery = false;
             passForm.reset();
             flashSaved("acc-pass-saved");
         });
@@ -3440,11 +3499,11 @@ function railCard(p) {
                 ${buildProductMockup(p)}
                 ${onSale ? `<span class="rail-sale">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</span>` : ""}
             </div>
-            <span class="product-brand">${p.brand}</span>
+            <span class="product-brand">${esc(p.brand)}</span>
             <p class="rail-card-title">${title}</p>
             <div class="rail-card-price">
-                ${onSale ? `<span class="rail-old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}
-                <strong>${p.price.toLocaleString()} ₾</strong>
+                ${onSale ? `<span class="rail-old-price">${p.oldPrice.toLocaleString("en-US")} ₾</span>` : ""}
+                <strong>${p.price.toLocaleString("en-US")} ₾</strong>
             </div>
         </a>
     `;
@@ -3545,7 +3604,8 @@ function renderCatalog() {
         }
 
         // Price range
-        if (p.price < state.filters.minPrice || p.price > state.filters.maxPrice) return false;
+        if (p.price < state.filters.minPrice) return false;
+        if (state.filters.maxPrice < priceCeiling() && p.price > state.filters.maxPrice) return false;
 
         // Brands
         if (state.filters.brands.length > 0 && !state.filters.brands.includes(p.brand)) return false;
@@ -3575,7 +3635,7 @@ function renderCatalog() {
     filteredProducts.sort((a, b) => {
         if (state.sortBy === "price-asc") return a.price - b.price;
         if (state.sortBy === "price-desc") return b.price - a.price;
-        if (state.sortBy === "btu-desc") return parseInt(b.btu) - parseInt(a.btu);
+        if (state.sortBy === "btu-desc") return (parseInt(b.btu) || 0) - (parseInt(a.btu) || 0);
         return b.popularity - a.popularity;
     });
 
@@ -3630,15 +3690,15 @@ function renderCatalog() {
                     </div>
 
                     <div class="card-body">
-                        <span class="product-brand">${p.brand}</span>
-                        <h3 class="product-title" title="${localizedTitle}">${localizedTitle}</h3>
+                        <span class="product-brand">${esc(p.brand)}</span>
+                        <h3 class="product-title" title="${esc(localizedTitle)}">${esc(localizedTitle)}</h3>
 
                         <div class="product-specs-summary">
                             ${p.btu ? `<div class="spec-line">
                                 <i class="fa-solid fa-cube"></i>
-                                <span>${p.category === 'boiler' ? (state.currentLang === 'ka' ? 'სიმძლავრე' : 'Power') : 'BTU'}: <strong>${p.btu}</strong></span>
+                                <span>${p.category === 'boiler' ? (state.currentLang === 'ka' ? 'სიმძლავრე' : 'Power') : 'BTU'}: <strong>${esc(p.btu)}</strong></span>
                             </div>` : ""}
-                            ${p.area ? `<div class="spec-line"><i class="fa-solid fa-maximize"></i> <span>${t("filter-area").split(" ")[0]}: <strong>${areaLabel}</strong></span></div>` : ""}
+                            ${p.area ? `<div class="spec-line"><i class="fa-solid fa-maximize"></i> <span>${t("filter-area").split(" ")[0]}: <strong>${esc(areaLabel)}</strong></span></div>` : ""}
                             ${p.color ? `<div class="spec-line"><i class="fa-solid fa-palette"></i> <span>${t("filter-color")}: <strong>${colorLabel}</strong></span></div>` : ""}
                             ${p.category !== 'boiler' ? `<div class="spec-line spec-line-wide">
                                 <i class="fa-solid fa-snowflake"></i>
@@ -3648,7 +3708,7 @@ function renderCatalog() {
                         
                         <div class="card-footer">
                             <div class="price-container">
-                                <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString()} ₾</span>` : ""}${p.price.toLocaleString()}</div>
+                                <div class="price-tag">${p.oldPrice && p.oldPrice > p.price ? `<span class="old-price">${p.oldPrice.toLocaleString("en-US")} ₾</span>` : ""}${p.price.toLocaleString("en-US")}</div>
                             </div>
                             
                             <div class="card-actions">
@@ -3692,7 +3752,7 @@ function renderFilterBadges() {
     }
 
     // Price Badge
-    if (state.filters.minPrice > 500 || state.filters.maxPrice < 4000) {
+    if (state.filters.minPrice > 500 || state.filters.maxPrice < priceCeiling()) {
         activeFiltersCount++;
         wrapper.appendChild(createBadge(`${t("filter-price").split(" ")[0]}: ${state.filters.minPrice}₾ - ${state.filters.maxPrice}₾`, 'price'));
     }
@@ -3756,10 +3816,10 @@ function removeFilterBadge(type, val) {
         document.getElementById("search-clear-btn").classList.add("hidden");
     } else if (type === 'price') {
         state.filters.minPrice = 500;
-        state.filters.maxPrice = 4000;
+        state.filters.maxPrice = priceCeiling();
         document.getElementById("price-min-input").value = 500;
-        document.getElementById("price-max-input").value = 4000;
-        document.getElementById("price-range-slider").value = 4000;
+        document.getElementById("price-max-input").value = priceCeiling();
+        document.getElementById("price-range-slider").value = priceCeiling();
     } else {
         let selector = "";
         if (type === 'brand') selector = `input[name="brand"][value="${val}"]`;
@@ -3833,7 +3893,7 @@ function resetAllFilters() {
         category: "all",
         search: "",
         minPrice: 500,
-        maxPrice: 4000,
+        maxPrice: priceCeiling(),
         brands: [],
         areas: [],
         btus: [],
@@ -3847,8 +3907,8 @@ function resetAllFilters() {
     document.getElementById("search-bar").value = "";
     document.getElementById("search-clear-btn").classList.add("hidden");
     document.getElementById("price-min-input").value = 500;
-    document.getElementById("price-max-input").value = 4000;
-    document.getElementById("price-range-slider").value = 4000;
+    document.getElementById("price-max-input").value = priceCeiling();
+    document.getElementById("price-range-slider").value = priceCeiling();
 
     // Reset active category tab class
     document.querySelectorAll(".category-tab").forEach(tab => {
@@ -3908,7 +3968,7 @@ function openFinancingModal(productId) {
     // Set preview details
     document.getElementById("modal-product-brand").innerText = product.brand;
     document.getElementById("modal-product-title").innerText = product.title[state.currentLang];
-    document.getElementById("modal-product-price").innerText = `${product.price.toLocaleString()} ₾`;
+    document.getElementById("modal-product-price").innerText = `${product.price.toLocaleString("en-US")} ₾`;
     
     // Reset Down Payment
     document.getElementById("down-payment-input").value = 0;
@@ -3982,8 +4042,8 @@ function updateCalculatorValues() {
 
     // Display updates
     document.getElementById("monthly-payment-amount").innerText = monthlyPayment.toFixed(2);
-    document.getElementById("financed-amount-text").innerText = `${principal.toLocaleString()} ₾`;
-    document.getElementById("down-payment-paid-text").innerText = `${downPayment.toLocaleString()} ₾`;
+    document.getElementById("financed-amount-text").innerText = `${principal.toLocaleString("en-US")} ₾`;
+    document.getElementById("down-payment-paid-text").innerText = `${downPayment.toLocaleString("en-US")} ₾`;
     document.getElementById("interest-rate-text").innerText = `${monthlyRatePercent}%`;
     document.getElementById("total-interest-text").innerText = `${Math.max(0, totalInterest).toFixed(2)} ₾`;
     document.getElementById("total-paid-text").innerText = `${totalPaid.toFixed(2)} ₾`;
@@ -4064,12 +4124,12 @@ function updateCartUI() {
             return `
                 <div class="cart-item">
                     <div class="cart-item-preview">
-                        ${p.image ? `<img class="product-photo" src="${p.image}" alt="">` : '<i class="fa-regular fa-image"></i>'}
+                        ${p.image ? `<img class="product-photo" src="${esc(p.image)}" alt="">` : '<i class="fa-regular fa-image"></i>'}
                     </div>
                     <div class="cart-item-info">
                         <h4 class="cart-item-title">${p.title[state.currentLang]}</h4>
                         <div class="cart-item-specs">${[p.btu, p.energyClass].filter(Boolean).join(" | ")}</div>
-                        <div class="cart-item-price">${(p.price * item.quantity).toLocaleString()}</div>
+                        <div class="cart-item-price">${(p.price * item.quantity).toLocaleString("en-US")}</div>
                     </div>
                     
                     <div class="cart-item-controls">
@@ -4084,7 +4144,7 @@ function updateCartUI() {
             `;
         }).join('');
 
-        subtotalText.innerText = `${totalPrice.toLocaleString()} ₾`;
+        subtotalText.innerText = `${totalPrice.toLocaleString("en-US")} ₾`;
     }
 }
 
@@ -4189,10 +4249,9 @@ function bindUIEventListeners() {
                 updateCartUI();
                 updateServiceEstimator();
 
-                // Re-render the current sub-page (product / checkout / account) in the new language
-                if (SUBPAGE_CLASSES.some(c => document.body.classList.contains(c))) {
-                    handleRouting();
-                }
+                // Re-render the current view in the new language (sub-pages and
+                // the <title>/description of category and brand pages)
+                handleRouting();
             }
         });
     });
@@ -4248,8 +4307,8 @@ function bindUIEventListeners() {
     });
 
     maxInput.addEventListener("change", (e) => {
-        let val = parseInt(e.target.value) || 4000;
-        if (val > 4000) val = 4000;
+        let val = parseInt(e.target.value) || priceCeiling();
+        if (val > priceCeiling()) val = priceCeiling();
         if (val < state.filters.minPrice) val = state.filters.minPrice;
         state.filters.maxPrice = val;
         maxInput.value = val;
@@ -4650,7 +4709,7 @@ function bindUIEventListeners() {
                 successDetails.innerHTML = `
                     <div class="detail-line"><span>შეკვეთის კოდი:</span><span>${refNum}</span></div>
                     <div class="detail-line"><span>პროდუქცია:</span><span>${orderSummary}</span></div>
-                    <div class="detail-line"><span>ჯამური ფასი:</span><span>${grandTotal.toLocaleString()} ₾</span></div>
+                    <div class="detail-line"><span>ჯამური ფასი:</span><span>${grandTotal.toLocaleString("en-US")} ₾</span></div>
                     <div class="detail-line"><span>მისამართი:</span><span>${address}</span></div>
                     <div class="detail-line"><span>ტელეფონი:</span><span>${phone}</span></div>
                 `;
@@ -4660,7 +4719,7 @@ function bindUIEventListeners() {
                 successDetails.innerHTML = `
                     <div class="detail-line"><span>Order Number:</span><span>${refNum}</span></div>
                     <div class="detail-line"><span>Products:</span><span>${orderSummary}</span></div>
-                    <div class="detail-line"><span>Total Paid:</span><span>${grandTotal.toLocaleString()} ₾</span></div>
+                    <div class="detail-line"><span>Total Paid:</span><span>${grandTotal.toLocaleString("en-US")} ₾</span></div>
                     <div class="detail-line"><span>Delivery Address:</span><span>${address}</span></div>
                     <div class="detail-line"><span>Contact Phone:</span><span>${phone}</span></div>
                 `;

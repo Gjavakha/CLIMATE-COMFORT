@@ -332,7 +332,10 @@ on conflict (id) do nothing;
 -- ----------------------------------------------------------------------------
 insert into suppliers (slug, name) values
     ('elit',    'Elit Electronics'),
-    ('kontakt', 'Kontakt')
+    ('kontakt', 'Kontakt'),
+    ('chigo',   'Chigo'),
+    ('alneo',   'Alneo'),
+    ('midea',   'Midea')
 on conflict (slug) do nothing;
 
 -- ----------------------------------------------------------------------------
@@ -390,7 +393,19 @@ create policy orders_insert_any on orders
         and bog_order_id is null
         and bog_transaction_id is null
         and paid_at is null
+        and confirmation_sent_at is null
+        -- a guest order has no owner; a signed-in order belongs to the caller
+        and (user_id is null or user_id = auth.uid())
     );
+
+-- One confirmation e-mail per order (claimed by send-order-email before sending)
+alter table orders add column if not exists confirmation_sent_at timestamptz;
+
+-- A customer may delete their account (data-protection law); their orders stay
+-- as guest orders instead of blocking the deletion.
+alter table orders drop constraint if exists orders_user_id_fkey;
+alter table orders add constraint orders_user_id_fkey
+    foreign key (user_id) references auth.users (id) on delete set null;
 
 -- ============================================================================
 -- Storage: product photos (added 2026-10-22)

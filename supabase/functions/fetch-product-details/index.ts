@@ -288,11 +288,33 @@ async function fetchKontaktBySearch(brand: string, model: string) {
     return result.images.length ? { ...result, sourceUrl: res.url } : null;
 }
 
+// Only the admin importer may use this: it fetches whatever URL it is given
+// from the server, which must not be open to every shopper with a session.
+async function callerIsAdmin(authHeader: string): Promise<boolean> {
+    const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/rest/v1/rpc/is_admin`, {
+        method: "POST",
+        headers: {
+            apikey: Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+            Authorization: authHeader,
+            "Content-Type": "application/json",
+        },
+        body: "{}",
+    });
+    if (!res.ok) return false;
+    return (await res.json()) === true;
+}
+
 Deno.serve(async (req) => {
     if (req.method === "OPTIONS") return json({ ok: true });
+    if (req.method !== "POST") return json({ error: "POST only" }, 405);
+
+    const auth = req.headers.get("Authorization");
+    if (!auth) return json({ error: "authentication required" }, 401);
+    if (!(await callerIsAdmin(auth))) return json({ error: "admin only" }, 403);
 
     try {
         const { url, supplier, brand, model } = await req.json();
+        if (url && !/^https?:\/\//i.test(String(url))) return json({ error: "url must be http(s)" }, 400);
 
         // Only Elit and Kontakt have a direct-site parser above; other
         // suppliers (Chigo, Alneo.ge, ...) have no product-page link at all

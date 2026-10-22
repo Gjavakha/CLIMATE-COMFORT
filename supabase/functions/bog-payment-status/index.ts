@@ -27,7 +27,7 @@ const STATUS_MAP: Record<string, string> = {
     rejected: "failed",
     blocked: "failed",
     refunded: "refunded",
-    refunded_partially: "refunded",
+    refunded_partially: "paid", // partial refund: order stays paid, bog_order_status shows it
 };
 
 const CORS = {

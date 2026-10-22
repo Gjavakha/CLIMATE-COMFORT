@@ -55,7 +55,9 @@ type Row = { id: string; image_url: string | null; images: string[] | null };
 
 const isOurs = (u: string) => typeof u === "string" && u.startsWith(PUBLIC_PREFIX);
 
-async function fetchCandidates(limit: number, productId?: string): Promise<Row[]> {
+// `skip` lets the admin page step past products whose photos failed last
+// round, so one dead supplier link cannot stall the whole backlog.
+async function fetchCandidates(limit: number, productId?: string, skip = 0): Promise<Row[]> {
     // Rows whose cover or gallery still points outside our bucket. PostgREST
     // cannot express "any array element not like", so over-fetch and filter.
     const filter = productId ? `&id=eq.${productId}` : "";
@@ -65,8 +67,12 @@ async function fetchCandidates(limit: number, productId?: string): Promise<Row[]
     return rows.filter(r => {
         const all = [...(r.images || []), ...(r.image_url ? [r.image_url] : [])];
         return all.some(u => u && !isOurs(u));
-    }).slice(0, limit);
+    }).slice(skip, skip + limit);
 }
+
+// Only raster formats a browser renders as an image. SVG is left out: it can
+// carry scripts and would be served from our own origin.
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]);
 
 function extFor(contentType: string, url: string): string {
     const ct = contentType.split(";")[0].trim().toLowerCase();
@@ -85,8 +91,10 @@ async function mirrorOne(productId: string, src: string, n: number): Promise<str
     if (isOurs(src)) return src;
     const res = await fetch(src, { headers: { "User-Agent": "Mozilla/5.0 (compatible; ClimateComfortBot/1.0; +https://climate-comfort.ge)" } });
     if (!res.ok) return null;
-    const ct = res.headers.get("content-type") || "";
-    if (!ct.startsWith("image/")) return null;
+    const ct = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+    if (!IMAGE_TYPES.has(ct)) { await res.body?.cancel(); return null; }
+    const declared = Number(res.headers.get("content-length") || 0);
+    if (declared > MAX_BYTES) { await res.body?.cancel(); return null; }
     const bytes = new Uint8Array(await res.arrayBuffer());
     if (!bytes.length || bytes.length > MAX_BYTES) return null;
     const path = `${productId}/${n}.${extFor(ct, src)}`;
@@ -134,13 +142,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
     if (!auth) return json({ error: "authentication required" }, 401);
     if (!(await callerIsAdmin(auth))) return json({ error: "admin only" }, 403);
 
-    let body: { productId?: string; limit?: number } = {};
+    let body: { productId?: string; limit?: number; skip?: number } = {};
     try { body = await req.json(); } catch { /* empty body is fine */ }
     const productId = typeof body.productId === "string" && /^[0-9a-f-]{36}$/i.test(body.productId) ? body.productId : undefined;
     const limit = productId ? 1 : Math.min(Math.max(Number(body.limit) || 10, 1), 25);
+    const skip = productId ? 0 : Math.max(Number(body.skip) || 0, 0);
 
     try {
-        const rows = await fetchCandidates(limit, productId);
+        const rows = await fetchCandidates(limit, productId, skip);
         const errors: { productId: string; error: string }[] = [];
         let processed = 0, photos = 0;
         for (const row of rows) {

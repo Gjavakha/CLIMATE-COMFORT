@@ -58,14 +58,31 @@ async function dbSelect(table: string, query: string) {
     return await res.json();
 }
 
-async function dbPatch(table: string, query: string, patch: Record<string, unknown>) {
+// Returns the number of rows the patch touched (conditional updates rely on it)
+async function dbPatch(table: string, query: string, patch: Record<string, unknown>): Promise<number> {
     const url = Deno.env.get("SUPABASE_URL");
     const res = await fetch(`${url}/rest/v1/${table}?${query}`, {
         method: "PATCH",
-        headers: { ...dbHeaders(), Prefer: "return=minimal" },
+        headers: { ...dbHeaders(), Prefer: "return=representation" },
         body: JSON.stringify(patch),
     });
     if (!res.ok) throw new Error(`database ${res.status}: ${await res.text()}`);
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows.length : 0;
+}
+
+// The confirmation mail is sent by the order-email function (service role);
+// it is idempotent, so calling it twice for one order is harmless.
+async function sendOrderEmail(orderId: string) {
+    const fn = Deno.env.get("ORDER_EMAIL_FUNCTION") || "rapid-action";
+    try {
+        const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/${fn}`, {
+            method: "POST", headers: dbHeaders(), body: JSON.stringify({ orderId }),
+        });
+        if (!res.ok) console.warn("order email failed:", res.status, await res.text());
+    } catch (err) {
+        console.warn("order email errored:", (err as Error).message);
+    }
 }
 
 async function dbInsert(table: string, row: Record<string, unknown>) {
@@ -151,54 +168,72 @@ Deno.serve(async (req) => {
 
         if (order.status === "cancelled") return json(409, { error: "order is cancelled" });
         if (order.payment_status === "paid") return json(200, { already_paid: true, order_no: order.order_no });
+        if (order.payment_status === "refunded") return json(409, { error: "order was refunded" });
         if (order.payment_method !== "card" || order.order_type === "financing") return json(409, { error: "order is not a card payment" });
 
         const amount = Number(order.amount);
         if (!(amount > 0)) return json(409, { error: "order amount is not positive" });
 
-        // The order row was written by the shopper's browser. Re-check the
-        // amount against the product's live price before asking the bank for
-        // money: it must be a whole multiple (quantity) of the display price.
-        if (order.product_id) {
-            const products = await dbSelect("products", `id=eq.${order.product_id}&select=display_price,is_published,hidden&limit=1`);
-            const product = products[0];
-            if (!product) return json(409, { error: "product no longer exists" });
-            const price = Number(product.display_price);
-            if (!(price > 0)) return json(409, { error: "product has no price" });
-            const qty = amount / price;
-            if (Math.abs(qty - Math.round(qty)) > 0.001 || Math.round(qty) < 1) {
-                return json(409, { error: "order amount does not match the product price" });
-            }
+        // The order row was written by the shopper's browser. Only a real,
+        // published product can be paid for by card, and the amount must be
+        // exactly a whole number of units at the live price (to the tetri).
+        // The title the bank and the admin see is taken from the product, not
+        // from the row, so a tampered row cannot relabel a cheap item.
+        if (!UUID_RE.test(String(order.product_id || ""))) return json(409, { error: "order has no product" });
+        const products = await dbSelect("products", `id=eq.${order.product_id}&select=display_price,is_published,hidden,title_ka,brand,model&limit=1`);
+        const product = products[0];
+        if (!product) return json(409, { error: "product no longer exists" });
+        if (!product.is_published || product.hidden) return json(409, { error: "product is not for sale" });
+        const price = Number(product.display_price);
+        if (!(price > 0)) return json(409, { error: "product has no price" });
+        const qty = Math.round(amount / price);
+        if (qty < 1 || Math.abs(amount - qty * price) > 0.005) {
+            return json(409, { error: "order amount does not match the product price" });
         }
+        const productTitle = `${product.title_ka || `${product.brand} ${product.model}`}${qty > 1 ? ` ×${qty}` : ""}`;
 
         const token = await bogToken();
 
         // A bank order may already exist (shopper closed the bank page and came
-        // back). Reuse it while it is still open; replace it once it is dead.
+        // back). Reuse it while it is still open; replace it only once the bank
+        // says it is dead. If the bank cannot be asked, do NOT create a second
+        // order — a live one would be orphaned and the shopper could pay twice.
         if (order.bog_order_id) {
+            let receipt;
             try {
-                const receipt = await bogReceipt(token, order.bog_order_id);
-                const key = receipt?.order_status?.key;
-                if (key === "completed") {
-                    await dbPatch("orders", `id=eq.${orderId}`, {
-                        payment_status: "paid", payment_provider: "bog", bog_order_status: key,
-                        bog_transaction_id: receipt?.payment_detail?.transaction_id ?? null,
-                        bog_payer_identifier: receipt?.payment_detail?.payer_identifier ?? null,
-                        bog_card_type: receipt?.payment_detail?.card_type ?? null,
-                        paid_at: new Date().toISOString(), payment_updated_at: new Date().toISOString(),
-                    });
-                    return json(200, { already_paid: true, order_no: order.order_no });
-                }
-                if ((key === "created" || key === "processing") && order.bog_redirect_url) {
-                    return json(200, { redirect_url: order.bog_redirect_url, reused: true });
-                }
+                receipt = await bogReceipt(token, order.bog_order_id);
             } catch (err) {
-                console.warn("could not read existing bank order, creating a new one:", (err as Error).message);
+                console.warn("could not read existing bank order:", (err as Error).message);
+                return json(502, { error: "bank is not reachable, try again in a moment" });
             }
+            const key = receipt?.order_status?.key ?? "";
+            if (key === "completed" || key === "partial_completed") {
+                // Callback was lost: record the payment the same way the callback would
+                const now = new Date().toISOString();
+                const touched = await dbPatch("orders", `id=eq.${orderId}&payment_status=eq.${order.payment_status}`, {
+                    payment_status: "paid", payment_provider: "bog", bog_order_status: key,
+                    bog_transaction_id: receipt?.payment_detail?.transaction_id ?? null,
+                    bog_payer_identifier: receipt?.payment_detail?.payer_identifier ?? null,
+                    bog_card_type: receipt?.payment_detail?.card_type ?? null,
+                    paid_at: now, payment_updated_at: now,
+                });
+                await dbInsert("payment_events", {
+                    order_id: orderId, provider: "bog", bog_order_id: order.bog_order_id, source: "status_sync",
+                    event: "paid_on_retry", order_status: key, payload: receipt,
+                });
+                if (touched > 0) await sendOrderEmail(orderId);
+                return json(200, { already_paid: true, order_no: order.order_no });
+            }
+            if (key.startsWith("refund")) return json(409, { error: "order was refunded" });
+            if ((key === "created" || key === "processing" || key === "auth_requested") && order.bog_redirect_url) {
+                return json(200, { redirect_url: order.bog_redirect_url, reused: true });
+            }
+            // rejected / blocked / expired: fall through and create a fresh bank order
         }
 
-        const siteUrl = (Deno.env.get("SITE_URL") || new URL(req.headers.get("origin") || "https://climate-comfort.ge").origin).replace(/\/$/, "");
-        const resultUrl = `${siteUrl}/#payment-result/${orderId}`;
+        const siteUrl = (Deno.env.get("SITE_URL") || "").replace(/\/$/, "");
+        if (!/^https?:\/\//.test(siteUrl)) return json(500, { error: "SITE_URL is not configured" });
+        const resultUrl = `${siteUrl}/payment-result/${orderId}`;
 
         const bogBody = {
             callback_url: callbackUrl(),
@@ -209,10 +244,10 @@ Deno.serve(async (req) => {
                 currency: "GEL",
                 total_amount: amount,
                 basket: [{
-                    product_id: order.product_id || "item",
-                    description: String(order.product_title || "").slice(0, 200),
-                    quantity: 1,
-                    unit_price: amount,
+                    product_id: order.product_id,
+                    description: productTitle.slice(0, 200),
+                    quantity: qty,
+                    unit_price: Math.round((amount / qty) * 100) / 100,
                 }],
             },
             redirect_urls: { success: resultUrl, fail: resultUrl },
@@ -250,6 +285,7 @@ Deno.serve(async (req) => {
             bog_order_id: created.id,
             bog_redirect_url: redirect,
             bog_order_status: "created",
+            product_title: productTitle,
             payment_updated_at: new Date().toISOString(),
         });
         await dbInsert("payment_events", {
@@ -259,7 +295,9 @@ Deno.serve(async (req) => {
 
         return json(200, { redirect_url: redirect });
     } catch (err) {
+        // Details (PostgREST / bank bodies) stay in the function log; the
+        // shopper only needs to know it did not work.
         console.error("bog-create-payment:", (err as Error).message);
-        return json(500, { error: (err as Error).message });
+        return json(500, { error: "payment could not be started" });
     }
 });

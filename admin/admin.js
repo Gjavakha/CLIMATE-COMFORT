@@ -124,6 +124,7 @@ async function enterDashboard(user) {
 
     await loadOrders();
     loadBookings();
+    checkExternalPhotos(); // needs the admin session: as anon it would only see published rows
     startAutoRefresh();
 }
 
@@ -134,7 +135,6 @@ function bindDashboardUI() {
     $("refresh-btn").addEventListener("click", loadOrders);
     $("publish-site-btn").addEventListener("click", publishSite);
     $("mirror-photos-btn").addEventListener("click", mirrorPhotos);
-    checkExternalPhotos();
 
     $("status-chips").addEventListener("click", (e) => {
         const chip = e.target.closest(".chip");
@@ -291,7 +291,13 @@ function renderBookings() {
 
 function startAutoRefresh() {
     stopAutoRefresh();
-    refreshTimer = setInterval(loadOrders, 60000);
+    // Re-rendering the table wipes an open detail row, a typed refund amount
+    // or an armed confirm button — skip the tick while the admin is working.
+    refreshTimer = setInterval(() => {
+        const busy = document.querySelector("#orders-body .detail-row:not(.hidden)")
+            || (document.activeElement && document.activeElement.closest && document.activeElement.closest("#orders-body"));
+        if (!busy) loadOrders();
+    }, 60000);
 }
 function stopAutoRefresh() {
     if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
@@ -544,10 +550,12 @@ async function mirrorPhotos() {
     btn.disabled = true;
     let total = 0, errors = 0;
     try {
-        // 10 products per call keeps each request well inside the function's time limit
+        // 10 products per call keeps each request well inside the function's
+        // time limit; failed products are skipped on the next round instead of
+        // being retried forever.
         for (let round = 0; round < 40; round++) {
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Copying… ${total} done`;
-            const { data, error } = await sbClient.functions.invoke("mirror-product-images", { body: { limit: 10 } });
+            const { data, error } = await sbClient.functions.invoke("mirror-product-images", { body: { limit: 10, skip: errors } });
             if (error) {
                 let detail = error.message;
                 try { const body = await error.context?.json(); if (body?.error) detail = body.error; } catch { /* keep */ }

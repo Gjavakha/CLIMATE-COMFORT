@@ -60,8 +60,18 @@ while ($httpListener.IsListening) {
             }
         }
 
-        # Double check if file exists and is within script directory
-        if (Test-Path $filePath -PathType Leaf) {
+        # Resolve ".." and encoded tricks, then refuse anything outside the project
+        $filePath = [System.IO.Path]::GetFullPath($filePath)
+        $rootPath = [System.IO.Path]::GetFullPath($PSScriptRoot).TrimEnd('\') + '\'
+        if (-not $filePath.StartsWith($rootPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $response.StatusCode = 403
+            $bytes = [System.Text.Encoding]::UTF8.GetBytes("<h3>403 Forbidden</h3>")
+            $response.ContentType = "text/html; charset=utf-8"
+            $response.ContentLength64 = $bytes.Length
+            $response.OutputStream.Write($bytes, 0, $bytes.Length)
+            Write-Host "[403] Outside project: $urlPath"
+        }
+        elseif (Test-Path $filePath -PathType Leaf) {
             $bytes = [System.IO.File]::ReadAllBytes($filePath)
 
             # Determine Content Type

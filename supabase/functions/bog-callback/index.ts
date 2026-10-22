@@ -38,7 +38,9 @@ const STATUS_MAP: Record<string, string> = {
     rejected: "failed",
     blocked: "failed",
     refunded: "refunded",
-    refunded_partially: "refunded",
+    // A partial refund leaves the order paid (the rest can still be refunded);
+    // bog_order_status keeps "refunded_partially" so the admin can see it.
+    refunded_partially: "paid",
 };
 
 // ---------------------------------------------------------------------------
@@ -157,6 +159,11 @@ async function applyBankOrder(order: any, bank: any): Promise<string | null> {
         bog_order_status: key || null,
         payment_updated_at: now,
     };
+    // A refund the admin requested is still in flight: a late/duplicate
+    // "completed" callback must not clear that marker.
+    if (order.bog_order_status === "refund_requested" && (key === "completed" || key === "partial_completed")) {
+        patch.bog_order_status = "refund_requested";
+    }
     if (detail.transaction_id) patch.bog_transaction_id = detail.transaction_id;
     if (detail.payer_identifier) patch.bog_payer_identifier = detail.payer_identifier;
     if (detail.card_type) patch.bog_card_type = detail.card_type;
@@ -208,14 +215,17 @@ Deno.serve(async (req) => {
     if (req.method !== "POST") return new Response("POST only", { status: 405 });
 
     const raw = await req.text();
+    // The bank signs every callback. Anything unsigned is not the bank: drop
+    // it before touching the database or spending a bank API call on it.
     const signature = req.headers.get("Callback-Signature") || req.headers.get("callback-signature") || "";
-    let signatureValid: boolean | null = null;
-    if (signature) {
-        signatureValid = await verifySignature(raw, signature);
-        if (!signatureValid) {
-            console.warn("callback with INVALID signature rejected");
-            return new Response("bad signature", { status: 401 });
-        }
+    if (!signature) {
+        console.warn("callback without signature rejected");
+        return new Response("signature required", { status: 401 });
+    }
+    const signatureValid: boolean = await verifySignature(raw, signature);
+    if (!signatureValid) {
+        console.warn("callback with INVALID signature rejected");
+        return new Response("bad signature", { status: 401 });
     }
 
     // deno-lint-ignore no-explicit-any
