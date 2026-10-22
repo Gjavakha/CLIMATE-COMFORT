@@ -465,7 +465,7 @@ async function applyImport() {
         document.getElementById("done-text").innerText =
             `${profile.name}: ${stats.new_products} new products, ${stats.new_offers} new offers, ` +
             `${stats.updates} updated, ${stats.hidden} hidden, ${stats.review_skipped} skipped for review. ` +
-            `The shop is now selling the updated catalog — open the storefront to see it.`;
+            `The database is updated. Click "Publish site" (top right) so the public product pages are rebuilt with the new catalog.`;
         pendingImport = null;
     } catch (err) {
         document.getElementById("import-progress").classList.add("hidden");

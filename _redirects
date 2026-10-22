@@ -1,0 +1,5 @@
+# Cloudflare Pages routing (copied into dist by build.mjs).
+# Every path that is not a real file is the app shell: app.js reads the path
+# (/product/<slug>, /catalog/ac, /terms …) and shows the right view. Static
+# files, including the pre-rendered product pages, always win over this rule.
+/*  /index.html  200

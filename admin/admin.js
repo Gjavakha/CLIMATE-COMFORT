@@ -132,6 +132,7 @@ function bindDashboardUI() {
     $("denied-logout").addEventListener("click", () => sbClient.auth.signOut());
 
     $("refresh-btn").addEventListener("click", loadOrders);
+    $("publish-site-btn").addEventListener("click", publishSite);
 
     $("status-chips").addEventListener("click", (e) => {
         const chip = e.target.closest(".chip");
@@ -489,4 +490,33 @@ async function handleBankAction(btn) {
     const row = document.querySelector(`tr.order-row[data-id="${orderId}"]`);
     if (row && row.nextElementSibling) row.nextElementSibling.classList.remove("hidden");
     showMsg(data.message || "Done.", false);
+}
+
+// ---------------------------------------------------------------------------
+// Publish site — the public site is pre-built from the database (build.mjs),
+// so product/price changes reach visitors only after a rebuild. The button
+// asks the publish-site Edge Function to trigger Cloudflare's deploy hook.
+// ---------------------------------------------------------------------------
+async function publishSite() {
+    const btn = $("publish-site-btn");
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publishing…`;
+    try {
+        const { data, error } = await sbClient.functions.invoke("publish-site", { body: {} });
+        if (error) {
+            let detail = error.message;
+            try { const body = await error.context?.json(); if (body?.error) detail = body.error; } catch { /* keep message */ }
+            throw new Error(detail);
+        }
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Build started`;
+        btn.title = "Cloudflare is rebuilding the site — the new pages are live in about 1–2 minutes.";
+        setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 8000);
+        console.info("publish-site:", data);
+    } catch (err) {
+        btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Failed`;
+        btn.title = String(err.message || err);
+        alert(`Publish failed: ${err.message || err}`);
+        setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 4000);
+    }
 }

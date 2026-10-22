@@ -15,3 +15,6 @@ verify_jwt = true
 
 [functions.bog-refund]
 verify_jwt = true
+
+[functions.publish-site]
+verify_jwt = true

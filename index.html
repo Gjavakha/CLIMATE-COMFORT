@@ -11,10 +11,9 @@
     <meta name="keywords" content="კონდიციონერი, კონდიციონერები, გათბობის ქვაბი, ინვერტორული კონდიციონერი, კონდიციონერის მონტაჟი, განვადება, თბილისი, air conditioner Georgia, boiler Tbilisi">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#0ec1f5">
+    <!-- Georgian is the indexed language. The English UI is reachable through
+         the toggle (and ?lang=en), but it is the same URL, so no hreflang. -->
     <link rel="canonical" href="https://climate-comfort.ge/">
-    <link rel="alternate" hreflang="ka" href="https://climate-comfort.ge/">
-    <link rel="alternate" hreflang="en" href="https://climate-comfort.ge/?lang=en">
-    <link rel="alternate" hreflang="x-default" href="https://climate-comfort.ge/">
 
     <!-- Open Graph: what Facebook, LinkedIn, WhatsApp and Viber show on a share -->
     <meta property="og:type" content="website">
@@ -35,8 +34,9 @@
     <meta name="twitter:description" content="ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.">
     <meta name="twitter:image" content="https://climate-comfort.ge/assets/og-image.jpg">
 
-    <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="apple-touch-icon" href="assets/logo.png">
+    <!-- Asset paths are root-absolute: this page is also served at /product/<slug> etc. -->
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+    <link rel="apple-touch-icon" href="/assets/logo.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +46,7 @@
     <!-- Google Identity Services (real Google sign-in; used only when a client ID is configured in app.js) -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- CSS stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
 
     <!-- Structured data: lets Google show the business card, opening hours and
          a sitelinks search box. ⚠ Replace the placeholder phone/address/social
@@ -112,8 +112,8 @@
     <header class="header">
         <div class="container header-container">
             <div class="logo-area">
-                <a href="#" class="logo">
-                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img">
+                <a href="/" class="logo">
+                    <img src="/assets/logo.png" alt="Climate Comfort Logo" class="logo-img" width="40" height="40">
                     <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
                 </a>
             </div>
@@ -128,14 +128,14 @@
 
             <nav class="nav-menu">
                 <div class="nav-item-dropdown">
-                    <a href="#catalog" class="nav-link active" id="nav-shop-main" data-i18n="nav-shop">პროდუქცია</a>
+                    <a href="/#catalog" class="nav-link active" id="nav-shop-main" data-i18n="nav-shop">პროდუქცია</a>
                     <div class="dropdown-menu">
-                        <a href="#catalog" class="dropdown-item" data-category="ac" data-i18n="nav-ac">კონდიციონერები</a>
-                        <a href="#catalog" class="dropdown-item" data-category="boiler" data-i18n="nav-boiler">ცენტრალური გათბობის ქვაბები</a>
+                        <a href="/catalog/ac" class="dropdown-item" data-category="ac" data-i18n="nav-ac">კონდიციონერები</a>
+                        <a href="/catalog/boiler" class="dropdown-item" data-category="boiler" data-i18n="nav-boiler">ცენტრალური გათბობის ქვაბები</a>
                     </div>
                 </div>
-                <a href="#booking-section" class="nav-link" data-i18n="nav-booking">სერვისები</a>
-                <a href="#about-us" class="nav-link" data-i18n="nav-why-us">რატომ ჩვენ</a>
+                <a href="/#booking-section" class="nav-link" data-i18n="nav-booking">სერვისები</a>
+                <a href="/#about-us" class="nav-link" data-i18n="nav-why-us">რატომ ჩვენ</a>
             </nav>
 
             <div class="header-actions">
@@ -174,13 +174,13 @@
                 <h1 class="hero-title" data-i18n="hero-title">შეინარჩუნეთ სიგრილე ზაფხულში, სითბო ზამთარში</h1>
                 <p class="hero-description" data-i18n="hero-description">აღმოაჩინეთ ინტელექტუალური ინვერტორული კონდიციონერების ფართო არჩევანი, ისარგებლეთ მყისიერი 0%-იანი განვადებით და პროფესიონალური მონტაჟით.</p>
                 <div class="hero-ctas">
-                    <a href="#catalog" class="btn btn-primary btn-lg"><span data-i18n="hero-cta-explore">კატალოგის ნახვა</span> <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#booking-section" class="btn btn-outline-white btn-lg"><span data-i18n="hero-cta-service">დაჯავშნე სერვისი</span> <i class="fa-solid fa-screwdriver-wrench"></i></a>
+                    <a href="/#catalog" class="btn btn-primary btn-lg"><span data-i18n="hero-cta-explore">კატალოგის ნახვა</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="/#booking-section" class="btn btn-outline-white btn-lg"><span data-i18n="hero-cta-service">დაჯავშნე სერვისი</span> <i class="fa-solid fa-screwdriver-wrench"></i></a>
                 </div>
             </div>
 
             <div class="hero-banner">
-                <img src="assets/hero-banner.webp" alt="უფასო მიწოდება თბილისში">
+                <img src="/assets/hero-banner.webp" alt="უფასო მიწოდება თბილისში — Climate Comfort" fetchpriority="high">
             </div>
             </div>
             <div class="hero-stats">
@@ -442,7 +442,8 @@
         </section>
     </main>
 
-    <!-- Product Detail Page (SPA view — rendered by app.js on #product/<id>, hidden on home) -->
+    <!-- Product Detail Page (SPA view — rendered by app.js on /product/<slug>, hidden on home;
+         build.mjs pre-renders the content into this container for each product page) -->
     <section class="product-detail-page" id="product-detail-page">
         <div class="container" id="product-detail-content"></div>
     </section>
@@ -903,20 +904,20 @@
             <div class="footer-links-col">
                 <h4 data-i18n="footer-products-title">პროდუქცია და სერვისი</h4>
                 <ul class="footer-links">
-                    <li><a href="#catalog" class="footer-cat-link" data-category="ac" data-i18n="footer-prod-1">კონდიციონერები</a></li>
-                    <li><a href="#catalog" class="footer-cat-link" data-category="boiler" data-i18n="footer-prod-2">ცენტრალური გათბობის ქვაბები</a></li>
-                    <li><a href="#booking-section" data-i18n="footer-serv-1">კონდიციონერის მონტაჟი</a></li>
-                    <li><a href="#booking-section" data-i18n="footer-serv-3">ფრეონით შევსება / მოვლა</a></li>
-                    <li><a href="#booking-section" data-i18n="footer-serv-4">სრული პროფილაქტიკა</a></li>
+                    <li><a href="/catalog/ac" class="footer-cat-link" data-category="ac" data-i18n="footer-prod-1">კონდიციონერები</a></li>
+                    <li><a href="/catalog/boiler" class="footer-cat-link" data-category="boiler" data-i18n="footer-prod-2">ცენტრალური გათბობის ქვაბები</a></li>
+                    <li><a href="/#booking-section" data-i18n="footer-serv-1">კონდიციონერის მონტაჟი</a></li>
+                    <li><a href="/#booking-section" data-i18n="footer-serv-3">ფრეონით შევსება / მოვლა</a></li>
+                    <li><a href="/#booking-section" data-i18n="footer-serv-4">სრული პროფილაქტიკა</a></li>
                 </ul>
             </div>
 
             <div class="footer-links-col">
                 <h4 data-i18n="footer-legal-title">წესები და პირობები</h4>
                 <ul class="footer-links">
-                    <li><a href="#terms" data-i18n="footer-terms">წესები და პირობები</a></li>
-                    <li><a href="#returns" data-i18n="footer-returns">დაბრუნება და გარანტია</a></li>
-                    <li><a href="#privacy" data-i18n="footer-privacy">კონფიდენციალურობის პოლიტიკა</a></li>
+                    <li><a href="/terms" data-i18n="footer-terms">წესები და პირობები</a></li>
+                    <li><a href="/returns" data-i18n="footer-returns">დაბრუნება და გარანტია</a></li>
+                    <li><a href="/privacy" data-i18n="footer-privacy">კონფიდენციალურობის პოლიტიკა</a></li>
                     <li><a href="#" id="cookie-settings-link" data-i18n="footer-cookies">Cookie პარამეტრები</a></li>
                 </ul>
             </div>
@@ -954,8 +955,8 @@
         </div>
         <div class="footer-bottom">
             <div class="container footer-bottom-container">
-                <a href="#" class="footer-logo">
-                    <img src="assets/logo.png" alt="Climate Comfort Logo" class="logo-img">
+                <a href="/" class="footer-logo">
+                    <img src="/assets/logo.png" alt="Climate Comfort Logo" class="logo-img" loading="lazy" width="40" height="40">
                     <span class="logo-text"><span class="logo-accent">Climate</span>Comfort<span class="domain-tld">.ge</span></span>
                 </a>
                 <p data-i18n="footer-copyright">საავტორო უფლება © 2026 Climate Comfort. ყველა უფლება დაცულია</p>
@@ -979,9 +980,10 @@
     <!-- JS script -->
     <!-- Supabase client (database: products, orders) — must load before app.js -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="app.js"></script>
+    <script src="/supabase-config.js"></script>
+    <!-- build.mjs inserts the published catalog as JSON right here (#catalog-data) -->
+    <script src="/app.js"></script>
     <!-- Analytics (GA4 + Meta Pixel) — loads only after cookie consent -->
-    <script src="analytics.js"></script>
+    <script src="/analytics.js"></script>
 </body>
 </html>

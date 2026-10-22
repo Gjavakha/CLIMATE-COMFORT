@@ -75,9 +75,15 @@
                 <span class="topbar-title">Climate Comfort <em>Admin</em></span>
             </div>
             <div class="topbar-actions">
-                <a class="topbar-link" href="../index.html" target="_blank" rel="noopener">
+                <a class="topbar-link" href="../" target="_blank" rel="noopener">
                     <i class="fa-solid fa-store"></i> View shop
                 </a>
+                <!-- The public site is pre-built: product pages are generated from the
+                     database at build time, so price/product changes go live only
+                     after a rebuild (publish-site Edge Function → Cloudflare deploy hook) -->
+                <button class="topbar-link publish-btn" id="publish-site-btn" title="Rebuild the public site with the current products and prices (takes 1–2 minutes)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Publish site
+                </button>
                 <span class="admin-chip" id="admin-chip"><i class="fa-solid fa-circle-user"></i> <span id="admin-email"></span></span>
                 <button class="icon-btn" id="logout-btn" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
             </div>

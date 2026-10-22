@@ -255,6 +255,10 @@ const translations = {
         "footer-serv-3": "ფრეონით შევსება / მოვლა",
         "footer-serv-4": "სრული პროფილაქტიკა",
         "meta-description": "კონდიციონერები და ცენტრალური გათბობის ქვაბები საქართველოში — Samsung, LG, Midea, Bosch, Gree და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
+        "seo-title-ac": "კონდიციონერები — ფასები, მონტაჟი, განვადება | Climate Comfort",
+        "seo-desc-ac": "ინვერტორული და ON/OFF კონდიციონერები 9000-დან 24000 BTU-მდე: Midea, LG, Samsung, Haier, Daikin და სხვა. ოფიციალური გარანტია, პროფესიონალური მონტაჟი, 0%-იანი განვადება, უფასო მიწოდება თბილისში.",
+        "seo-title-boiler": "გათბობის ქვაბები — ცენტრალური გათბობა, მონტაჟი | Climate Comfort",
+        "seo-desc-boiler": "კონდენსაციური და სტანდარტული გაზის ქვაბები ცენტრალური გათბობისთვის: Bosch, Gorenje და სხვა. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.",
         "footer-legal-title": "წესები და პირობები",
         "footer-terms": "წესები და პირობები",
         "footer-privacy": "კონფიდენციალურობის პოლიტიკა",
@@ -599,6 +603,10 @@ const translations = {
         "footer-serv-3": "Freon Refill / Maintenance",
         "footer-serv-4": "Full Servicing",
         "meta-description": "Air conditioners and central heating boilers in Georgia — Samsung, LG, Midea, Bosch, Gree and more. Official warranty, professional installation, 0% instalments and free delivery in Tbilisi.",
+        "seo-title-ac": "Air Conditioners — Prices, Installation, Instalments | Climate Comfort",
+        "seo-desc-ac": "Inverter and on/off air conditioners from 9000 to 24000 BTU: Midea, LG, Samsung, Haier, Daikin and more. Official warranty, professional installation, 0% instalments, free delivery in Tbilisi.",
+        "seo-title-boiler": "Heating Boilers — Central Heating, Installation | Climate Comfort",
+        "seo-desc-boiler": "Condensing and standard gas boilers for central heating: Bosch, Gorenje and more. Official warranty, installation, 0% instalments and free delivery in Tbilisi.",
         "footer-legal-title": "Terms & Policies",
         "footer-terms": "Terms & Conditions",
         "footer-privacy": "Privacy Policy",
@@ -1075,9 +1083,15 @@ const banksConfig = {
     }
 };
 
+// A shared link may carry the language in the query string (/product/x?lang=en);
+// it wins over the remembered choice and becomes the new remembered choice.
+const LANG_PARAM = new URLSearchParams(location.search).get("lang");
+if (LANG_PARAM === "ka" || LANG_PARAM === "en") localStorage.setItem("lang", LANG_PARAM);
+
 // 3. Application State variables
 let state = {
     currentLang: localStorage.getItem("lang") || "ka", // KA is main language
+    catalogReady: false,      // true once the live catalog has been fetched (or the fetch failed)
     cart: [],
     filters: {
         category: "all",
@@ -1112,10 +1126,24 @@ function findProduct(id) {
     return products.find(p => String(p.id) === String(id));
 }
 
+// URL slug for /product/<slug>: brand + model, lower-case, dashes. The build
+// script (build.mjs) derives the same slug from the same columns, so the
+// pre-rendered page and the in-app route always agree. A product with no
+// Latin characters at all falls back to its id.
+function productSlug(brand, model, id) {
+    const s = `${brand || ""}-${model || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return s || String(id);
+}
+
+function findProductBySlug(slug) {
+    return products.find(p => p.slug === slug) || findProduct(slug) || null;
+}
+
 function dbRowToProduct(r) {
     const fallbackTitle = `${r.brand} ${r.model}`;
     return {
         id: r.id,
+        slug: productSlug(r.brand, r.model, r.id),
         category: r.category,
         brand: r.brand,
         title: {
@@ -1145,8 +1173,34 @@ function dbRowToProduct(r) {
     };
 }
 
+function replaceCatalog(rows) {
+    products.length = 0;
+    rows.forEach(r => products.push(dbRowToProduct(r)));
+}
+
+// The build (build.mjs) embeds the published catalog into the page as JSON so
+// the first paint — and a search engine's crawl — shows the real products
+// instead of the demo set. A pre-rendered product page also carries that one
+// product in full (specs, gallery, description) under #product-data.
+// Both are merged here; the live fetch below still refreshes prices afterwards.
+function loadEmbeddedCatalog() {
+    const parse = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return null;
+        try { return JSON.parse(el.textContent); } catch { return null; }
+    };
+    const rows = parse("catalog-data");
+    if (Array.isArray(rows) && rows.length) replaceCatalog(rows);
+    const full = parse("product-data");
+    if (full && full.id) {
+        const i = products.findIndex(p => String(p.id) === String(full.id));
+        const p = dbRowToProduct(full);
+        if (i >= 0) products[i] = p; else products.unshift(p);
+    }
+}
+
 async function loadDbProducts() {
-    if (!sbClient) return;
+    if (!sbClient) { state.catalogReady = true; handleRouting(); return; }
     try {
         const { data, error } = await sbClient
             .from("products")
@@ -1154,19 +1208,21 @@ async function loadDbProducts() {
             .eq("is_published", true)
             .order("created_at", { ascending: false });
 
-        if (error) { console.warn("Supabase catalog error — using demo products:", error.message); return; }
-        if (!data || data.length === 0) return; // nothing imported yet — keep demo catalog
+        if (error) { console.warn("Supabase catalog error — using built-in products:", error.message); return; }
+        if (!data || data.length === 0) return; // nothing imported yet — keep what we have
 
-        products.length = 0;
-        data.forEach(r => products.push(dbRowToProduct(r)));
+        replaceCatalog(data);
 
         // Rebuild everything derived from the catalog
         generateFiltersUI();
         renderCatalog();
         renderHomeRails();
-        handleRouting();
     } catch (err) {
-        console.warn("Supabase unreachable — using demo products:", err);
+        console.warn("Supabase unreachable — using built-in products:", err);
+    } finally {
+        // Deep links to products wait for this before deciding "not found"
+        state.catalogReady = true;
+        handleRouting();
     }
 }
 
@@ -1283,21 +1339,25 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. Translate static HTML
     applyLanguage();
 
-    // 3. Generate filters dynamically based on product database to get correct counts
+    // 3. Catalog embedded at build time (if any), then filters with correct counts
+    products.forEach(p => { if (!p.slug) p.slug = productSlug(p.brand, p.title && p.title.en, p.id); });
+    loadEmbeddedCatalog();
     generateFiltersUI();
-    
+
     // 4. Initial Render of Catalog + homepage rails
     renderCatalog();
     renderHomeRails();
-    
+
     // 5. Bind Event Listeners
     bindUIEventListeners();
 
-    // 6. Hash routing (product detail pages) — handle deep links like #product/3
-    window.addEventListener("hashchange", handleRouting);
+    // 6. Path routing (/product/<slug>, /terms …) — handle deep links and back/forward
+    upgradeLegacyHashUrl();
+    window.addEventListener("popstate", handleRouting);
+    document.addEventListener("click", interceptInternalLinks);
     handleRouting();
 
-    // 7. Swap in the live catalog from Supabase (async; demo data until it lands)
+    // 7. Swap in the live catalog from Supabase (async; embedded/demo data until it lands)
     loadDbProducts();
 
     // Initialize date selector minimum date
@@ -1530,7 +1590,8 @@ function stockBadge(p) {
 // (the old CSS-drawn mockups are retired — real photos are coming)
 function buildProductMockup(p) {
     if (p.image) {
-        return `<img class="product-photo" src="${p.image}" alt="${p.brand}" loading="lazy">`;
+        const title = p.title ? (p.title[state.currentLang] || p.title.ka) : p.brand;
+        return `<img class="product-photo" src="${p.image}" alt="${title}" loading="lazy" decoding="async">`;
     }
     const soon = state.currentLang === 'ka' ? 'ფოტო მალე დაემატება' : 'Photo coming soon';
     return `
@@ -1930,19 +1991,104 @@ function renderLegalPage(slug) {
 }
 
 // ==========================================================================
-// Product Detail Page (hash route: #product/<id>)
+// Routing — real paths, so every product and category is its own URL for
+// search engines and for sharing:
+//
+//   /                      home (catalog, services, about)
+//   /#catalog etc.         a section of the home page (plain anchors)
+//   /catalog/ac            home with the catalog filtered to a category
+//   /product/<slug>        product page (pre-rendered by build.mjs)
+//   /checkout/<id>, /account, /payment-result/<id>   app-only, noindex
+//   /terms /privacy /returns
+//
+// The host serves index.html for every path (Cloudflare Pages: _redirects;
+// locally: server.ps1), and the app reads the path to decide what to show.
+// A "route" below is the path without its leading slash; "" is home.
 // ==========================================================================
 const SUBPAGE_CLASSES = ["product-view", "checkout-view", "account-view", "legal-view"];
+const HOME_ANCHORS = ["catalog", "booking-section", "about-us", "home-rails"];
+const SITE_ORIGIN = "https://climate-comfort.ge";
+
+function currentRoute() {
+    const path = location.pathname.replace(/\.html$/, "").replace(/\/+$/, "");
+    if (path === "") return location.hash ? decodeURIComponent(location.hash.slice(1)) : "";
+    return decodeURIComponent(path.slice(1));
+}
+
+function routeToUrl(route) {
+    route = String(route || "").replace(/^[#/]+/, "").replace(/\/+$/, "");
+    if (!route) return "/";
+    if (HOME_ANCHORS.includes(route)) return "/#" + route; // section of the home page
+    return "/" + route;
+}
+
+function navigate(route, { replace = false } = {}) {
+    const url = routeToUrl(route);
+    if (url !== location.pathname + location.hash) {
+        history[replace ? "replaceState" : "pushState"](null, "", url);
+    }
+    handleRouting();
+}
+
+// Links shared before the move to real paths looked like /#product/<id>;
+// turn them into the path form once, so old links keep working.
+function upgradeLegacyHashUrl() {
+    const m = location.hash.match(/^#(product|checkout|payment-result)\/([\w-]+)$|^#(account|terms|privacy|returns)$/);
+    if (!m || location.pathname !== "/") return;
+    const route = m[3] || `${m[1]}/${m[2]}`;
+    history.replaceState(null, "", routeToUrl(route) + location.search);
+}
+
+// Same-site links navigate in place instead of reloading the page. Links the
+// app already handles (e.preventDefault), new-tab clicks and the admin panel
+// are left alone.
+function interceptInternalLinks(e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest("a[href]");
+    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    const href = a.getAttribute("href");
+    if (!href || href === "#") return;
+    if (href.startsWith("#")) { e.preventDefault(); navigate(href.slice(1)); return; }
+    if (href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/admin")) {
+        e.preventDefault();
+        navigate(href.slice(1));
+    }
+}
+
+// <head> tags for the current view. Pre-rendered pages ship with the right
+// values already; this keeps them right while navigating inside the app.
+function updateSeoTags({ title, description, path, noindex = false, image = null } = {}) {
+    const setMeta = (selector, value) => {
+        const el = document.querySelector(selector);
+        if (el && value != null) el.setAttribute("content", value);
+    };
+    if (title) document.title = title;
+    if (description) setMeta('meta[name="description"]', description);
+    const url = SITE_ORIGIN + routeToUrl(path || "").replace(/#.*$/, "");
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
+    setMeta('meta[property="og:url"]', url);
+    if (title) { setMeta('meta[property="og:title"]', title); setMeta('meta[name="twitter:title"]', title); }
+    if (description) { setMeta('meta[property="og:description"]', description); setMeta('meta[name="twitter:description"]', description); }
+    if (image) { setMeta('meta[property="og:image"]', image); setMeta('meta[name="twitter:image"]', image); }
+    setMeta('meta[name="robots"]', noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
+}
 
 function handleRouting() {
-    const productMatch = location.hash.match(/^#product\/([\w-]+)$/);
-    const checkoutMatch = location.hash.match(/^#checkout\/([\w-]+)$/);
-    const paymentResultMatch = location.hash.match(/^#payment-result\/([0-9a-f-]{36})$/i);
-    const detailProduct = productMatch ? findProduct(productMatch[1]) : null;
+    const route = currentRoute();
+    const productMatch = route.match(/^product\/([^/]+)$/);
+    const checkoutMatch = route.match(/^checkout\/([\w-]+)$/);
+    const paymentResultMatch = route.match(/^payment-result\/([0-9a-f-]{36})$/i);
+    const categoryMatch = route.match(/^catalog\/(ac|boiler)$/);
+    const detailProduct = productMatch ? findProductBySlug(productMatch[1]) : null;
     const checkoutProduct = checkoutMatch ? findProduct(checkoutMatch[1]) : null;
-    const isAccount = location.hash === "#account";
-    const legalSlug = LEGAL_SLUGS.includes(location.hash.slice(1)) ? location.hash.slice(1) : null;
+    const isAccount = route === "account";
+    const legalSlug = LEGAL_SLUGS.includes(route) ? route : null;
     const wasOnSubPage = SUBPAGE_CLASSES.some(c => document.body.classList.contains(c));
+
+    // A product deep link before the live catalog has arrived: keep whatever
+    // the pre-rendered page shows rather than flashing the home page.
+    if (productMatch && !detailProduct && !state.catalogReady) return;
 
     // WhatsApp message follows the page: product name on a product/checkout page
     updateWhatsAppLinks(detailProduct || checkoutProduct);
@@ -1950,7 +2096,7 @@ function handleRouting() {
     // Checkout requires an account (or explicit guest mode) — bounce to the product page and ask to sign in
     if (checkoutProduct && !state.user && !state.guestCheckout) {
         state.afterAuthHash = `checkout/${checkoutProduct.id}`;
-        location.hash = `product/${checkoutProduct.id}`;
+        navigate(`product/${checkoutProduct.slug}`, { replace: true });
         openAuthModal();
         return;
     }
@@ -1959,6 +2105,7 @@ function handleRouting() {
     if (isAccount && !state.user) {
         state.afterAuthHash = "account";
         document.body.classList.remove(...SUBPAGE_CLASSES);
+        updateSeoTags({ title: t("doc-title"), path: "account", noindex: true });
         openAuthModal();
         setAuthMode("login");
         return;
@@ -1974,23 +2121,63 @@ function handleRouting() {
 
     if (legalSlug) {
         showSubPage("legal-view", () => renderLegalPage(legalSlug));
+        updateSeoTags({ path: legalSlug });
     } else if (isAccount) {
         showSubPage("account-view", () => renderAccountPage());
+        updateSeoTags({ path: "account", noindex: true });
     } else if (paymentResultMatch) {
         showSubPage("checkout-view", () => renderPaymentResultPage(paymentResultMatch[1]));
+        updateSeoTags({ path: route, noindex: true });
     } else if (checkoutProduct) {
         showSubPage("checkout-view", () => renderCheckoutPage(checkoutProduct));
+        updateSeoTags({ path: route, noindex: true });
     } else if (detailProduct) {
         showSubPage("product-view", () => renderProductDetailPage(detailProduct));
+        updateSeoTags({
+            title: productPageTitle(detailProduct),
+            description: productPageDescription(detailProduct),
+            path: `product/${detailProduct.slug}`,
+            image: detailProduct.image || null
+        });
     } else {
         document.body.classList.remove(...SUBPAGE_CLASSES);
-        document.title = t("doc-title");
-        // Re-scroll to the section anchor once the home sections are visible again
-        if (wasOnSubPage && location.hash) {
-            const target = document.getElementById(location.hash.slice(1));
-            if (target) target.scrollIntoView();
+        if (categoryMatch) {
+            if (state.filters.category !== categoryMatch[1]) applyCategoryFilter(categoryMatch[1]);
+            updateSeoTags({ title: t(`seo-title-${categoryMatch[1]}`), description: t(`seo-desc-${categoryMatch[1]}`), path: route });
+            document.getElementById("catalog").scrollIntoView({ behavior: wasOnSubPage ? "auto" : "smooth" });
+        } else {
+            updateSeoTags({ title: t("doc-title"), description: t("meta-description"), path: "" });
+            // Re-scroll to the section anchor once the home sections are visible again
+            if (location.hash) {
+                const target = document.getElementById(location.hash.slice(1));
+                if (target) target.scrollIntoView(wasOnSubPage ? undefined : { behavior: "smooth" });
+            }
         }
     }
+
+    // Analytics (analytics.js) reports each route as a page view
+    window.dispatchEvent(new CustomEvent("routechange", { detail: { path: location.pathname + location.hash } }));
+}
+
+// Title/description for a product page — the same wording build.mjs uses for
+// the pre-rendered <head>, so what Google indexed matches what the app shows.
+function productPageTitle(p) {
+    const lang = state.currentLang;
+    const kind = p.category === "boiler"
+        ? (lang === "ka" ? "გათბობის ქვაბი" : "Boiler")
+        : (lang === "ka" ? "კონდიციონერი" : "Air Conditioner");
+    const cap = p.btu ? ` ${p.btu}` : "";
+    return `${p.title[lang]} — ${kind}${cap} | Climate Comfort`;
+}
+
+function productPageDescription(p) {
+    const lang = state.currentLang;
+    const own = (p.description[lang] || "").replace(/\s+/g, " ").trim();
+    if (own.length > 60) return own.length > 160 ? own.slice(0, 157).trimEnd() + "…" : own;
+    const price = p.price ? `${p.price.toLocaleString()} ₾` : "";
+    return lang === "ka"
+        ? `${p.title.ka}${p.area ? ", " + p.area.replace("m²", "მ²") : ""}${price ? ", ფასი " + price : ""}. ოფიციალური გარანტია, მონტაჟი, 0%-იანი განვადება და უფასო მიწოდება თბილისში.`
+        : `${p.title.en}${p.area ? ", " + p.area : ""}${price ? ", price " + price : ""}. Official warranty, installation, 0% instalments and free delivery in Tbilisi.`;
 }
 
 function renderProductDetailPage(p) {
@@ -2015,7 +2202,7 @@ function renderProductDetailPage(p) {
     const inCart = state.cart.find(item => item.id === p.id);
 
     container.innerHTML = `
-        <a href="#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
+        <a href="/#catalog" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${t("detail-back")}</a>
 
         <div class="detail-layout">
             <div class="detail-visual ${p.images.length > 1 ? 'has-gallery' : ''}">
@@ -2028,12 +2215,12 @@ function renderProductDetailPage(p) {
                 <div class="detail-gallery">
                     <div class="detail-gallery-thumbs">
                         ${p.images.map((img, i) => `
-                        <button class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${img}">
-                            <img src="${img}" alt="${p.brand} ${i + 1}">
+                        <button class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${img}" aria-label="${localizedTitle} ${i + 1}">
+                            <img src="${img}" alt="${localizedTitle} — ${i + 1}" loading="lazy" width="80" height="80">
                         </button>`).join('')}
                     </div>
                     <div class="detail-gallery-main">
-                        <img id="detail-main-image" src="${p.images[0]}" alt="${p.brand}">
+                        <img id="detail-main-image" src="${p.images[0]}" alt="${localizedTitle}" fetchpriority="high">
                     </div>
                 </div>` : buildProductMockup(p)}
             </div>
@@ -2198,7 +2385,7 @@ async function logout() {
     updateAuthUI();
     // Leaving an authenticated-only page? Return to the catalog
     if (document.body.classList.contains("checkout-view") || document.body.classList.contains("account-view")) {
-        location.hash = "catalog";
+        navigate("catalog");
     }
 }
 
@@ -2229,7 +2416,7 @@ function updateAuthUI() {
 // everyone else registers / logs in first.
 function startPurchase(productId) {
     if (state.user) {
-        location.hash = `checkout/${productId}`;
+        navigate(`checkout/${productId}`);
     } else {
         state.afterAuthHash = `checkout/${productId}`;
         openAuthModal();
@@ -2324,7 +2511,7 @@ async function handlePasswordReset() {
     if (!sbClient) { showAuthError("auth-err-offline"); return; }
 
     const { error } = await sbClient.auth.resetPasswordForEmail(email, {
-        redirectTo: location.origin + location.pathname + "#account"
+        redirectTo: location.origin + "/account"
     });
     if (error) { showAuthError(authErrorKey(error), error.message); return; }
     showAuthNotice("auth-reset-sent");
@@ -2337,7 +2524,7 @@ async function handleGoogleSignIn() {
     if (!sbClient) { showAuthError("auth-err-offline"); return; }
     const { error } = await sbClient.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: location.origin + location.pathname + (state.afterAuthHash ? `#${state.afterAuthHash}` : "") }
+        options: { redirectTo: location.origin + routeToUrl(state.afterAuthHash || "") }
     });
     if (error) showAuthError(authErrorKey(error), error.message);
 }
@@ -2345,14 +2532,11 @@ async function handleGoogleSignIn() {
 function finishAuth() {
     document.getElementById("auth-modal").classList.remove("open");
     if (state.afterAuthHash) {
-        const target = `#${state.afterAuthHash}`;
+        const target = state.afterAuthHash;
         state.afterAuthHash = null;
-        if (location.hash === target) {
-            // Already on the target page (e.g. guest logged in from checkout) — re-render in place
-            handleRouting();
-        } else {
-            location.hash = target;
-        }
+        // navigate() re-renders in place when already on the target page
+        // (e.g. a guest who logged in from checkout)
+        navigate(target);
     }
 }
 
@@ -2382,7 +2566,7 @@ function renderCheckoutPage(p) {
                         </div>` : '';
 
     container.innerHTML = `
-        <a href="#product/${p.id}" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${localizedTitle}</a>
+        <a href="/product/${p.slug}" class="back-link"><i class="fa-solid fa-arrow-left"></i> ${localizedTitle}</a>
 
         <h1 class="checkout-title">${t("co-title")}</h1>
         <p class="signed-in-line">${identityLine}</p>
@@ -2592,7 +2776,7 @@ function renderCheckoutPage(p) {
                 // #payment-result/<orderId>, which shows the outcome.
                 if (!orderId) throw new Error("order not saved");
                 const result = await startCardPayment(orderId);
-                if (result.alreadyPaid) { location.hash = `payment-result/${orderId}`; return; }
+                if (result.alreadyPaid) { navigate(`payment-result/${orderId}`); return; }
                 payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${t("co-redirecting")}`;
                 state.afterAuthHash = null;
                 state.guestCheckout = false;
@@ -2615,7 +2799,7 @@ function renderCheckoutPage(p) {
             });
             state.afterAuthHash = null;
             state.guestCheckout = false;
-            location.hash = "catalog"; // home behind the success modal
+            navigate("catalog"); // home behind the success modal
         })().catch(err => {
             console.warn("checkout failed:", err);
             alert(t("co-pay-error"));
@@ -2673,7 +2857,7 @@ function renderPaymentResultPage(orderId) {
         ...(o.needs_install ? [line(t("co-install-line"), t("co-install-onsite"))] : [])
     ].join("");
 
-    const backBtn = `<a href="#catalog" class="btn btn-outline btn-md">${t("pr-back-shop")}</a>`;
+    const backBtn = `<a href="/#catalog" class="btn btn-outline btn-md">${t("pr-back-shop")}</a>`;
     const retryBtn = `<button class="btn btn-accent btn-md" id="pr-retry-btn"><i class="fa-solid fa-rotate-right"></i> ${t("pr-retry")}</button>`;
     const refreshBtn = `<button class="btn btn-primary btn-md" id="pr-refresh-btn"><i class="fa-solid fa-arrows-rotate"></i> ${t("pr-refresh")}</button>`;
 
@@ -2716,7 +2900,7 @@ function renderPaymentResultPage(orderId) {
         try {
             const o = await fetchPaymentStatus(orderId);
             if (!o || o.error) { container.innerHTML = panel("fa-solid fa-xmark", "failed", t("pr-not-found"), "", "", backBtn); return; }
-            if (o.payment_status === "pending" && attempts < PAYMENT_RESULT_POLLS && location.hash === `#payment-result/${orderId}`) {
+            if (o.payment_status === "pending" && attempts < PAYMENT_RESULT_POLLS && currentRoute() === `payment-result/${orderId}`) {
                 attempts++;
                 setTimeout(poll, PAYMENT_RESULT_INTERVAL_MS);
                 return;
@@ -3051,7 +3235,7 @@ function railCard(p) {
     const title = p.title[state.currentLang];
     const onSale = p.oldPrice && p.oldPrice > p.price;
     return `
-        <a class="rail-card" href="#product/${p.id}">
+        <a class="rail-card" href="/product/${p.slug}">
             <div class="rail-card-img">
                 ${buildProductMockup(p)}
                 ${onSale ? `<span class="rail-sale">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</span>` : ""}
@@ -3401,8 +3585,19 @@ function removeFilterBadge(type, val) {
     renderCatalog();
 }
 
-// Switch Category selection in Catalog
+// Switch Category selection in Catalog (user action: also moves the URL to
+// /catalog/<category>, so the filtered view can be shared and indexed)
 function switchCategory(category) {
+    applyCategoryFilter(category);
+    const route = category && category !== "all" ? `catalog/${category}` : "catalog";
+    // The router updates the <head> tags and scrolls the filtered catalog into
+    // view — filtering alone leaves the page where it was, which looks like
+    // the click did nothing. From a product page this also returns home.
+    navigate(route, { replace: !document.body.classList.contains("product-view") });
+}
+
+// The filtering half of switchCategory, also used by the router for /catalog/<category>
+function applyCategoryFilter(category) {
     state.filters.category = category;
     
     // Update active class on category tabs in UI
@@ -3430,16 +3625,6 @@ function switchCategory(category) {
 
     // Re-render catalog grid
     renderCatalog();
-
-    // If we're on a product detail page, jump back to the (now filtered) catalog
-    if (document.body.classList.contains("product-view")) {
-        location.hash = "catalog";
-    } else {
-        // Otherwise (e.g. picked from the homepage nav dropdown) scroll the
-        // now-filtered catalog into view — filtering alone leaves the page
-        // exactly where it was, which looks like the click did nothing.
-        document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
-    }
 }
 
 // Reset all filters
@@ -3973,7 +4158,7 @@ function bindUIEventListeners() {
     cartOverlay.addEventListener("click", closeCart);
     cartShopNow.addEventListener("click", () => {
         closeCart();
-        window.location.hash = "catalog";
+        navigate("catalog");
     });
 
     // Category tab click listeners
@@ -3984,21 +4169,13 @@ function bindUIEventListeners() {
         });
     });
 
-    // Dropdown menu item click listeners
-    document.querySelectorAll('.dropdown-item').forEach(item => {
+    // Nav dropdown + footer category links are real /catalog/<category> URLs;
+    // the link interceptor routes them in place and the router applies the filter.
+    // Repeat clicks on the already-active category still need the scroll.
+    document.querySelectorAll('.dropdown-item, .footer-cat-link').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            const cat = item.getAttribute('data-category');
-            switchCategory(cat);
-        });
-    });
-
-    // Footer category link click listeners (same filter-by-category behavior)
-    document.querySelectorAll('.footer-cat-link').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const cat = item.getAttribute('data-category');
-            switchCategory(cat);
+            switchCategory(item.getAttribute('data-category'));
         });
     });
 
@@ -4021,7 +4198,8 @@ function bindUIEventListeners() {
         // Anywhere else on the card → open the product detail page
         const card = e.target.closest(".product-card");
         if (card) {
-            location.hash = `product/${card.getAttribute("data-id")}`;
+            const p = findProduct(card.getAttribute("data-id"));
+            if (p) navigate(`product/${p.slug}`);
         }
     });
 
@@ -4073,7 +4251,7 @@ function bindUIEventListeners() {
 
     // Header account chip → account page
     document.getElementById("account-btn").addEventListener("click", () => {
-        location.hash = "account";
+        navigate("account");
     });
 
     // Payment Method Selection Modal Listeners

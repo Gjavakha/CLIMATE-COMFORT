@@ -85,7 +85,7 @@ function loadTrackers() {
 // Hash routing means no real page loads, so views are reported by hand
 function trackPageView(path) {
     if (getConsent() !== "granted") return;
-    if (window.gtag) window.gtag("event", "page_view", { page_path: path || location.hash || "/" });
+    if (window.gtag) window.gtag("event", "page_view", { page_path: path || (location.pathname + location.hash) || "/" });
     if (window.fbq) window.fbq("track", "PageView");
 }
 
@@ -229,8 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(showConsentBanner, 1200);
     }
 
-    // Report each hash route as its own view
-    window.addEventListener("hashchange", () => trackPageView(location.hash));
+    // Report each route (/product/<slug>, /catalog/ac …) as its own view; app.js
+    // fires this on every navigation
+    window.addEventListener("routechange", (e) => trackPageView(e.detail && e.detail.path));
 
     const settingsLink = document.getElementById("cookie-settings-link");
     if (settingsLink) {

@@ -678,3 +678,12 @@ tr.detail-row td {
 .refund-wait { font-size: 0.8rem; font-weight: 600; color: #b45309; }
 .detail-msg { font-size: 0.8rem; color: var(--ink-muted); }
 .detail-msg.is-error { color: #b91c1c; }
+
+/* "Publish site" — a button styled like the topbar links */
+.publish-btn {
+    background: none;
+    border: 1px solid var(--navy-line);
+    cursor: pointer;
+    font-family: inherit;
+}
+.publish-btn:disabled { opacity: 0.7; cursor: default; }

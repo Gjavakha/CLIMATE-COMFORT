@@ -46,6 +46,20 @@ while ($httpListener.IsListening) {
         $cleanPath = $urlPath.Replace("/", "\").TrimStart('\')
         $filePath = Join-Path $PSScriptRoot $cleanPath
 
+        # Extension-less paths are app routes (/product/<slug>, /terms, /catalog/ac):
+        # serve a pre-rendered <path>.html when the build made one, a folder's
+        # index.html, otherwise the app shell — the same thing Cloudflare Pages
+        # does in production (see _redirects).
+        if (-not (Test-Path $filePath -PathType Leaf) -and [System.IO.Path]::GetExtension($filePath) -eq "") {
+            if (Test-Path "$filePath.html" -PathType Leaf) {
+                $filePath = "$filePath.html"
+            } elseif (Test-Path (Join-Path $filePath "index.html") -PathType Leaf) {
+                $filePath = Join-Path $filePath "index.html"
+            } else {
+                $filePath = Join-Path $PSScriptRoot "index.html"
+            }
+        }
+
         # Double check if file exists and is within script directory
         if (Test-Path $filePath -PathType Leaf) {
             $bytes = [System.IO.File]::ReadAllBytes($filePath)

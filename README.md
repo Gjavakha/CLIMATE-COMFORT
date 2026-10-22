@@ -40,7 +40,9 @@ npx serve .
 
 | გზა | დანიშნულება |
 | --- | --- |
-| `index.html` | მთელი storefront ერთ ფაილში; ნავიგაცია hash routing-ით (`#catalog`, `#product/<id>`, `#checkout/<id>`, `#account`, `#terms`, `#privacy`, `#returns`) |
+| `index.html` | მთელი storefront ერთ ფაილში; ნავიგაცია რეალური მისამართებით (`/product/<slug>`, `/catalog/ac`, `/catalog/boiler`, `/checkout/<id>`, `/account`, `/terms`, `/privacy`, `/returns`; მთავარი გვერდის სექციები — `/#catalog`, `/#booking-section`). ჰოსტინგი ყველა გზაზე `index.html`-ს აბრუნებს (`_redirects`, ლოკალურად `server.ps1`) |
+| `build.mjs`, `build.sh` | საიტის აწყობა `dist/`-ში (Cloudflare Pages). ბაზიდან იღებს გამოქვეყნებულ პროდუქტებს და თითოეულს ცალკე HTML გვერდად წინასწარ არენდერებს (`/product/<slug>`) — თავისი `<title>`, აღწერით, Open Graph და Product schema-თი; აგენერირებს `sitemap.xml`-ს. იხ. „ჰოსტინგი და SEO" |
+| `_redirects`, `_headers` | Cloudflare Pages — SPA fallback და უსაფრთხოების header-ები (`build.mjs` აკოპირებს `dist/`-ში) |
 | `app.js` | storefront-ის ლოგიკა — კატალოგი, ფილტრები, კალათა, ავტორიზაცია, checkout, იურიდიული გვერდები, WhatsApp, ორენოვნება (KA/EN) |
 | `styles.css` | მთელი სტილი |
 | `analytics.js` | GA4 + Meta Pixel cookie თანხმობის უკან; სანამ ID არ არის მითითებული, სრულად გამორთულია (ბანერიც არ ჩანს) |
@@ -53,8 +55,9 @@ npx serve .
 | `supabase/functions/bog-callback/` | Edge Function — ბანკის callback (ხელმოწერის შემოწმება, სტატუსის ჩაწერა, მეილი) |
 | `supabase/functions/bog-payment-status/` | Edge Function — შეკვეთის გადახდის სტატუსი შედეგის გვერდისთვის; აკეთებს sync-ს ბანკიდან |
 | `supabase/functions/bog-refund/` | Edge Function — ადმინის Refund / „Sync from bank" ღილაკები (მხოლოდ `admin_emails`-ში მყოფი მომხმარებლისთვის) |
+| `supabase/functions/publish-site/` | Edge Function — ადმინის „Publish site" ღილაკი: Cloudflare Pages-ის deploy hook-ს უშვებს, რომ პროდუქტის გვერდები ახალი ფასებით გადაიწყოს (მხოლოდ ადმინისთვის) |
 | `supabase/config.toml` | Supabase CLI კონფიგი — `bog-callback`-ზე JWT შემოწმება გამორთულია |
-| `robots.txt`, `sitemap.xml` | SEO |
+| `robots.txt` | SEO (`sitemap.xml`-ს `build.mjs` აგენერირებს) |
 | `server.ps1` | ლოკალური სტატიკური სერვერი დეველოპმენტისთვის |
 
 ---
@@ -208,9 +211,48 @@ npx -y supabase@latest functions deploy bog-callback --no-verify-jwt --project-r
 npx -y supabase@latest functions deploy bog-create-payment --project-ref qgujhxxezplvnbheaeqs
 npx -y supabase@latest functions deploy bog-payment-status --project-ref qgujhxxezplvnbheaeqs
 npx -y supabase@latest functions deploy bog-refund --project-ref qgujhxxezplvnbheaeqs
+npx -y supabase@latest functions deploy publish-site --project-ref qgujhxxezplvnbheaeqs
+# publish-site-ს სჭირდება Cloudflare Pages-ის deploy hook-ის URL (იხ. „ჰოსტინგი და SEO"):
+npx -y supabase@latest secrets set PAGES_DEPLOY_HOOK=https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/... --project-ref qgujhxxezplvnbheaeqs
 ```
 
 ✅ 2026-10-19: სამივე ფუნქცია დადეპლოიებულია, Secrets ჩაწერილია, სქემა გაშვებულია; ბანკის ტოკენი რეალური კრედენციალებით მიიღება. რეალური გადახდის ტესტი ჯერ არ ჩატარებულა.
+
+---
+
+## ჰოსტინგი და SEO
+
+საიტი სტატიკურია და **Cloudflare Pages**-ზე იდება კლიენტის Cloudflare ანგარიშიდან, GitHub რეპოსთან მიბმით — ყოველი push `main`-ზე ავტომატურად აწყობს და აქვეყნებს.
+
+| პარამეტრი | მნიშვნელობა |
+| --- | --- |
+| Build command | `sh build.sh` |
+| Build output directory | `dist` |
+| Node | 18+ (Pages-ის ნაგულისხმევი საკმარისია) |
+| Custom domain | `climate-comfort.ge` (`www` → apex redirect rule უკვე არის Cloudflare-ში) |
+
+### რას აკეთებს build-ი (`build.mjs`)
+
+1. აკოპირებს ბრაუზერისთვის საჭირო ფაილებს (`app.js`, `styles.css`, `admin/`, `assets/` …) — Edge Function-ების კოდი, სქემა, README და Excel-ები `dist/`-ში არასდროს ხვდება.
+2. Supabase-დან საჯარო anon key-ით იღებს გამოქვეყნებულ პროდუქტებს (იგივე წაკითხვა, რასაც საიტი აკეთებს).
+3. კატალოგს JSON-ად ჩააშენებს `index.html`-ში (`#catalog-data`), რომ პირველი ჩატვირთვა და საძიებო სისტემის crawl-ი რეალურ პროდუქტებს ხედავდეს და არა demo-ს.
+4. თითოეული პროდუქტისთვის წერს `dist/product/<slug>.html`-ს — თავისი `<title>`, meta description, canonical, Open Graph სურათი, `Product` + `BreadcrumbList` schema და უკვე ჩასმული კონტენტი (სათაური, ფასი, მახასიათებლები). `app.js` ჩატვირთვის შემდეგ იგივე გვერდს „აცოცხლებს". Slug = ბრენდი + მოდელი (`midea-msag-24hrn8`), ზუსტად იგივე წესით, რაც `productSlug()`-ს აქვს `app.js`-ში — ორივე ერთად უნდა შეიცვალოს.
+5. წერს `/catalog/ac`, `/catalog/boiler`, `/terms`, `/privacy`, `/returns` გვერდებს თავიანთი `<head>`-ით და `sitemap.xml`-ს (155 URL).
+
+> თუ ბაზა ვერ წაიკითხა, build **განზრახ ეცემა** — Cloudflare მაშინ წინა ვერსიას ტოვებს ცოცხლად, პროდუქტების გვერდების გარეშე საიტი არ ქვეყნდება. ლოკალურად უბაზოდ ასაწყობად: `ALLOW_EMPTY_CATALOG=1 node build.mjs`.
+
+### ფასის ან პროდუქტის შეცვლის შემდეგ
+
+საიტის აპლიკაცია ფასებს ბაზიდან ყოველთვის ცოცხლად იღებს, მაგრამ წინასწარ არენდერებული HTML (ის, რასაც Google და სოციალური ქსელები ხედავენ) build-ის დროის მდგომარეობას ინახავს. ამიტომ იმპორტის ან ხელით ცვლილების შემდეგ ადმინ-პანელში **„Publish site"** ღილაკს დააჭირე — `publish-site` Edge Function Cloudflare-ის deploy hook-ს უშვებს და 1–2 წუთში ახალი გვერდები ცოცხალია.
+
+Deploy hook-ის შექმნა (ერთხელ, Pages პროექტის გაკეთების შემდეგ): Cloudflare → Workers & Pages → პროექტი → Settings → Builds → Deploy hooks → Add; URL-ი `PAGES_DEPLOY_HOOK` secret-ად (იხ. CLI ბლოკი ზემოთ). URL კოდში არასდროს — ვისაც აქვს, build-ების გაშვება შეუძლია.
+
+### რა რჩება დომენის გაშვების შემდეგ
+
+- Google Search Console — დომენის დადასტურება Cloudflare DNS-ში TXT ჩანაწერით, `sitemap.xml`-ის გაგზავნა.
+- Google Business Profile (მ. გელოვანის ქ. N4) — ლოკალური ძიებისთვის.
+- `analytics.js`-ში GA4 / Pixel ID-ები.
+- ინდექსირდება მხოლოდ ქართული ვერსია (`<html lang="ka">`, hreflang არ არის). ინგლისური ინტერფეისი გადამრთველით და `?lang=en`-ით იხსნება, მაგრამ იგივე URL-ია; ცალკე `/en/` გვერდები ცალკე სამუშაოა.
 
 ---
 
@@ -232,7 +274,7 @@ npx -y supabase@latest functions deploy bog-refund --project-ref qgujhxxezplvnbh
 - **დომენი და hosting** — `climate-comfort.ge` ჯერ არ არის გაშვებული.
 - **მეილები** — Resend-ში დომენის დადასტურება; Supabase Auth → Custom SMTP (ჩაშენებული გამგზავნი საათში ~2-4 წერილითაა შეზღუდული, რაც რეგისტრაციის დადასტურებას შეაფერხებს).
 - **ანალიტიკა** — `ANALYTICS_CONFIG` (`analytics.js`) ID-ები ცარიელია.
-- **SPA და SEO** — პროდუქტების გვერდები hash route-ებზეა, ამიტომ ცალკე არ ინდექსირდება; საჭიროა History API + ჰოსტინგის rewrite.
+- **SEO** — ✅ 2026-10-22: რეალური მისამართები + წინასწარ არენდერებული პროდუქტის გვერდები (იხ. „ჰოსტინგი და SEO"). რჩება: Search Console, Business Profile, ანალიტიკის ID-ები, `PAGES_DEPLOY_HOOK` secret-ი Pages პროექტის შექმნის შემდეგ.
 - **ფოტოს გარეშე პროდუქტები** — HAIER ×6 (Elit-ის ფაილიდან; ვერცერთ ქართულ საიტზე ვერ მოიძებნა), MIDEA MSAG-24HRN8 და MFM-48FN8D0-Q (Midea-ს ფაილში ბმული არასწორია/აკლია). ფოტოები მომწოდებლებს უნდა ვთხოვოთ.
 
 ---
